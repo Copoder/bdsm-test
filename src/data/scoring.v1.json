@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "modelVersion": "1.0.0",
+  "openEndedThreshold": 45,
+  "blendDifference": 7,
+  "switchFullThreshold": 60
+}
