@@ -1,9 +1,24 @@
 ---
-import { ArrowLeft, Check, RotateCcw, ShieldCheck } from "@lucide/astro";
+import { ArrowLeft, Check, Copy, Download, Ellipsis, ImageDown, Link, QrCode, RotateCcw, Share2, ShieldCheck, Trash2, X } from "@lucide/astro";
 ---
 
-<section class="test-app" id="start" data-test-app data-state="intro" aria-labelledby="test-heading">
+<section class="test-app" id="start" data-test-app data-state="intro" aria-label="BDSM Test tool">
   <div class="test-frame">
+    <div class="shared-view" data-view="shared" hidden>
+      <div class="shared-intro">
+        <p class="eyebrow">A BDSM Test result was shared with you</p>
+        <p class="result-kicker">Their current profile</p>
+        <h1 data-shared-primary>Shared profile</h1>
+        <p>This is a shared self-reflection result, not a verified identity or diagnosis.</p>
+        <button class="button shared-cta" type="button" data-action="shared-start">Take your own BDSM Test</button>
+      </div>
+      <div class="shared-map">
+        <div class="section-title-row"><h2>Eight shared affinities</h2><span>0–100</span></div>
+        <div data-shared-dimensions></div>
+        <p>The sender's answers, limits, and private boundary map are not included.</p>
+      </div>
+    </div>
+
     <div class="intro-view" data-view="intro">
       <div class="hero-copy">
         <p class="eyebrow">Private by design · Adults 18+</p>
@@ -25,6 +40,11 @@ import { ArrowLeft, Check, RotateCcw, ShieldCheck } from "@lucide/astro";
             <button class="button button--secondary" type="button" data-action="restart">Start over</button>
           </div>
         </div>
+        <div class="saved-panel" data-saved-result hidden>
+          <p>Your latest result is saved on this device.</p>
+          <button class="button button--secondary" type="button" data-action="saved-result">View my result</button>
+        </div>
+        <p class="shared-error" data-shared-error hidden>The shared result link is damaged or no longer supported. You can still take your own test.</p>
       </div>
       <div class="hero-object" aria-hidden="true">
         <div class="tension-disc">
@@ -112,13 +132,58 @@ import { ArrowLeft, Check, RotateCcw, ShieldCheck } from "@lucide/astro";
           </section>
         </aside>
       </div>
+      <section class="share-panel" aria-labelledby="share-heading">
+        <div class="share-heading-row">
+          <div><p class="insight-label">Share a deliberate summary</p><h3 id="share-heading">Pass the map, not the answers.</h3></div>
+          <Share2 size={26} aria-hidden="true" />
+        </div>
+        <p>Your shared link contains only the profile and eight rounded affinity scores. Anyone with the link — including the app you send it through — can see that summary.</p>
+        <div class="share-primary-actions">
+          <button class="button" type="button" data-action="share-link"><Link size={18} /> Share result link</button>
+          <button class="button button--secondary" type="button" data-action="share-image"><ImageDown size={18} /> Share result image</button>
+        </div>
+        <details class="share-more">
+          <summary><Ellipsis size={19} /> More sharing options</summary>
+          <div class="share-menu">
+            <button type="button" data-action="copy-link"><Copy size={17} /> Copy link</button>
+            <button type="button" data-action="copy-text"><Copy size={17} /> Copy result text</button>
+            <button type="button" data-action="download-image"><Download size={17} /> Download image</button>
+            <button type="button" data-action="show-qr"><QrCode size={17} /> Show QR code</button>
+            <a data-share-channel="whatsapp" href="#" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            <a data-share-channel="telegram" href="#" target="_blank" rel="noopener noreferrer">Telegram</a>
+            <a data-share-channel="bluesky" href="#" target="_blank" rel="noopener noreferrer">Bluesky</a>
+            <a data-share-channel="x" href="#" target="_blank" rel="noopener noreferrer">X</a>
+            <a data-share-channel="reddit" href="#" target="_blank" rel="noopener noreferrer">Reddit</a>
+            <a data-share-channel="facebook" href="#" target="_blank" rel="noopener noreferrer">Facebook</a>
+          </div>
+        </details>
+        <p class="share-status" data-share-status aria-live="polite"></p>
+        <div class="copy-fallback" data-copy-fallback hidden>
+          <label for="manual-copy">Select and copy this text</label>
+          <div><input id="manual-copy" data-manual-copy readonly /><button type="button" data-action="hide-copy" aria-label="Close manual copy"><X size={17} /></button></div>
+        </div>
+        <div class="qr-panel" data-qr-panel hidden>
+          <button class="qr-close" type="button" data-action="hide-qr" aria-label="Close QR code"><X size={18} /></button>
+          <canvas data-qr-canvas width="260" height="260" aria-label="QR code for this shared result"></canvas>
+          <p>Scan to open this shared result on another device.</p>
+        </div>
+      </section>
       <div class="result-actions">
         <button class="button" type="button" data-action="boundary">Build a private boundary map</button>
         <button class="button button--secondary" type="button" data-action="retake"><RotateCcw size={18} /> Retake</button>
       </div>
-      <div class="boundary-placeholder" data-boundary-placeholder hidden>
-        <p><strong>Private Boundary Map is the next section.</strong> Your test result is already complete and will not change.</p>
-      </div>
+      <section class="boundary-map" data-boundary-map hidden aria-labelledby="boundary-heading">
+        <div class="boundary-heading-row">
+          <div><p class="insight-label">Saved on this device only</p><h3 id="boundary-heading">Private Boundary Map</h3></div>
+          <button class="button button--secondary button--icon" type="button" data-action="close-boundary" aria-label="Close boundary map"><X size={19} /></button>
+        </div>
+        <p>Something can be appealing and still be a boundary for practical, emotional, relational, or health reasons. These choices do not change your result and never enter a shared link or image.</p>
+        <div class="boundary-list" data-boundary-list></div>
+        <div class="boundary-footer">
+          <p data-boundary-status aria-live="polite">All categories are optional.</p>
+          <button class="button button--secondary" type="button" data-action="clear-boundaries"><Trash2 size={17} /> Clear private map</button>
+        </div>
+      </section>
     </div>
   </div>
 </section>
@@ -222,6 +287,33 @@ import { ArrowLeft, Check, RotateCcw, ShieldCheck } from "@lucide/astro";
     background: var(--surface);
   }
 
+  .saved-panel {
+    display: flex;
+    max-width: 34rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--line);
+    background: rgb(255 253 248 / 70%);
+  }
+
+  .saved-panel p {
+    margin: 0;
+    font-size: 0.85rem;
+  }
+
+  .shared-error {
+    max-width: 36rem;
+    margin-top: var(--space-4);
+    padding: var(--space-3);
+    color: var(--danger);
+    border-left: 3px solid currentColor;
+    background: rgb(139 39 49 / 6%);
+    font-size: 0.84rem;
+  }
+
   .resume-panel p {
     margin-bottom: var(--space-3);
     font-weight: 600;
@@ -290,9 +382,50 @@ import { ArrowLeft, Check, RotateCcw, ShieldCheck } from "@lucide/astro";
 
   .gate-view,
   .quiz-view,
-  .result-view {
+  .result-view,
+  .shared-view {
     min-height: inherit;
     padding: var(--space-5) 0 var(--space-7);
+  }
+
+  .shared-view {
+    display: grid;
+    align-content: center;
+    gap: var(--space-7);
+  }
+
+  .shared-intro h1 {
+    max-width: 14ch;
+    margin-bottom: var(--space-4);
+  }
+
+  .shared-intro > p:not(.eyebrow, .result-kicker) {
+    max-width: 38rem;
+    color: var(--ink-soft);
+  }
+
+  .shared-cta {
+    margin-top: var(--space-3);
+  }
+
+  .shared-map {
+    align-self: center;
+    padding: var(--space-5);
+    border: 1px solid var(--line-strong);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+
+  .shared-map h2 {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 1rem;
+  }
+
+  .shared-map > p {
+    margin: var(--space-4) 0 0;
+    color: var(--steel);
+    font-size: 0.75rem;
   }
 
   .gate-view {
@@ -633,14 +766,69 @@ import { ArrowLeft, Check, RotateCcw, ShieldCheck } from "@lucide/astro";
   .prompt-list { display: grid; gap: var(--space-3); padding-left: 1.2rem; margin: 0; }
   .prompt-list li { padding-left: 0.3rem; }
   .result-actions { padding-top: var(--space-4); border-top: 1px solid var(--line-strong); }
-  .boundary-placeholder { margin-top: var(--space-4); padding: var(--space-4); border: 1px dashed var(--line-strong); }
-  .boundary-placeholder p { margin: 0; }
+  .share-panel {
+    position: relative;
+    margin: var(--space-5) 0;
+    padding: var(--space-5);
+    color: var(--paper);
+    background: var(--ink);
+    border-top: 3px solid var(--oxblood);
+  }
+
+  .share-heading-row,
+  .boundary-heading-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .share-panel .insight-label { color: #c98c91; }
+  .share-panel h3 { margin-bottom: var(--space-3); color: white; }
+  .share-panel > p { max-width: 47rem; color: #beb7ae; }
+  .share-primary-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
+  .share-panel .button { color: var(--ink); background: var(--paper); border-color: var(--paper); }
+  .share-panel .button:hover { color: white; background: var(--oxblood); border-color: var(--oxblood); }
+  .share-panel .button--secondary { color: white; background: transparent; border-color: #756f68; }
+  .share-more { margin-top: var(--space-3); }
+  .share-more summary { display: inline-flex; min-height: 2.75rem; align-items: center; gap: var(--space-2); color: #d4cdc4; cursor: pointer; font-size: 0.82rem; font-weight: 600; list-style: none; }
+  .share-more summary::-webkit-details-marker { display: none; }
+  .share-menu { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: var(--space-2); border: 1px solid #4a4641; }
+  .share-menu button,
+  .share-menu a { display: flex; min-height: 3rem; align-items: center; gap: var(--space-2); padding: 0.65rem 0.75rem; color: #eee9df; border: 0; border-right: 1px solid #4a4641; border-bottom: 1px solid #4a4641; background: transparent; text-align: left; text-decoration: none; cursor: pointer; }
+  .share-menu button:hover,
+  .share-menu a:hover { background: #302d29; }
+  .share-status { min-height: 1.4rem; margin: var(--space-3) 0 0 !important; color: #a9c9c5 !important; font-size: 0.78rem; }
+  .copy-fallback { margin-top: var(--space-3); padding: var(--space-3); border: 1px solid #5e5851; }
+  .copy-fallback label { display: block; margin-bottom: var(--space-2); color: #d4cdc4; font-size: 0.72rem; }
+  .copy-fallback > div { display: grid; grid-template-columns: 1fr 2.75rem; }
+  .copy-fallback input { min-width: 0; height: 2.75rem; padding: 0 0.65rem; border: 0; color: var(--ink); background: var(--paper); }
+  .copy-fallback button { display: grid; place-items: center; border: 0; color: white; background: var(--oxblood); cursor: pointer; }
+  .qr-panel { position: relative; width: min(100%, 20rem); margin-top: var(--space-4); padding: var(--space-4); color: var(--ink); background: var(--paper); }
+  .qr-panel canvas { width: 100%; height: auto; background: white; }
+  .qr-panel p { margin: var(--space-2) 0 0; font-size: 0.74rem; }
+  .qr-close { position: absolute; top: 0.3rem; right: 0.3rem; display: grid; width: 2.25rem; height: 2.25rem; place-items: center; border: 1px solid var(--line); background: var(--surface); cursor: pointer; }
+  .boundary-map { margin-top: var(--space-5); padding: var(--space-5); border: 1px solid var(--line-strong); background: var(--surface); }
+  .boundary-map > p { max-width: 50rem; color: var(--ink-soft); }
+  .boundary-list { margin-top: var(--space-5); border-top: 1px solid var(--line-strong); }
+  .boundary-row { padding: var(--space-4) 0; border-bottom: 1px solid var(--line); }
+  .boundary-copy strong,
+  .boundary-copy small { display: block; }
+  .boundary-copy small { margin-top: 0.2rem; color: var(--steel); }
+  .boundary-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.4rem; margin-top: var(--space-3); }
+  .boundary-option { position: relative; display: flex; min-height: 2.8rem; align-items: center; justify-content: center; padding: 0.5rem; border: 1px solid var(--line); border-radius: var(--radius); font-size: 0.74rem; text-align: center; cursor: pointer; }
+  .boundary-option input { position: absolute; opacity: 0; }
+  .boundary-option:has(input:checked) { color: white; background: var(--teal); border-color: var(--teal); }
+  .boundary-option:has(input[value="hard"]:checked) { background: var(--oxblood); border-color: var(--oxblood); }
+  .boundary-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); padding-top: var(--space-4); }
+  .boundary-footer p { margin: 0; color: var(--teal); font-size: 0.8rem; }
 
   [hidden] { display: none !important; }
 
   @media (min-width: 48rem) {
     .test-frame { width: min(calc(100% - 4rem), var(--content)); }
     .intro-view { grid-template-columns: minmax(0, 7fr) minmax(17rem, 5fr); }
+    .shared-view { grid-template-columns: minmax(0, 7fr) minmax(20rem, 5fr); }
     .hero-object { display: grid; justify-items: end; }
     .keyboard-note { display: block; }
     .result-seal {
@@ -660,6 +848,9 @@ import { ArrowLeft, Check, RotateCcw, ShieldCheck } from "@lucide/astro";
       transform: rotate(5deg);
     }
     .result-grid { grid-template-columns: minmax(0, 7fr) minmax(17rem, 5fr); }
+    .share-menu { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .boundary-row { display: grid; grid-template-columns: minmax(12rem, 4fr) minmax(0, 8fr); align-items: center; gap: var(--space-5); }
+    .boundary-options { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 0; }
   }
 
   @media (max-height: 44rem) and (max-width: 47.99rem) {
