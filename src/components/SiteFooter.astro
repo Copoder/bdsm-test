@@ -1,8 +1,12 @@
+---
+import { CONTACT_EMAIL } from "../data/site";
+---
+
 <footer class="site-footer">
   <div class="site-shell footer-grid">
     <div>
       <a class="footer-brand" href="/">BDSMTest.top</a>
-      <p>A private, research-informed preference map for adults.</p>
+      <p>A private BDSM role and preference test for adults.</p>
     </div>
     <nav aria-label="Product links">
       <strong>Explore</strong>
@@ -15,6 +19,7 @@
       <a href="/about/">About</a>
       <a href="/privacy/">Privacy</a>
       <a href="/terms/">Terms</a>
+      <a href={`mailto:${CONTACT_EMAIL}`}>Contact</a>
       <a href="https://github.com/Copoder/bdsm-test/issues" rel="noreferrer">Report a correction</a>
     </nav>
   </div>

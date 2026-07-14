@@ -1,4 +1,17 @@
-import type { ProfileMeta } from "../lib/model";
+import type { ProfileId, ProfileMeta } from "../lib/model";
+
+export const profileDisplayNames: Record<ProfileId, string> = {
+  Dominant: "Dominant",
+  Submissive: "Submissive",
+  Switch: "Switch",
+  "Sensation Giver": "Sadist / sensation giver",
+  "Sensation Receiver": "Masochist / sensation receiver",
+  Rigger: "Rigger / bondage giver",
+  "Rope Receiver": "Rope receiver / bondage receiver",
+  Caregiver: "Caregiver",
+  Brat: "Brat",
+  Experimentalist: "Experimentalist"
+};
 
 export const profiles: ProfileMeta[] = [
   { id: "Dominant", primaryDimension: "DIR", summary: "You may enjoy shaping structure, pace, and responsibility within clear agreements.", reflection: "Direction works best when authority and responsibility grow together." },
@@ -10,5 +23,5 @@ export const profiles: ProfileMeta[] = [
   { id: "Rope Receiver", primaryDimension: "RST", summary: "Restricted movement, anticipation, or the experience of being restrained may appeal.", reflection: "This affinity is separate from whether you prefer to direct or surrender overall." },
   { id: "Caregiver", primaryDimension: "CAR", summary: "Service, attentiveness, ritual, and responsibility may be central to your interest.", reflection: "Care is most meaningful when it is discussed rather than assumed." },
   { id: "Brat", primaryDimension: "PLY", summary: "Playful resistance, wit, and negotiated challenge may create enjoyable tension.", reflection: "A playful no and a real no must remain easy to tell apart." },
-  { id: "Experimentalist", primaryDimension: "EXP", summary: "Novel dynamics, atmosphere, and carefully designed scenarios may draw your curiosity.", reflection: "Exploration can be deliberate, bounded, and paced rather than limitless." }
+  { id: "Experimentalist", primaryDimension: "EXP", summary: "Novel dynamics, atmosphere, and planned scenarios may draw your curiosity.", reflection: "Exploration can be paced and bounded rather than limitless." }
 ];

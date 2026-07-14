@@ -1,5 +1,5 @@
 ---
-import { ArrowLeft, Check, Copy, Download, Ellipsis, ImageDown, Link, QrCode, RotateCcw, Share2, ShieldCheck, Trash2, X } from "@lucide/astro";
+import { ArrowLeft, ArrowRight, Check, Copy, Download, Ellipsis, ImageDown, Link, QrCode, RotateCcw, Share2, ShieldCheck, Trash2, X } from "@lucide/astro";
 ---
 
 <section class="test-app" id="start" data-test-app data-state="intro" aria-label="BDSM Test tool">
@@ -7,14 +7,21 @@ import { ArrowLeft, Check, Copy, Download, Ellipsis, ImageDown, Link, QrCode, Ro
     <div class="shared-view" data-view="shared" hidden>
       <div class="shared-intro">
         <p class="eyebrow">A BDSM Test result was shared with you</p>
-        <p class="result-kicker">Their current profile</p>
+        <p class="result-kicker">Their best profile match</p>
         <h2 data-shared-primary>Shared profile</h2>
-        <p>This is a shared self-reflection result, not a verified identity or diagnosis.</p>
+        <p>These are the scores they chose to share. They are not proof of identity, experience, or consent.</p>
         <button class="button shared-cta" type="button" data-action="shared-start">Take your own BDSM Test</button>
       </div>
       <div class="shared-map">
-        <div class="section-title-row"><h2>Eight shared affinities</h2><span>0–100</span></div>
-        <div data-shared-dimensions></div>
+        <section data-shared-role-section>
+          <div class="section-title-row"><h2>Shared role scores</h2><span>0–100</span></div>
+          <div class="role-score-grid role-score-grid--shared" data-shared-role-results></div>
+        </section>
+        <details class="shared-dimensions">
+          <summary>See the eight preference dimensions</summary>
+          <div class="radar-chart radar-chart--shared" data-shared-radar></div>
+          <div data-shared-dimensions></div>
+        </details>
         <p>The sender's answers, limits, and private boundary map are not included.</p>
       </div>
     </div>
@@ -23,7 +30,7 @@ import { ArrowLeft, Check, Copy, Download, Ellipsis, ImageDown, Link, QrCode, Ro
       <div class="hero-copy">
         <p class="eyebrow">Private by design · Adults 18+</p>
         <h1 id="test-heading">Free BDSM Test</h1>
-        <p class="hero-lede">Map what feels appealing to you right now across eight dimensions. No account, no answer uploads, no judgment.</p>
+        <p class="hero-lede">Answer 32 questions and get scores for 10 BDSM roles and eight preference dimensions. No account required; scoring stays in your browser.</p>
         <div class="hero-meta" aria-label="Test details">
           <span><strong>32</strong> questions</span>
           <span><strong>4–6</strong> minutes</span>
@@ -54,7 +61,7 @@ import { ArrowLeft, Check, Copy, Download, Ellipsis, ImageDown, Link, QrCode, Ro
           <span class="disc-pin"></span>
           <span class="disc-label">01—08</span>
         </div>
-        <p>Eight affinities.<br/>No forced identity.</p>
+        <p>10 role scores.<br/>8 preference dimensions.</p>
       </div>
     </div>
 
@@ -63,15 +70,15 @@ import { ArrowLeft, Check, Copy, Download, Ellipsis, ImageDown, Link, QrCode, Ro
       <div class="gate-content">
         <span class="gate-icon"><ShieldCheck size={26} /></span>
         <p class="eyebrow">Before you begin</p>
-        <h2>Keep the frame clear.</h2>
-        <p>This test measures current self-reported appeal. It does not measure experience, skill, identity, consent knowledge, or compatibility.</p>
+        <h2>Two things before you start</h2>
+        <p>The questions ask what appeals to you now. They do not test experience, skill, identity, consent knowledge, or compatibility.</p>
         <label class="confirm-row">
           <input type="checkbox" data-confirm="age" />
           <span><strong>I am 18 or older.</strong><small>This tool is intended only for adults.</small></span>
         </label>
         <label class="confirm-row">
           <input type="checkbox" data-confirm="context" />
-          <span><strong>I understand the shared premise.</strong><small>Every question assumes informed consent, prior negotiation, adults only, and the ability to stop.</small></span>
+          <span><strong>I understand what the test assumes.</strong><small>Every question assumes informed consent, prior negotiation, adults only, and the ability to stop.</small></span>
         </label>
         <button class="button gate-continue" type="button" data-action="confirm" disabled>Continue</button>
         <p class="storage-note" data-storage-note hidden>Private browsing settings prevent progress from surviving a refresh. You can still finish in this tab.</p>
@@ -85,7 +92,7 @@ import { ArrowLeft, Check, Copy, Download, Ellipsis, ImageDown, Link, QrCode, Ro
           <span data-dimension-label>Current preferences</span>
           <strong data-progress-label aria-live="polite">1 of 32</strong>
         </div>
-        <span class="quiz-mark" aria-hidden="true"></span>
+        <button class="button button--secondary button--icon" type="button" data-action="next" aria-label="Next question" disabled><ArrowRight size={21} /></button>
       </header>
       <div class="progress-track" aria-hidden="true"><span data-progress-bar></span></div>
       <form class="question-form" data-question-form>
@@ -95,49 +102,62 @@ import { ArrowLeft, Check, Copy, Download, Ellipsis, ImageDown, Link, QrCode, Ro
           <p>How appealing does this feel to you right now?</p>
           <div class="answer-list" data-answer-list></div>
         </fieldset>
-        <button class="button continue-button" type="submit" disabled>Continue</button>
-        <p class="keyboard-note">Keyboard: press 1–5 to choose, then Enter to continue.</p>
+        <p class="keyboard-note">Keyboard: press 1–5 to answer. Use the arrow above to revisit a question.</p>
       </form>
     </div>
 
     <div class="result-view" data-view="result" hidden aria-live="polite">
       <div class="result-header">
         <div>
-          <p class="eyebrow">Your current preference map</p>
-          <p class="result-kicker">Your answers suggest</p>
+          <p class="eyebrow">Your BDSM test result</p>
+          <p class="result-kicker">Best profile match</p>
           <h2 data-result-primary>Profile</h2>
           <p class="result-summary" data-result-summary></p>
           <p class="result-secondary" data-result-secondary hidden></p>
         </div>
         <div class="result-seal" aria-hidden="true"><Check size={28} /><span>LOCAL<br/>RESULT</span></div>
       </div>
-      <p class="result-disclaimer">This result is a reflection tool, not a diagnosis or a rule for who you are.</p>
+      <p class="result-disclaimer">Role scores show how closely your answers match this test's formulas. They are not population percentiles or fixed identities.</p>
+      <section class="role-results" aria-labelledby="role-score-heading">
+        <div class="section-title-row role-title-row">
+          <div><h3 id="role-score-heading">Your role scores</h3><p>All ten matches, ranked from highest to lowest.</p></div>
+          <span>0–100</span>
+        </div>
+        <div class="role-score-grid" data-role-results></div>
+      </section>
       <div class="result-grid">
-        <section class="dimension-results" aria-labelledby="affinity-heading">
-          <div class="section-title-row"><h3 id="affinity-heading">Eight affinities</h3><span>0–100</span></div>
-          <div data-dimension-results></div>
+        <section class="radar-results" aria-labelledby="shape-heading">
+          <div class="section-title-row"><h3 id="shape-heading">Why these roles matched</h3><span>8 dimensions</span></div>
+          <div class="radar-chart" data-result-radar></div>
         </section>
         <aside class="result-insights">
           <section>
-            <p class="insight-label">What seems core</p>
+            <p class="insight-label">Highest dimensions</p>
             <div class="tag-list" data-core-dimensions></div>
           </section>
           <section data-context-section>
-            <p class="insight-label">What may depend on context</p>
+            <p class="insight-label">Context-sensitive dimensions</p>
             <div class="tag-list" data-context-dimensions></div>
           </section>
           <section>
-            <p class="insight-label">Questions worth discussing</p>
+            <p class="insight-label">Questions to discuss</p>
             <ol class="prompt-list" data-communication-prompts></ol>
           </section>
         </aside>
       </div>
+      <section class="dimension-results" aria-labelledby="affinity-heading">
+        <div class="section-title-row dimension-title-row">
+          <div><h3 id="affinity-heading">Category breakdown</h3><p>Ranked by current affinity. Tap a category for context.</p></div>
+          <span>0–100</span>
+        </div>
+        <div data-dimension-results></div>
+      </section>
       <section class="share-panel" aria-labelledby="share-heading">
         <div class="share-heading-row">
-          <div><p class="insight-label">Share a deliberate summary</p><h3 id="share-heading">Pass the map, not the answers.</h3></div>
+          <div><p class="insight-label">Made for sharing</p><h3 id="share-heading">Share your BDSM test result</h3></div>
           <Share2 size={26} aria-hidden="true" />
         </div>
-        <p>Your shared link contains only the profile and eight rounded affinity scores. Anyone with the link — including the app you send it through — can see that summary.</p>
+        <p>The link and result image show your profile, role scores, and eight preference scores. They never include individual answers or your private boundary choices.</p>
         <div class="share-primary-actions">
           <button class="button" type="button" data-action="share-link"><Link size={18} /> Share result link</button>
           <button class="button button--secondary" type="button" data-action="share-image"><ImageDown size={18} /> Share result image</button>
@@ -429,6 +449,19 @@ import { ArrowLeft, Check, Copy, Download, Ellipsis, ImageDown, Link, QrCode, Ro
     font-size: 0.75rem;
   }
 
+  .shared-dimensions {
+    margin-top: var(--space-4);
+    border-top: 1px solid var(--line);
+  }
+
+  .shared-dimensions > summary {
+    padding: var(--space-3) 0;
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+    font-weight: 650;
+    cursor: pointer;
+  }
+
   .gate-view {
     position: relative;
     display: grid;
@@ -527,15 +560,6 @@ import { ArrowLeft, Check, Copy, Download, Ellipsis, ImageDown, Link, QrCode, Ro
   }
 
   .quiz-progress-copy span { color: var(--ink-soft); }
-
-  .quiz-mark {
-    justify-self: end;
-    width: 1.75rem;
-    height: 1.75rem;
-    border: 2px solid var(--ink);
-    border-radius: 50%;
-    box-shadow: inset 0 0 0 0.4rem var(--paper), inset 0 0 0 0.52rem var(--oxblood);
-  }
 
   .progress-track {
     height: 3px;
@@ -639,20 +663,8 @@ import { ArrowLeft, Check, Copy, Download, Ellipsis, ImageDown, Link, QrCode, Ro
     border-color: var(--oxblood);
   }
 
-  .answer-copy strong,
-  .answer-copy small {
+  .answer-copy strong {
     display: block;
-  }
-
-  .answer-copy small {
-    color: var(--ink-soft);
-    font-size: 0.74rem;
-    line-height: 1.35;
-  }
-
-  .continue-button {
-    width: 100%;
-    margin-top: var(--space-4);
   }
 
   .keyboard-note {
@@ -711,10 +723,164 @@ import { ArrowLeft, Check, Copy, Download, Ellipsis, ImageDown, Link, QrCode, Ro
     font-size: 0.82rem;
   }
 
+  .role-results {
+    padding: var(--space-3) 0 var(--space-5);
+  }
+
+  .role-title-row > div > p {
+    margin: 0.25rem 0 0;
+    color: var(--steel);
+    font-size: 0.76rem;
+  }
+
+  .role-score-grid {
+    display: grid;
+    margin-top: var(--space-3);
+    border-top: 1px solid var(--line-strong);
+    border-left: 1px solid var(--line-strong);
+  }
+
+  .role-score-row {
+    min-width: 0;
+    border-right: 1px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+    background: rgb(255 253 248 / 76%);
+  }
+
+  .role-score-row summary {
+    display: grid;
+    min-height: 4.65rem;
+    grid-template-columns: 2rem minmax(0, 1fr) auto 0.8rem;
+    align-content: center;
+    align-items: baseline;
+    column-gap: var(--space-2);
+    padding: 0.7rem 0.8rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .role-score-row summary::-webkit-details-marker { display: none; }
+
+  .role-rank {
+    color: var(--steel);
+    font-size: 0.68rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .role-score-row summary > strong {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    font-size: 0.86rem;
+    line-height: 1.2;
+  }
+
+  .role-score-value {
+    color: var(--oxblood);
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .role-score-toggle {
+    color: var(--steel);
+    font-size: 1rem;
+    line-height: 1;
+    text-align: right;
+  }
+
+  .role-score-row[open] .role-score-toggle {
+    transform: rotate(45deg);
+  }
+
+  .role-score-bar {
+    display: block;
+    height: 0.3rem;
+    margin-top: 0.55rem;
+    background: var(--paper-deep);
+    grid-column: 2 / 5;
+  }
+
+  .role-score-bar > span {
+    display: block;
+    width: var(--role-score);
+    height: 100%;
+    background: var(--oxblood);
+  }
+
+  .role-score-detail {
+    padding: 0 var(--space-4) var(--space-4) 3.55rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .role-score-detail p {
+    margin: var(--space-3) 0 var(--space-2);
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+  }
+
+  .role-score-detail small {
+    display: block;
+    color: var(--steel);
+    font-size: 0.72rem;
+  }
+
   .result-grid {
     display: grid;
     gap: var(--space-6);
     padding: var(--space-5) 0;
+  }
+
+  .radar-results {
+    min-width: 0;
+  }
+
+  .radar-chart {
+    width: min(100%, 31rem);
+    aspect-ratio: 1;
+    margin: var(--space-3) auto 0;
+  }
+
+  .radar-chart--shared {
+    width: min(100%, 23rem);
+  }
+
+  .radar-chart svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .radar-grid polygon,
+  .radar-grid line {
+    fill: none;
+    stroke: var(--line-strong);
+    stroke-width: 1;
+  }
+
+  .radar-grid polygon:nth-child(2) {
+    fill: rgb(124 31 42 / 3%);
+  }
+
+  .radar-shape {
+    fill: rgb(124 31 42 / 26%);
+    stroke: var(--oxblood);
+    stroke-linejoin: round;
+    stroke-width: 2.5;
+  }
+
+  .radar-points circle {
+    fill: var(--surface);
+    stroke: var(--oxblood);
+    stroke-width: 2.5;
+  }
+
+  .radar-labels text {
+    fill: var(--ink-soft);
+    font-family: var(--font-body);
+    font-size: 10px;
+    font-weight: 650;
   }
 
   .section-title-row {
@@ -726,22 +892,108 @@ import { ArrowLeft, Check, Copy, Download, Ellipsis, ImageDown, Link, QrCode, Ro
     border-bottom: 1px solid var(--line);
   }
 
+  .section-title-row h2,
   .section-title-row h3 { margin: 0; }
   .section-title-row span { color: var(--steel); font-size: 0.75rem; }
 
-  .dimension-row {
-    display: grid;
-    grid-template-columns: minmax(7rem, 1fr) 3fr 2.5rem;
-    align-items: center;
-    gap: var(--space-3);
-    padding: 0.7rem 0;
-    border-bottom: 1px solid var(--line);
+  .dimension-results {
+    padding: var(--space-3) 0 var(--space-5);
   }
 
-  .dimension-row span:first-child { font-size: 0.82rem; font-weight: 600; }
-  .dimension-row strong { text-align: right; }
-  .dimension-bar { height: 0.45rem; background: var(--paper-deep); }
-  .dimension-bar span { display: block; width: var(--score); height: 100%; background: var(--bar-color); }
+  .dimension-title-row > div > p {
+    margin: 0.25rem 0 0;
+    color: var(--steel);
+    font-size: 0.76rem;
+  }
+
+  .dimension-row {
+    margin-top: 0.6rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: rgb(255 253 248 / 74%);
+  }
+
+  .dimension-row summary {
+    display: grid;
+    min-height: 4.4rem;
+    grid-template-columns: minmax(0, 1fr) 1.25rem;
+    align-content: center;
+    column-gap: var(--space-3);
+    padding: 0.8rem 0.9rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .dimension-row summary::-webkit-details-marker { display: none; }
+
+  .dimension-summary-copy {
+    display: flex;
+    min-width: 0;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .dimension-summary-copy > span {
+    overflow-wrap: anywhere;
+    font-size: 0.88rem;
+    font-weight: 650;
+  }
+
+  .dimension-summary-copy strong {
+    flex: none;
+    color: var(--oxblood);
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+  }
+
+  .dimension-bar {
+    display: block;
+    height: 0.35rem;
+    margin-top: 0.55rem;
+    overflow: hidden;
+    background: var(--paper-deep);
+  }
+
+  .dimension-bar > span {
+    display: block;
+    width: var(--score);
+    height: 100%;
+    background: var(--bar-color);
+  }
+
+  .dimension-chevron {
+    width: 0.55rem;
+    height: 0.55rem;
+    align-self: center;
+    border-right: 1.5px solid var(--ink-soft);
+    border-bottom: 1.5px solid var(--ink-soft);
+    transform: rotate(45deg);
+    transition: transform 160ms ease;
+    grid-column: 2;
+    grid-row: 1 / 3;
+  }
+
+  .dimension-row[open] .dimension-chevron {
+    transform: rotate(225deg);
+  }
+
+  .dimension-detail {
+    padding: 0 var(--space-4) var(--space-4);
+    border-top: 1px solid var(--line);
+  }
+
+  .dimension-detail p {
+    margin: var(--space-3) 0 var(--space-2);
+    color: var(--ink-soft);
+    font-size: 0.84rem;
+  }
+
+  .dimension-detail small {
+    display: block;
+    color: var(--steel);
+    font-size: 0.74rem;
+  }
 
   .result-insights {
     display: grid;
@@ -849,6 +1101,7 @@ import { ArrowLeft, Check, Copy, Download, Ellipsis, ImageDown, Link, QrCode, Ro
       transform: rotate(5deg);
     }
     .result-grid { grid-template-columns: minmax(0, 7fr) minmax(17rem, 5fr); }
+    .role-score-grid:not(.role-score-grid--shared) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .share-menu { grid-template-columns: repeat(4, minmax(0, 1fr)); }
     .boundary-row { display: grid; grid-template-columns: minmax(12rem, 4fr) minmax(0, 8fr); align-items: center; gap: var(--space-5); }
     .boundary-options { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 0; }

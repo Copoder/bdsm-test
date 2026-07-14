@@ -1,5 +1,6 @@
 ---
 import ContentLayout from "../layouts/ContentLayout.astro";
+import { CONTACT_EMAIL } from "../data/site";
 import { breadcrumbSchema } from "../lib/seo";
 const title = "BDSM Test Terms of Use | BDSMTest.top";
 const description = "Terms for using the adult BDSM preference test, including age, educational scope, no professional advice, and acceptable use.";
@@ -9,8 +10,8 @@ const description = "Terms for using the adult BDSM preference test, including a
   {title}
   {description}
   eyebrow="Terms of use"
-  heading="Use this tool as reflection, not instruction"
-  intro="These terms define the limited educational purpose of BDSMTest.top and the responsibilities that remain with each user."
+  heading="Terms for using BDSMTest.top"
+  intro="This page explains what the test provides, what it does not provide, and how it may be used."
   breadcrumbs={[{ label: "Home", href: "/" }, { label: "Terms" }]}
   structuredData={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Terms", path: "/terms/" }])}
 >
@@ -18,7 +19,7 @@ const description = "Terms for using the adult BDSM preference test, including a
   <p>You must be at least 18 years old and legally able to access adult-oriented educational material in your location. Do not use the interactive test if you are under 18.</p>
 
   <h2>Educational and self-reflection purpose</h2>
-  <p>The site provides a research-informed preference map and general educational content. It is not medical, psychological, legal, relationship, safety, or emergency advice. A result is not a diagnosis, identity verification, compatibility assessment, consent record, or certification of competence.</p>
+  <p>The site provides research-informed role and preference scores plus general educational content. It is not medical, psychological, legal, relationship, safety, or emergency advice. A result is not a diagnosis, identity verification, compatibility assessment, consent record, or certification of competence.</p>
 
   <h2>No activity recommendation</h2>
   <p>A score or profile does not recommend trying an activity. Users remain responsible for seeking relevant education, considering health and legal context, communicating specifically, and obtaining informed, voluntary, ongoing consent.</p>
@@ -29,9 +30,18 @@ const description = "Terms for using the adult BDSM preference test, including a
   <h2>Availability and changes</h2>
   <p>The site may change questions, models, features, or availability. Model versions are included in shared results so a future decoder can reject unsupported formats instead of silently changing their meaning.</p>
 
+  <h2>External services and shared content</h2>
+  <p>Links to research, GitHub, social platforms, and other third-party services are provided for convenience. Those services have their own terms and privacy practices. You are responsible for deciding where and with whom to share a result link or image.</p>
+
+  <h2>Privacy</h2>
+  <p>The <a href="/privacy/">Privacy Policy</a> explains browser storage, shared results, hosting data, contact messages, and the choices available to users.</p>
+
   <h2>No warranty</h2>
   <p>The service is provided as available without a guarantee that a result will feel personally accurate or that every browser feature will work on every device. Where local law does not permit a limitation, the limitation applies only to the extent allowed.</p>
 
   <h2>Effective date</h2>
   <p>These terms are effective July 14, 2026.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about these terms can be sent to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
 </ContentLayout>

@@ -1,5 +1,5 @@
-import { dimensions } from "../data/questions";
-import type { TestResult } from "./model";
+import { profileDisplayNames } from "../data/profiles";
+import { PROFILE_IDS, type TestResult } from "./model";
 
 const WIDTH = 1080;
 const HEIGHT = 1350;
@@ -72,56 +72,64 @@ export async function createResultImage(result: TestResult): Promise<Blob> {
   context.fillText("BDSMTest.top", 214, 144);
   context.fillStyle = "#7c1f2a";
   context.font = "600 20px 'DM Sans Variable', sans-serif";
-  context.fillText("MY CURRENT PREFERENCE MAP", 106, 252);
+  context.fillText("MY BDSM TEST RESULT", 106, 252);
 
   context.fillStyle = "#171614";
-  context.font = "600 86px 'Newsreader Variable', Georgia, serif";
+  context.font = "600 78px 'Newsreader Variable', Georgia, serif";
   const profileLines = wrappedLines(context, result.primary, 840).slice(0, 3);
-  profileLines.forEach((line, index) => context.fillText(line, 106, 358 + index * 84));
-  let y = 430 + (profileLines.length - 1) * 84;
+  profileLines.forEach((line, index) => context.fillText(line, 106, 350 + index * 76));
+  let y = 418 + (profileLines.length - 1) * 76;
   context.fillStyle = "#45413d";
   context.font = "500 24px 'DM Sans Variable', sans-serif";
-  context.fillText("Your answers suggest this pattern — not a fixed identity.", 106, y);
+  context.fillText("Best profile match, followed by all ten role scores.", 106, y);
 
-  y += 84;
+  y += 62;
   context.strokeStyle = "#aaa096";
   context.lineWidth = 2;
-  roundRect(context, 106, y, 868, 470, 8);
+  roundRect(context, 106, y, 868, 606, 8);
   context.fillStyle = "#171614";
   context.font = "600 25px 'DM Sans Variable', sans-serif";
-  context.fillText("TOP AFFINITIES", 144, y + 60);
+  context.fillText("ROLE AFFINITIES", 144, y + 55);
+  context.fillStyle = "#6f6962";
+  context.font = "500 18px 'DM Sans Variable', sans-serif";
+  context.textAlign = "right";
+  context.fillText("0–100 · highest first", 936, y + 55);
+  context.textAlign = "left";
 
-  const topDimensions = [...dimensions].sort((a, b) => result.dimensions[b.id] - result.dimensions[a.id]).slice(0, 3);
-  topDimensions.forEach((dimension, index) => {
-    const rowY = y + 130 + index * 105;
-    const score = result.dimensions[dimension.id];
+  const rankedProfiles = [...PROFILE_IDS].sort((a, b) => result.profileScores[b] - result.profileScores[a]);
+  rankedProfiles.forEach((profile, index) => {
+    const column = index < 5 ? 0 : 1;
+    const row = index % 5;
+    const columnX = column === 0 ? 144 : 558;
+    const rowY = y + 108 + row * 96;
+    const score = Math.round(result.profileScores[profile]);
     context.fillStyle = "#171614";
-    context.font = "500 25px 'DM Sans Variable', sans-serif";
-    context.fillText(dimension.shortName, 144, rowY);
-    context.fillStyle = "#e3ddd3";
-    context.fillRect(144, rowY + 24, 690, 14);
-    context.fillStyle = dimension.color;
-    context.fillRect(144, rowY + 24, 690 * (score / 100), 14);
-    context.fillStyle = "#171614";
-    context.font = "600 29px 'DM Sans Variable', sans-serif";
+    context.font = "600 18px 'DM Sans Variable', sans-serif";
+    context.fillText(profileDisplayNames[profile], columnX, rowY);
+    context.fillStyle = "#7c1f2a";
+    context.font = "600 22px 'Newsreader Variable', Georgia, serif";
     context.textAlign = "right";
-    context.fillText(String(score), 930, rowY + 10);
+    context.fillText(`${score}%`, columnX + 372, rowY);
     context.textAlign = "left";
+    context.fillStyle = "#e3ddd3";
+    context.fillRect(columnX, rowY + 20, 372, 9);
+    context.fillStyle = "#7c1f2a";
+    context.fillRect(columnX, rowY + 20, 372 * (score / 100), 9);
   });
 
   context.fillStyle = "#386b68";
   context.font = "600 20px 'DM Sans Variable', sans-serif";
-  context.fillText("PRIVATE BY DESIGN", 106, 1190);
+  context.fillText("PRIVATE BY DESIGN", 106, 1242);
   context.fillStyle = "#45413d";
   context.font = "500 20px 'DM Sans Variable', sans-serif";
-  context.fillText("Answers and private limits are not included.", 106, 1228);
+  context.fillText("No answers or private limits are included.", 106, 1280);
   context.fillStyle = "#7c1f2a";
   context.font = "600 24px 'DM Sans Variable', sans-serif";
   context.textAlign = "right";
-  context.fillText("TAKE THE BDSM TEST →", 974, 1190);
+  context.fillText("TAKE THE BDSM TEST →", 974, 1242);
   context.fillStyle = "#171614";
   context.font = "600 21px 'DM Sans Variable', sans-serif";
-  context.fillText("bdsmtest.top", 974, 1228);
+  context.fillText("bdsmtest.top", 974, 1280);
 
   return await new Promise<Blob>((resolve, reject) => {
     canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error("Could not create result image")), "image/png");

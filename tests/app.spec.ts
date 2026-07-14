@@ -9,14 +9,19 @@ test.describe("BDSM Test", () => {
 
     await page.goto("/");
     await expect(page).toHaveTitle("BDSM Test: Free Kink Preference Quiz | BDSMTest.top");
-    await expect(page.getByRole("heading", { name: "Free BDSM Test" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Free BDSM Test", exact: true })).toBeVisible();
     await page.getByRole("button", { name: "Start the test" }).click();
     await page.locator("[data-confirm='age']").check();
     await page.locator("[data-confirm='context']").check();
     await page.getByRole("button", { name: "Continue" }).click();
     await expect(page.locator("[data-progress-label]")).toHaveText("1 of 32");
     await page.getByText("Strongly appealing", { exact: true }).click();
-    await page.locator(".continue-button").click();
+    await expect(page.locator("[data-progress-label]")).toHaveText("2 of 32");
+
+    await page.getByRole("button", { name: "Previous question" }).click();
+    await expect(page.locator("[data-progress-label]")).toHaveText("1 of 32");
+    await page.getByText("Somewhat appealing", { exact: true }).click();
+    await expect(page.locator("[data-progress-label]")).toHaveText("2 of 32");
 
     await page.reload();
     await expect(page.locator("[data-resume]")).toBeVisible();
@@ -25,12 +30,14 @@ test.describe("BDSM Test", () => {
 
     for (let current = 2; current <= 32; current += 1) {
       await page.getByText("Somewhat appealing", { exact: true }).click();
-      await page.locator(".continue-button").click();
       if (current < 32) await expect(page.locator("[data-progress-label]")).toHaveText(`${current + 1} of 32`);
     }
 
     await expect(page.locator("[data-result-primary]")).toBeVisible();
     await expect(page.locator(".dimension-row")).toHaveCount(8);
+    await expect(page.locator("[data-role-results] .role-score-row")).toHaveCount(10);
+    await expect(page.locator("[data-result-radar] svg")).toBeVisible();
+    await expect(page.locator("[data-result-radar] .radar-points circle")).toHaveCount(8);
 
     await page.getByRole("button", { name: "Build a private boundary map" }).click();
     await page.locator(".boundary-row").first().getByText("Hard limit", { exact: true }).click();
@@ -43,6 +50,11 @@ test.describe("BDSM Test", () => {
     const sharedUrl = await page.evaluate(() => navigator.clipboard.readText());
     expect(sharedUrl).toMatch(/^https:\/\/bdsmtest\.top\/#r=/);
     expect(sharedUrl).not.toContain("giving-control");
+
+    const receiver = await context.newPage();
+    await receiver.goto(`${new URL(page.url()).origin}/${new URL(sharedUrl).hash}`);
+    await expect(receiver.locator("[data-shared-role-results] .role-score-row")).toHaveCount(10);
+    await receiver.close();
 
     await page.getByRole("button", { name: "Show QR code" }).click();
     await expect(page.locator("[data-qr-panel]")).toBeVisible();
@@ -69,9 +81,10 @@ test.describe("BDSM Test", () => {
     await page.goto(`/#r=${envelope}`);
     await expect(page.locator("[data-shared-primary]")).toHaveText("Caregiver");
     await expect(page.locator("[data-shared-dimensions] .dimension-row")).toHaveCount(8);
+    await expect(page.locator("[data-shared-role-section]")).toBeHidden();
     expect(await page.evaluate(() => location.hash)).toBe("");
     await page.getByRole("button", { name: "Take your own BDSM Test" }).click();
-    await expect(page.getByRole("heading", { name: "Keep the frame clear." })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Two things before you start" })).toBeVisible();
   });
 
   test("fits the mobile viewport without horizontal overflow", async ({ page }, testInfo) => {

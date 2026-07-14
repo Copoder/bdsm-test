@@ -1,7 +1,7 @@
 import { boundaryCategories, boundaryOptions, type BoundaryMap, type BoundaryValue } from "../data/boundaries";
 import { answerOptions, dimensions, questionOrder, QUESTION_VERSION } from "../data/questions";
-import { profiles } from "../data/profiles";
-import type { Answers, DimensionId, TestResult } from "./model";
+import { profileDisplayNames, profiles } from "../data/profiles";
+import { PROFILE_IDS, type Answers, type DimensionId, type ProfileId, type TestResult } from "./model";
 import { scoreTest } from "./scoring";
 import { createShareUrl, decodeShareEnvelope, type SharePayloadV1 } from "./share-codec";
 import { createResultImage, downloadBlob } from "./share-image";
@@ -39,26 +39,27 @@ const copyText = async (text: string): Promise<boolean> => {
 };
 
 const resultSummaryText = (result: TestResult): string => {
-  const top = [...dimensions]
-    .sort((a, b) => result.dimensions[b.id] - result.dimensions[a.id])
+  const top = [...PROFILE_IDS]
+    .sort((a, b) => result.profileScores[b] - result.profileScores[a])
     .slice(0, 3)
-    .map((dimension) => `${dimension.shortName} ${result.dimensions[dimension.id]}`)
+    .map((profile) => `${profileDisplayNames[profile]} ${Math.round(result.profileScores[profile])}%`)
     .join(", ");
-  return `I took the BDSM Test and got ${result.primary}. Top affinities: ${top}. This is a reflection result, not a diagnosis.`;
+  return `My BDSM Test profile is ${result.primary}. Top role scores: ${top}.`;
 };
 
 export function initTestApp(root: HTMLElement): void {
   let index = 0;
   let answers: Answers = {};
+  let advanceTimer: number | undefined;
   let storageEnabled = isStorageAvailable();
   let currentResult: TestResult | null = storageEnabled ? loadResult() : null;
   let imagePromise: Promise<Blob> | null = null;
   let boundaries: BoundaryMap = storageEnabled ? loadBoundaryMap() : {};
   const session = storageEnabled ? loadSession() : null;
   const form = required<HTMLFormElement>(root, "[data-question-form]");
-  const continueButton = required<HTMLButtonElement>(form, ".continue-button");
   const answerList = required<HTMLElement>(form, "[data-answer-list]");
   const backButton = required<HTMLButtonElement>(root, "[data-action='back']");
+  const nextButton = required<HTMLButtonElement>(root, "[data-action='next']");
   const confirmationInputs = [...root.querySelectorAll<HTMLInputElement>("[data-confirm]")];
   const shareStatus = required<HTMLElement>(root, "[data-share-status]");
 
@@ -91,25 +92,198 @@ export function initTestApp(root: HTMLElement): void {
   };
 
   const renderDimensionRows = (container: HTMLElement, scores: Record<DimensionId, number>): void => {
-    container.replaceChildren(...dimensions.map((dimension) => {
-      const row = document.createElement("div");
+    const rankedDimensions = [...dimensions].sort((a, b) => scores[b.id] - scores[a.id]);
+    container.replaceChildren(...rankedDimensions.map((dimension) => {
+      const row = document.createElement("details");
       row.className = "dimension-row";
+      const summary = document.createElement("summary");
+      const summaryCopy = document.createElement("span");
+      summaryCopy.className = "dimension-summary-copy";
       const label = document.createElement("span");
       label.textContent = dimension.shortName;
+      const score = document.createElement("strong");
+      score.textContent = `${scores[dimension.id]}%`;
+      summaryCopy.append(label, score);
       const bar = document.createElement("span");
       bar.className = "dimension-bar";
       const fill = document.createElement("span");
       fill.style.setProperty("--score", `${scores[dimension.id]}%`);
       fill.style.setProperty("--bar-color", dimension.color);
       bar.append(fill);
-      const score = document.createElement("strong");
-      score.textContent = String(scores[dimension.id]);
-      row.append(label, bar, score);
+      const chevron = document.createElement("span");
+      chevron.className = "dimension-chevron";
+      chevron.setAttribute("aria-hidden", "true");
+      summary.append(summaryCopy, bar, chevron);
+      const detail = document.createElement("div");
+      detail.className = "dimension-detail";
+      const description = document.createElement("p");
+      description.textContent = dimension.description;
+      const disclaimer = document.createElement("small");
+      disclaimer.textContent = dimension.disclaimer;
+      detail.append(description, disclaimer);
+      row.append(summary, detail);
       return row;
     }));
   };
 
+  const renderRoleRows = (container: HTMLElement, scores: Record<ProfileId, number>): void => {
+    const rankedProfiles = [...PROFILE_IDS].sort((a, b) => scores[b] - scores[a]);
+    container.replaceChildren(...rankedProfiles.map((profileId, rank) => {
+      const profile = profiles.find((item) => item.id === profileId)!;
+      const score = Math.round(scores[profileId]);
+      const row = document.createElement("details");
+      row.className = "role-score-row";
+      const summary = document.createElement("summary");
+      const rankLabel = document.createElement("span");
+      rankLabel.className = "role-rank";
+      rankLabel.textContent = String(rank + 1).padStart(2, "0");
+      const name = document.createElement("strong");
+      name.textContent = profileDisplayNames[profileId];
+      const value = document.createElement("span");
+      value.className = "role-score-value";
+      value.textContent = `${score}%`;
+      const toggle = document.createElement("span");
+      toggle.className = "role-score-toggle";
+      toggle.setAttribute("aria-hidden", "true");
+      toggle.textContent = "+";
+      const bar = document.createElement("span");
+      bar.className = "role-score-bar";
+      const fill = document.createElement("span");
+      fill.style.setProperty("--role-score", `${score}%`);
+      bar.append(fill);
+      summary.append(rankLabel, name, value, toggle, bar);
+      const detail = document.createElement("div");
+      detail.className = "role-score-detail";
+      const summaryText = document.createElement("p");
+      summaryText.textContent = profile.summary;
+      const reflection = document.createElement("small");
+      reflection.textContent = profile.reflection;
+      detail.append(summaryText, reflection);
+      row.append(summary, detail);
+      return row;
+    }));
+  };
+
+  const renderRadar = (container: HTMLElement, scores: Record<DimensionId, number>): void => {
+    const svgNamespace = "http://www.w3.org/2000/svg";
+    const size = 360;
+    const center = size / 2;
+    const radius = 108;
+    const labelRadius = 126;
+    const pointAt = (position: number, distance: number): [number, number] => {
+      const angle = (Math.PI * 2 * position) / dimensions.length - Math.PI / 2;
+      return [center + Math.cos(angle) * distance, center + Math.sin(angle) * distance];
+    };
+    const pointsAt = (distance: number): string => dimensions
+      .map((_, position) => pointAt(position, distance).join(","))
+      .join(" ");
+    const makeSvg = <K extends keyof SVGElementTagNameMap>(tag: K): SVGElementTagNameMap[K] =>
+      document.createElementNS(svgNamespace, tag);
+
+    const svg = makeSvg("svg");
+    svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
+    svg.setAttribute("role", "img");
+    svg.setAttribute("aria-label", dimensions.map((dimension) => `${dimension.shortName} ${scores[dimension.id]} percent`).join(", "));
+
+    const grid = makeSvg("g");
+    grid.setAttribute("class", "radar-grid");
+    [0.25, 0.5, 0.75, 1].forEach((level) => {
+      const polygon = makeSvg("polygon");
+      polygon.setAttribute("points", pointsAt(radius * level));
+      grid.append(polygon);
+    });
+    dimensions.forEach((_, position) => {
+      const [x, y] = pointAt(position, radius);
+      const axis = makeSvg("line");
+      axis.setAttribute("x1", String(center));
+      axis.setAttribute("y1", String(center));
+      axis.setAttribute("x2", String(x));
+      axis.setAttribute("y2", String(y));
+      grid.append(axis);
+    });
+
+    const shape = makeSvg("polygon");
+    shape.setAttribute("class", "radar-shape");
+    shape.setAttribute("points", dimensions.map((dimension, position) =>
+      pointAt(position, radius * scores[dimension.id] / 100).join(",")
+    ).join(" "));
+
+    const points = makeSvg("g");
+    points.setAttribute("class", "radar-points");
+    dimensions.forEach((dimension, position) => {
+      const [x, y] = pointAt(position, radius * scores[dimension.id] / 100);
+      const point = makeSvg("circle");
+      point.setAttribute("cx", String(x));
+      point.setAttribute("cy", String(y));
+      point.setAttribute("r", "4");
+      points.append(point);
+    });
+
+    const labels = makeSvg("g");
+    labels.setAttribute("class", "radar-labels");
+    const labelLines: Record<DimensionId, string[]> = {
+      DIR: ["Direction"],
+      SUR: ["Surrender"],
+      IGV: ["Giving", "intensity"],
+      IRC: ["Receiving", "intensity"],
+      RST: ["Restraint", "& craft"],
+      CAR: ["Service", "& care"],
+      PLY: ["Play", "& challenge"],
+      EXP: ["Exploration", "& ritual"]
+    };
+    dimensions.forEach((dimension, position) => {
+      const [rawX, y] = pointAt(position, labelRadius);
+      const x = position === 6 ? rawX + 10 : rawX;
+      const label = makeSvg("text");
+      label.setAttribute("x", String(x));
+      label.setAttribute("y", String(y - ((labelLines[dimension.id].length - 1) * 6)));
+      label.setAttribute("text-anchor", Math.abs(x - center) < 10 ? "middle" : x < center ? "end" : "start");
+      labelLines[dimension.id].forEach((line, lineIndex) => {
+        const span = makeSvg("tspan");
+        span.setAttribute("x", String(x));
+        span.setAttribute("dy", lineIndex === 0 ? "0" : "12");
+        span.textContent = line;
+        label.append(span);
+      });
+      labels.append(label);
+    });
+
+    svg.append(grid, shape, points, labels);
+    container.replaceChildren(svg);
+  };
+
+  const clearAdvanceTimer = (): void => {
+    if (advanceTimer !== undefined) window.clearTimeout(advanceTimer);
+    advanceTimer = undefined;
+    delete form.dataset.advancing;
+  };
+
+  const goNext = (expectedQuestionId?: number): void => {
+    const question = questionOrder[index];
+    if (!question || (expectedQuestionId !== undefined && question.id !== expectedQuestionId) || answers[question.id] === undefined) return;
+    clearAdvanceTimer();
+    if (index === questionOrder.length - 1) {
+      renderResult(scoreTest(answers));
+      return;
+    }
+    index += 1;
+    persist();
+    renderQuestion();
+    form.scrollIntoView({ behavior: "auto", block: "start" });
+  };
+
+  const advanceFromAnswer = (questionId: number): void => {
+    clearAdvanceTimer();
+    form.dataset.advancing = "true";
+    advanceTimer = window.setTimeout(() => {
+      advanceTimer = undefined;
+      delete form.dataset.advancing;
+      goNext(questionId);
+    }, 180);
+  };
+
   const renderQuestion = (): void => {
+    clearAdvanceTimer();
     const question = questionOrder[index];
     const selected = answers[question.id];
     const dimension = dimensions.find((item) => item.id === question.dimension)!;
@@ -118,6 +292,7 @@ export function initTestApp(root: HTMLElement): void {
     setText(root, "[data-progress-label]", `${index + 1} of ${questionOrder.length}`);
     required<HTMLElement>(root, "[data-progress-bar]").style.width = `${((index + 1) / questionOrder.length) * 100}%`;
     backButton.disabled = index === 0;
+    nextButton.disabled = selected === undefined;
     answerList.replaceChildren(
       ...answerOptions.map((option, optionIndex) => {
         const label = document.createElement("label");
@@ -129,8 +304,9 @@ export function initTestApp(root: HTMLElement): void {
         input.checked = selected === option.value;
         input.addEventListener("change", () => {
           answers[question.id] = option.value;
-          continueButton.disabled = false;
+          nextButton.disabled = false;
           persist();
+          advanceFromAnswer(question.id);
         });
         const number = document.createElement("span");
         number.className = "answer-number";
@@ -139,19 +315,15 @@ export function initTestApp(root: HTMLElement): void {
         copy.className = "answer-copy";
         const strong = document.createElement("strong");
         strong.textContent = option.label;
-        const small = document.createElement("small");
-        small.textContent = option.note;
-        copy.append(strong, small);
+        copy.append(strong);
         label.append(input, number, copy);
         return label;
       })
     );
-    continueButton.disabled = selected === undefined;
-    continueButton.textContent = index === questionOrder.length - 1 ? "See my result" : "Continue";
   };
 
   const profileSummary = (result: TestResult): string => {
-    if (result.isOpenEnded) return "Your answers do not strongly converge on one profile. Curiosity, context, or lower overall appeal may matter more than a single label right now.";
+    if (result.isOpenEnded) return "No single role scored high enough to become your main match. Your individual role and preference scores may be more useful than one label.";
     if (result.isBlended) {
       return result.primary
         .split(" / ")
@@ -159,12 +331,12 @@ export function initTestApp(root: HTMLElement): void {
         .filter(Boolean)
         .join(" ");
     }
-    return profiles.find((profile) => profile.id === result.primary)?.summary ?? "Your current preferences form a distinct pattern across the eight dimensions.";
+    return profiles.find((profile) => profile.id === result.primary)?.summary ?? "Your result is based on the role and preference scores below.";
   };
 
   const updateShareChannels = (result: TestResult): void => {
     const url = createShareUrl(result);
-    const text = `I took the BDSM Test and got ${result.primary}. See my shared result, then discover yours.`;
+    const text = `I took the BDSM Test and got ${result.primary}. Compare my scores and take the test yourself.`;
     const urls: Record<string, string> = {
       whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(`${text} ${url}`)}`,
       telegram: `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`,
@@ -224,6 +396,8 @@ export function initTestApp(root: HTMLElement): void {
     secondary.hidden = !result.secondary;
     secondary.textContent = result.secondary ? `Secondary tendency: ${result.secondary}` : "";
     renderDimensionRows(required<HTMLElement>(root, "[data-dimension-results]"), result.dimensions);
+    renderRoleRows(required<HTMLElement>(root, "[data-role-results]"), result.profileScores);
+    renderRadar(required<HTMLElement>(root, "[data-result-radar]"), result.dimensions);
     const renderTags = (selector: string, ids: DimensionId[]): void => {
       const container = required<HTMLElement>(root, selector);
       container.replaceChildren(...ids.map((id) => {
@@ -257,6 +431,14 @@ export function initTestApp(root: HTMLElement): void {
     setText(root, "[data-shared-primary]", payload.p);
     const scores = Object.fromEntries(dimensions.map((dimension, index) => [dimension.id, payload.a[index]])) as Record<DimensionId, number>;
     renderDimensionRows(required<HTMLElement>(root, "[data-shared-dimensions]"), scores);
+    renderRadar(required<HTMLElement>(root, "[data-shared-radar]"), scores);
+    const roleSection = required<HTMLElement>(root, "[data-shared-role-section]");
+    roleSection.hidden = !payload.c;
+    required<HTMLDetailsElement>(root, ".shared-dimensions").open = !payload.c;
+    if (payload.c) {
+      const roleScores = Object.fromEntries(PROFILE_IDS.map((profile, index) => [profile, payload.c![index]])) as Record<ProfileId, number>;
+      renderRoleRows(required<HTMLElement>(root, "[data-shared-role-results]"), roleScores);
+    }
     showView("shared");
   };
 
@@ -284,7 +466,7 @@ export function initTestApp(root: HTMLElement): void {
   const shareLink = async (): Promise<void> => {
     if (!currentResult) return;
     const url = createShareUrl(currentResult);
-    const text = `I took the BDSM Test and got ${currentResult.primary}. See my shared result, then discover yours.`;
+    const text = `I took the BDSM Test and got ${currentResult.primary}. Compare my scores and take the test yourself.`;
     if (navigator.share) {
       try {
         await navigator.share({ title: "My BDSM Test result", text, url });
@@ -301,12 +483,12 @@ export function initTestApp(root: HTMLElement): void {
 
   const shareImage = async (): Promise<void> => {
     if (!currentResult) return;
-    shareStatus.textContent = "Creating your private share image…";
+    shareStatus.textContent = "Creating your result image…";
     const blob = await getImage();
     const file = new File([blob], "my-bdsm-test-result.png", { type: "image/png" });
     if (navigator.share && navigator.canShare?.({ files: [file] })) {
       try {
-        await navigator.share({ title: "My BDSM Test result", text: "My current BDSM preference map.", files: [file] });
+        await navigator.share({ title: "My BDSM Test result", text: "My BDSM Test role scores.", files: [file] });
         shareStatus.textContent = "Image shared.";
       } catch (error) {
         if ((error as DOMException).name !== "AbortError") {
@@ -334,11 +516,13 @@ export function initTestApp(root: HTMLElement): void {
         case "saved-result": if (currentResult) renderResult(currentResult, false); break;
         case "back":
           if (index > 0) {
+            clearAdvanceTimer();
             index -= 1;
             persist();
             renderQuestion();
           }
           break;
+        case "next": goNext(); break;
         case "retake":
           clearLocalTestData();
           currentResult = null;
@@ -398,7 +582,7 @@ export function initTestApp(root: HTMLElement): void {
         case "hide-qr": required<HTMLElement>(root, "[data-qr-panel]").hidden = true; break;
       }
     } catch {
-      shareStatus.textContent = "That action is unavailable in this browser. Your result is still safe.";
+      shareStatus.textContent = "This browser could not complete that action. Your result has not changed.";
     }
   });
 
@@ -406,19 +590,7 @@ export function initTestApp(root: HTMLElement): void {
     required<HTMLButtonElement>(root, "[data-action='confirm']").disabled = !confirmationInputs.every((item) => item.checked);
   }));
 
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const question = questionOrder[index];
-    if (answers[question.id] === undefined) return;
-    if (index === questionOrder.length - 1) {
-      renderResult(scoreTest(answers));
-      return;
-    }
-    index += 1;
-    persist();
-    renderQuestion();
-    form.scrollIntoView({ behavior: "auto", block: "start" });
-  });
+  form.addEventListener("submit", (event) => event.preventDefault());
 
   root.addEventListener("keydown", (event) => {
     if (root.dataset.state !== "quiz") return;

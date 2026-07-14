@@ -1,5 +1,6 @@
 ---
 import ContentLayout from "../layouts/ContentLayout.astro";
+import { CONTACT_EMAIL } from "../data/site";
 import { breadcrumbSchema } from "../lib/seo";
 const title = "Private BDSM Test Data | Privacy | BDSMTest.top";
 const description = "How BDSMTest.top stores test progress locally, what shared result links contain, and which sensitive information is never sent for scoring.";
@@ -14,6 +15,9 @@ const description = "How BDSMTest.top stores test progress locally, what shared 
   breadcrumbs={[{ label: "Home", href: "/" }, { label: "Privacy" }]}
   structuredData={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Privacy", path: "/privacy/" }])}
 >
+  <h2>Who is responsible for this notice</h2>
+  <p>BDSMTest.top is responsible for the product practices described on this page. Privacy and service enquiries can be sent to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+
   <h2>Information the test does not ask for</h2>
   <p>Version 1 does not request a name, email address, birthday, gender, sexual orientation, relationship status, or demographic profile. It does not require an account or server session.</p>
 
@@ -21,18 +25,36 @@ const description = "How BDSMTest.top stores test progress locally, what shared 
   <p>Progress, raw answers, the latest result, and Private Boundary Map choices are stored in your browser's local storage when available. This allows refresh recovery on that device. If storage is blocked, the test continues in memory and progress may disappear on refresh.</p>
   <p>You can remove test data by selecting Retake from the result and starting over, by clearing the Private Boundary Map, or by clearing site data in your browser. Local data does not automatically synchronize across devices.</p>
 
+  <h2>Messages you send us</h2>
+  <p>If you email us, we receive your email address and the contents of your message. We use that information to reply, investigate a correction, or handle a privacy request. Do not include raw test answers, boundary choices, or other intimate details. Messages are delivered through Google email services, which process them under <a href="https://policies.google.com/privacy" rel="noreferrer">Google's Privacy Policy</a>.</p>
+
   <h2>Shared result links</h2>
-  <p>A link is created only after a user chooses a share action. Its URL fragment contains a model version, a profile name, an optional ordinary secondary tendency, and eight rounded affinity scores. It does not contain raw answers, question IDs, uncertainty locations, boundary choices, a sender ID, or a timestamp.</p>
-  <p>The fragment is not sent to BDSMTest.top in the HTTP request. After a receiving browser validates it, the fragment is removed from the address bar and the summary is held in memory. However, the app used to send the link and anyone holding the link can see the encoded summary. It is not encrypted or proof against modification.</p>
+  <p>A link is created only after a user chooses a share action. Its URL fragment contains a model version, profile name, optional secondary profile, 10 rounded role scores, and eight rounded preference scores. It does not contain raw answers, question IDs, uncertainty locations, boundary choices, a sender ID, or a timestamp. Older links may contain only the profile and eight preference scores.</p>
+  <p>The fragment is not sent to BDSMTest.top in the HTTP request. After a receiving browser validates it, the fragment is removed from the address bar and the summary is held in memory. However, the app used to send the link and anyone holding the link can see the encoded summary. It is not encrypted, does not prove who created it, and does not prevent intentional modification.</p>
 
   <h2>Result images and QR codes</h2>
-  <p>Result PNGs and QR codes are generated locally. They are not uploaded to an image service. A result image shows the profile and top three affinity scores, but never raw answers or the Boundary Map.</p>
+  <p>Result PNGs and QR codes are generated locally. They are not uploaded to an image service. A result image shows the profile and 10 role scores, but never raw answers or the Boundary Map.</p>
 
   <h2>Analytics and advertising</h2>
-  <p>No analytics or advertising script is enabled in the current release. If event analytics are introduced, they must not receive answers, scores, profiles, shared payloads, boundary data, or free-form user content. Advertising is prohibited during the test, around the shared-result call to action, and inside the private boundary area.</p>
+  <p>No analytics or advertising script is enabled in the current release. If event analytics are introduced, they must not receive answers, scores, profiles, shared-link contents, boundary data, or free-form user content. Advertising is prohibited during the test, around the shared-result call to action, and inside the private boundary area.</p>
 
   <h2>Hosting logs and external platforms</h2>
-  <p>Cloudflare may process ordinary request information needed to deliver static files, such as IP address, user agent, requested path, and security signals. URL fragments are not part of those HTTP requests. When you deliberately open WhatsApp, Telegram, Bluesky, X, Reddit, Facebook, or another share destination, that destination applies its own privacy terms.</p>
+  <p>Cloudflare may process ordinary request information needed to deliver static files, such as IP address, user agent, requested path, and security signals. URL fragments are not part of those HTTP requests. We do not maintain a separate server-side database of these logs. Cloudflare handles this data under its service terms and <a href="https://www.cloudflare.com/privacypolicy/" rel="noreferrer">Privacy Policy</a>.</p>
+  <p>When you open WhatsApp, Telegram, Bluesky, X, Reddit, Facebook, or another share destination, that destination receives the information needed for your chosen share action and applies its own privacy terms.</p>
+
+  <h2>Why information is processed and how long it is kept</h2>
+  <p>Where applicable law requires a legal basis, ordinary hosting data is processed to provide and secure the site, and contact messages are processed to respond to your request and maintain necessary records. We rely on legitimate operational interests, steps you ask us to take, consent where specifically requested, and legal obligations where applicable.</p>
+  <p>Local test data remains on your device until you remove it or the browser clears it. We do not set a separate retention period for Cloudflare records controlled by Cloudflare. Email is kept only as long as reasonably needed to finish the conversation, handle security or abuse, and meet legal obligations.</p>
+
+  <h2>Automated scoring</h2>
+  <p>The browser calculates role and preference scores from fixed formulas. The scoring does not create legal effects, make eligibility decisions, or identify you to BDSMTest.top. The formulas and model limits are described on the <a href="/methodology/">methodology page</a>.</p>
+
+  <h2>Your choices and privacy requests</h2>
+  <p>You can delete local test data through the controls described above. A shared link or image cannot be recalled after you send or publish it, so choose the audience carefully.</p>
+  <p>Depending on where you live, you may have rights to request access, correction, deletion, restriction, or objection, and to complain to a local data protection authority. Because raw test data stays in your browser, we normally cannot retrieve or identify it. For questions or requests about an email you sent us, contact <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+
+  <h2>Adults only</h2>
+  <p>The interactive test is intended for adults aged 18 and older. We do not knowingly ask minors to provide personal information. If you believe a minor has sent personal information by email, contact us so it can be reviewed and removed where appropriate.</p>
 
   <h2>Policy changes</h2>
   <p>Material changes to data collection will be reflected here before they are enabled. The effective date for this version is July 14, 2026.</p>

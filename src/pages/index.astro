@@ -6,10 +6,10 @@ import { dimensions } from "../data/questions";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const title = "BDSM Test: Free Kink Preference Quiz | BDSMTest.top";
-const description = "Take a free, private BDSM test to explore your current kink preferences. Get an 8-dimension profile in about 4 minutes.";
+const description = "Take a free, private BDSM test and get scores for 10 BDSM roles plus eight preference dimensions. 32 questions, scored in your browser.";
 const faqs = [
-  ["What does this BDSM test measure?", "It measures how appealing 32 negotiated adult scenarios feel to you right now, then maps the answers across eight affinity dimensions. It does not measure experience, skill, safety knowledge, or a fixed identity."],
-  ["Is the BDSM test private?", "Yes. The questions, scoring, progress, and personal result run in your browser. Raw answers are not sent to BDSMTest.top. A shared result contains only the profile and eight rounded scores you choose to share."],
+  ["What does this BDSM test measure?", "It scores 10 role matches and eight preference dimensions from your answers to 32 negotiated adult scenarios. It does not measure experience, skill, safety knowledge, or identity."],
+  ["Is the BDSM test private?", "Yes. Questions, scoring, progress, and results run in your browser. Raw answers are not sent to BDSMTest.top. Shared results contain only the profile and rounded role and preference scores."],
   ["Is this a scientific or diagnostic test?", "No. The model is research-informed but has not yet been validated as a psychometric scale. Treat the result as a structured starting point for reflection and conversation, not a diagnosis."],
   ["Can a result include more than one role?", "Yes. Direction and surrender are scored separately, and closely matched profiles can appear as a blend. A low or diffuse pattern returns Open-ended Explorer instead of forcing a label."],
   ["Does an appealing answer mean I should try it?", "No. Appeal, willingness, practical safety, relationship agreements, and personal boundaries are different questions. Any real activity needs specific, informed, ongoing consent."],
@@ -46,19 +46,19 @@ const structuredData = [
     <div class="site-shell trust-grid">
       <div><LockKeyhole size={22} /><span><strong>Answers stay here</strong>Scored in your browser</span></div>
       <div><ShieldCheck size={22} /><span><strong>Consent assumed</strong>Adults and prior negotiation</span></div>
-      <div><span class="fact-number">8</span><span><strong>Affinity dimensions</strong>Not forced into one axis</span></div>
+      <div><span class="fact-number">10</span><span><strong>Role scores</strong>Plus eight preference dimensions</span></div>
     </div>
   </section>
 
   <section class="measure-section site-shell" id="what-it-measures">
     <div class="measure-intro">
       <p class="eyebrow">What this BDSM test measures</p>
-      <h2>A map of attraction, not a verdict.</h2>
-      <p>The test separates leading from surrendering, giving intensity from receiving it, and adds craft, care, play, and exploration. That matters because BDSM interests often overlap rather than fitting one tidy role.</p>
+      <h2>What you get after 32 questions</h2>
+      <p>You get a best profile match, scores for all 10 supported roles, and eight preference scores. The separate scores show where roles overlap and where they do not.</p>
       <a class="text-link" href="/methodology/">Read the scoring method <ArrowRight size={17} /></a>
     </div>
     <div class="example-result" aria-label="Example result chart">
-      <div class="example-top"><span>Example map</span><strong>Profile preview</strong></div>
+      <div class="example-top"><span>Example scores</span><strong>Result preview</strong></div>
       {dimensions.slice(0, 5).map((dimension, index) => (
         <div class="example-row">
           <span>{dimension.shortName}</span>
@@ -66,15 +66,15 @@ const structuredData = [
           <strong>{[78, 62, 45, 53, 70][index]}</strong>
         </div>
       ))}
-      <p>Illustrative only — your pattern is calculated after all 32 answers.</p>
+      <p>Example only. Your result is calculated after all 32 answers.</p>
     </div>
   </section>
 
   <section class="dimensions-band">
     <div class="site-shell">
       <div class="section-heading">
-        <p class="eyebrow">Eight distinct lenses</p>
-        <h2>Preferences can cross familiar role lines.</h2>
+        <p class="eyebrow">Eight preference dimensions</p>
+        <h2>Role labels do not explain everything</h2>
       </div>
       <div class="dimension-grid">
         {dimensions.map((dimension, index) => (
@@ -91,8 +91,8 @@ const structuredData = [
 
   <section class="principles-section site-shell">
     <div>
-      <p class="eyebrow">Designed for honest answers</p>
-      <h2>Clear distinctions make a more useful result.</h2>
+      <p class="eyebrow">How to read the scores</p>
+      <h2>What a BDSM test result can and cannot tell you</h2>
     </div>
     <div class="principle-list">
       <article><span>01</span><div><h3>Appeal is not experience</h3><p>You can be curious without having tried something. The test never infers skill or behavior from attraction.</p></div></article>
@@ -104,11 +104,11 @@ const structuredData = [
   <section class="roles-band">
     <div class="site-shell roles-inner">
       <div>
-        <p class="eyebrow">Profiles without a box</p>
-        <h2>Dominant, submissive, switch — and the patterns between.</h2>
+        <p class="eyebrow">Ten role scores</p>
+        <h2>See every role match, not only the winner</h2>
       </div>
       <div>
-        <p>A profile is calculated from all eight affinities. Closely matched patterns can form a blended result, while diffuse or lower scores remain Open-ended Explorer.</p>
+        <p>The result ranks every supported role from 0 to 100. The highest match becomes your profile, or a blended profile when two scores are close.</p>
         <a class="button button--secondary" href="/bdsm-roles/">Explore BDSM roles <ArrowRight size={17} /></a>
       </div>
     </div>
@@ -117,16 +117,16 @@ const structuredData = [
   <section class="safety-section site-shell">
     <div class="safety-mark" aria-hidden="true"><span></span><span></span><span></span></div>
     <div class="reading-width">
-      <p class="eyebrow">The premise beneath every question</p>
-      <h2>Consent is not one of the scores. It is the condition for the whole test.</h2>
-      <p>Every scenario assumes informed adults, prior negotiation, and the freedom to pause or stop. We do not award a “consent score,” because ethical communication is not a kink intensity or personality trait.</p>
+      <p class="eyebrow">Built into every question</p>
+      <h2>Consent is assumed, not scored</h2>
+      <p>Every scenario assumes informed adults, prior negotiation, and the freedom to pause or stop. There is no consent score because communication is not a kink preference.</p>
       <a class="text-link" href="/consent-and-safety/">Read the consent and safety framework <ArrowRight size={17} /></a>
     </div>
   </section>
 
   <section class="faq-band">
     <div class="site-shell faq-layout">
-      <div><p class="eyebrow">Questions, answered plainly</p><h2>BDSM test FAQ</h2></div>
+      <div><p class="eyebrow">Common questions</p><h2>BDSM test FAQ</h2></div>
       <div class="faq-list">
         {faqs.map(([question, answer], index) => (
           <details open={index === 0}>
@@ -139,8 +139,8 @@ const structuredData = [
   </section>
 
   <section class="final-cta site-shell">
-    <p class="eyebrow">Your answers stay yours</p>
-    <h2>Take the BDSM test when you are ready.</h2>
+    <p class="eyebrow">Private browser-based scoring</p>
+    <h2>Take the free BDSM test</h2>
     <a class="button" href="#start">Start the 32-question test <ArrowRight size={17} /></a>
   </section>
 </BaseLayout>

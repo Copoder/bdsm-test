@@ -3,12 +3,12 @@ import type { AnswerValue, DimensionMeta, Question } from "../lib/model";
 export const MODEL_VERSION = "1.0.0";
 export const QUESTION_VERSION = "1.0.0";
 
-export const answerOptions: Array<{ value: AnswerValue; label: string; note: string }> = [
-  { value: 0, label: "Strongly unappealing", note: "Not appealing right now; not automatically a hard limit." },
-  { value: 1, label: "Somewhat unappealing", note: "Low current appeal." },
-  { value: 2, label: "It depends / unsure", note: "Context, trust, rules, or understanding may matter." },
-  { value: 3, label: "Somewhat appealing", note: "Appealing now; no experience implied." },
-  { value: 4, label: "Strongly appealing", note: "Strong current appeal; not an identity commitment." }
+export const answerOptions: Array<{ value: AnswerValue; label: string }> = [
+  { value: 0, label: "Strongly unappealing" },
+  { value: 1, label: "Somewhat unappealing" },
+  { value: 2, label: "It depends / unsure" },
+  { value: 3, label: "Somewhat appealing" },
+  { value: 4, label: "Strongly appealing" }
 ];
 
 export const dimensions: DimensionMeta[] = [

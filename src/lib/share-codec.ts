@@ -7,6 +7,7 @@ export interface SharePayloadV1 {
   p: string;
   s?: ProfileId;
   a: [number, number, number, number, number, number, number, number];
+  c?: [number, number, number, number, number, number, number, number, number, number];
 }
 
 const MAX_ENVELOPE_LENGTH = 1024;
@@ -49,11 +50,15 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 
 export function validateSharePayload(value: unknown): SharePayloadV1 {
   if (!isRecord(value)) throw new Error("Payload must be an object");
-  const allowedKeys = new Set(["v", "m", "p", "s", "a"]);
+  const allowedKeys = new Set(["v", "m", "p", "s", "a", "c"]);
   if (Object.keys(value).some((key) => !allowedKeys.has(key))) throw new Error("Payload contains unknown fields");
   if (value.v !== 1 || value.m !== MODEL_VERSION || typeof value.p !== "string") throw new Error("Unsupported payload version");
   if (!Array.isArray(value.a) || value.a.length !== DIMENSION_IDS.length) throw new Error("Payload requires eight scores");
   if (!value.a.every((score) => Number.isInteger(score) && score >= 0 && score <= 100)) throw new Error("Score out of range");
+  if (value.c !== undefined && (!Array.isArray(value.c) || value.c.length !== PROFILE_IDS.length ||
+    !value.c.every((score) => Number.isInteger(score) && score >= 0 && score <= 100))) {
+    throw new Error("Role scores are invalid");
+  }
 
   const ordinary = isOrdinaryProfile(value.p);
   const blended = isBlendedProfile(value.p);
@@ -72,13 +77,14 @@ export function validateSharePayload(value: unknown): SharePayloadV1 {
     m: MODEL_VERSION,
     p: value.p,
     ...(value.s ? { s: value.s as ProfileId } : {}),
-    a: value.a as SharePayloadV1["a"]
+    a: value.a as SharePayloadV1["a"],
+    ...(value.c ? { c: value.c as SharePayloadV1["c"] } : {})
   };
 }
 
 export function canonicalShareJson(payload: SharePayloadV1): string {
   const valid = validateSharePayload(payload);
-  return JSON.stringify({ v: valid.v, m: valid.m, p: valid.p, ...(valid.s ? { s: valid.s } : {}), a: valid.a });
+  return JSON.stringify({ v: valid.v, m: valid.m, p: valid.p, ...(valid.s ? { s: valid.s } : {}), a: valid.a, ...(valid.c ? { c: valid.c } : {}) });
 }
 
 export function encodeSharePayload(payload: SharePayloadV1): string {
@@ -107,7 +113,8 @@ export function payloadFromResult(result: TestResult): SharePayloadV1 {
     m: result.modelVersion,
     p: result.primary,
     ...(result.secondary ? { s: result.secondary } : {}),
-    a: DIMENSION_IDS.map((dimension) => result.dimensions[dimension])
+    a: DIMENSION_IDS.map((dimension) => result.dimensions[dimension]),
+    c: PROFILE_IDS.map((profile) => Math.round(result.profileScores[profile]))
   });
 }
 

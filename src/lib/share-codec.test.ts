@@ -28,6 +28,15 @@ describe("share codec", () => {
     expect(canonicalShareJson(fixtures[1])).toBe('{"v":1,"m":"1.0.0","p":"Dominant / Caregiver","a":[78,29,51,30,47,75,49,58]}');
   });
 
+  it("round-trips optional role scores while keeping old links valid", () => {
+    const withRoles: SharePayloadV1 = {
+      ...fixtures[0],
+      c: [82, 43, 51, 68, 31, 56, 29, 73, 47, 61]
+    };
+    expect(decodeShareEnvelope(encodeSharePayload(withRoles))).toEqual(withRoles);
+    expect(decodeShareEnvelope(goldenEnvelopes[0])).toEqual(fixtures[0]);
+  });
+
   it("rejects a modified checksum", () => {
     const envelope = encodeSharePayload(fixtures[0]);
     const last = envelope.at(-1) === "0" ? "1" : "0";
@@ -37,6 +46,7 @@ describe("share codec", () => {
   it("rejects answers, identifiers, and unknown fields", () => {
     expect(() => validateSharePayload({ ...fixtures[0], answers: [4, 4] })).toThrow("unknown fields");
     expect(() => validateSharePayload({ ...fixtures[0], id: "sender-1" })).toThrow("unknown fields");
+    expect(() => validateSharePayload({ ...fixtures[0], c: [10, 20] })).toThrow("Role scores");
   });
 
   it("rejects impossible secondary-profile combinations", () => {
