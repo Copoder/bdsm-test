@@ -15,7 +15,9 @@ test("policies publish the correct contact and current data practices", async ({
   await expect(page.getByRole("heading", { name: "Automated scoring" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Your choices and privacy requests" })).toBeVisible();
   await expect(page.locator("main")).toContainText("10 rounded role scores");
-  await expect(page.locator("main")).toContainText("No analytics or advertising script is enabled");
+  await expect(page.locator("main")).toContainText("G-28B43KH2T1");
+  await expect(page.locator("main")).toContainText("removes the URL fragment");
+  await expect(page.locator('script[src*="googletagmanager.com/gtag/js?id=G-28B43KH2T1"]')).toHaveCount(1);
 
   await page.goto("/terms/");
   await expect(page.getByRole("heading", { name: "External services and shared content" })).toBeVisible();

@@ -39,6 +39,17 @@ const schemas = structuredData ? (Array.isArray(structuredData) ? [schema, ...st
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#f8f5ee" />
     <meta name="description" content={description} />
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-28B43KH2T1"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { window.dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("set", "allow_google_signals", false);
+      gtag("set", "allow_ad_personalization_signals", false);
+      gtag("config", "G-28B43KH2T1", {
+        page_location: `${location.origin}${location.pathname}${location.search}`
+      });
+    </script>
     <script is:inline>
       if (location.hostname.endsWith(".pages.dev") || location.hostname.endsWith(".workers.dev")) {
         const robots = document.createElement("meta");

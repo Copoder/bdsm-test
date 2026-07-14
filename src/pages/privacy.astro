@@ -36,15 +36,17 @@ const description = "How BDSMTest.top stores test progress locally, what shared 
   <p>Result PNGs and QR codes are generated locally. They are not uploaded to an image service. A result image shows the profile and 10 role scores, but never raw answers or the Boundary Map.</p>
 
   <h2>Analytics and advertising</h2>
-  <p>No analytics or advertising script is enabled in the current release. If event analytics are introduced, they must not receive answers, scores, profiles, shared-link contents, boundary data, or free-form user content. Advertising is prohibited during the test, around the shared-result call to action, and inside the private boundary area.</p>
+  <p>We use Google Analytics 4, with measurement ID <code>G-28B43KH2T1</code>, to understand ordinary page visits and general site usage. Google Analytics may process information such as the page path, referral source, browser and device information, approximate location, and analytics identifiers or cookies. Google processes this information under its <a href="https://policies.google.com/privacy" rel="noreferrer">Privacy Policy</a>.</p>
+  <p>The analytics configuration removes the URL fragment before the first page view is sent. It does not send the <code>#r=</code> shared-result payload, raw answers, scores, profiles, question progress, Private Boundary Map choices, or free-form user content. Google Signals and advertising-personalization signals are disabled. You can limit analytics storage by blocking or clearing cookies in your browser.</p>
+  <p>No advertising script is enabled in the current release. Advertising is prohibited during the test, around the shared-result call to action, and inside the private boundary area.</p>
 
   <h2>Hosting logs and external platforms</h2>
   <p>Cloudflare may process ordinary request information needed to deliver static files, such as IP address, user agent, requested path, and security signals. URL fragments are not part of those HTTP requests. We do not maintain a separate server-side database of these logs. Cloudflare handles this data under its service terms and <a href="https://www.cloudflare.com/privacypolicy/" rel="noreferrer">Privacy Policy</a>.</p>
   <p>When you open WhatsApp, Telegram, Bluesky, X, Reddit, Facebook, or another share destination, that destination receives the information needed for your chosen share action and applies its own privacy terms.</p>
 
   <h2>Why information is processed and how long it is kept</h2>
-  <p>Where applicable law requires a legal basis, ordinary hosting data is processed to provide and secure the site, and contact messages are processed to respond to your request and maintain necessary records. We rely on legitimate operational interests, steps you ask us to take, consent where specifically requested, and legal obligations where applicable.</p>
-  <p>Local test data remains on your device until you remove it or the browser clears it. We do not set a separate retention period for Cloudflare records controlled by Cloudflare. Email is kept only as long as reasonably needed to finish the conversation, handle security or abuse, and meet legal obligations.</p>
+  <p>Where applicable law requires a legal basis, ordinary hosting data is processed to provide and secure the site, analytics data is processed to understand and improve the service, and contact messages are processed to respond to your request and maintain necessary records. We rely on legitimate operational interests, steps you ask us to take, consent where specifically requested, and legal obligations where applicable.</p>
+  <p>Local test data remains on your device until you remove it or the browser clears it. Google Analytics and Cloudflare apply their own retention controls to data they process. Email is kept only as long as reasonably needed to finish the conversation, handle security or abuse, and meet legal obligations.</p>
 
   <h2>Automated scoring</h2>
   <p>The browser calculates role and preference scores from fixed formulas. The scoring does not create legal effects, make eligibility decisions, or identify you to BDSMTest.top. The formulas and model limits are described on the <a href="/methodology/">methodology page</a>.</p>
@@ -57,5 +59,5 @@ const description = "How BDSMTest.top stores test progress locally, what shared 
   <p>The interactive test is intended for adults aged 18 and older. We do not knowingly ask minors to provide personal information. If you believe a minor has sent personal information by email, contact us so it can be reviewed and removed where appropriate.</p>
 
   <h2>Policy changes</h2>
-  <p>Material changes to data collection will be reflected here before they are enabled. The effective date for this version is July 14, 2026.</p>
+  <p>Material changes to data collection will be reflected here before they are enabled. The effective date for this version is July 15, 2026.</p>
 </ContentLayout>
