@@ -9,8 +9,8 @@ await Promise.all([
     .png({ compressionLevel: 9, palette: true })
     .toFile(path("../public/og-default.png")),
   sharp(path("../public/assets/material-grain.svg"))
-    .resize(288, 288)
-    .webp({ quality: 52, effort: 6 })
+    .resize(128, 128)
+    .webp({ quality: 24, effort: 6 })
     .toFile(path("../public/assets/material-grain.webp"))
 ]);
 

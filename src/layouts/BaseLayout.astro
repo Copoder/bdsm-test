@@ -1,6 +1,8 @@
 ---
 import SiteFooter from "../components/SiteFooter.astro";
 import SiteHeader from "../components/SiteHeader.astro";
+import dmSansFont from "@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2?url";
+import newsreaderFont from "@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2?url";
 import "../styles/global.css";
 
 interface Props {
@@ -40,6 +42,8 @@ const schemas = structuredData ? (Array.isArray(structuredData) ? [schema, ...st
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href={dmSansFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={newsreaderFont} as="font" type="font/woff2" crossorigin />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="BDSMTest.top" />
     <meta property="og:title" content={title} />

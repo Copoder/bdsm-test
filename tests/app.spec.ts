@@ -80,5 +80,28 @@ test.describe("BDSM Test", () => {
     const hasNoOverflow = await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth);
     expect(hasNoOverflow).toBe(true);
     await expect(page.getByRole("button", { name: "Start the test" })).toBeVisible();
+    await page.getByRole("button", { name: "Start the test" }).click();
+    await page.locator("[data-confirm='age']").check();
+    await page.locator("[data-confirm='context']").check();
+    await page.getByRole("button", { name: "Continue" }).click();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+    const optionHeights = await page.locator(".answer-option").evaluateAll((options) => options.map((option) => option.getBoundingClientRect().height));
+    expect(optionHeights.every((height) => height >= 48)).toBe(true);
+  });
+
+  test("stays stable across required viewport widths", async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== "desktop-chromium", "Responsive matrix runs once.");
+    for (const viewport of [
+      { width: 320, height: 568 },
+      { width: 1024, height: 768 },
+      { width: 1440, height: 900 },
+      { width: 1920, height: 1080 }
+    ]) {
+      await page.setViewportSize(viewport);
+      await page.goto("/");
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), `${viewport.width}px homepage overflow`).toBe(true);
+      await page.goto("/bdsm-roles/");
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), `${viewport.width}px content overflow`).toBe(true);
+    }
   });
 });
