@@ -1,0 +1,154 @@
+---
+import { Menu } from "@lucide/astro";
+---
+
+<header class="site-header">
+  <div class="site-shell header-inner">
+    <a class="brand" href="/" aria-label="BDSMTest.top home">
+      <span class="brand-mark" aria-hidden="true"><span></span></span>
+      <span>BDSMTest<span>.top</span></span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      <a href="/methodology/">Method</a>
+      <a href="/bdsm-roles/">Roles</a>
+      <a href="/consent-and-safety/">Consent & safety</a>
+      <a class="nav-cta" href="/#start">Take the test</a>
+    </nav>
+
+    <details class="mobile-nav">
+      <summary aria-label="Open navigation"><Menu size={22} aria-hidden="true" /></summary>
+      <nav aria-label="Mobile navigation">
+        <a href="/methodology/">Method</a>
+        <a href="/bdsm-roles/">Roles</a>
+        <a href="/consent-and-safety/">Consent & safety</a>
+        <a href="/#start">Take the test</a>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: relative;
+    z-index: 20;
+    border-bottom: 1px solid var(--line);
+    background: rgb(248 245 238 / 92%);
+    backdrop-filter: blur(14px);
+  }
+
+  .header-inner {
+    display: flex;
+    min-height: 4.5rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .brand > span:last-child > span {
+    color: var(--oxblood);
+  }
+
+  .brand-mark {
+    position: relative;
+    display: grid;
+    width: 1.7rem;
+    height: 1.7rem;
+    place-items: center;
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+  }
+
+  .brand-mark::after,
+  .brand-mark span {
+    position: absolute;
+    background: var(--oxblood);
+    content: "";
+  }
+
+  .brand-mark::after {
+    width: 0.36rem;
+    height: 0.36rem;
+    border-radius: 50%;
+  }
+
+  .brand-mark span {
+    width: 0.12rem;
+    height: 2.05rem;
+    transform: rotate(38deg);
+  }
+
+  .desktop-nav {
+    display: none;
+  }
+
+  .mobile-nav {
+    position: relative;
+  }
+
+  .mobile-nav summary {
+    display: grid;
+    width: 3rem;
+    height: 3rem;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .mobile-nav summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .mobile-nav nav {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    display: grid;
+    width: min(18rem, calc(100vw - 2rem));
+    padding: 0.5rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+
+  .mobile-nav nav a {
+    padding: 0.85rem;
+    text-decoration: none;
+  }
+
+  @media (min-width: 52rem) {
+    .desktop-nav {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .desktop-nav a {
+      text-decoration: none;
+    }
+
+    .nav-cta {
+      padding: 0.55rem 0.8rem;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius);
+    }
+
+    .mobile-nav {
+      display: none;
+    }
+  }
+</style>

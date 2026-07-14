@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f8f5ee"/>
+  <path d="M0 92h1200M0 538h1200" stroke="#d8d0c4"/>
+  <path d="M112 0v630M1088 0v630" stroke="#d8d0c4"/>
+  <circle cx="600" cy="170" r="47" fill="none" stroke="#171614" stroke-width="9"/>
+  <path d="m568 218 64-96" stroke="#7c1f2a" stroke-width="8"/>
+  <circle cx="600" cy="170" r="8" fill="#7c1f2a"/>
+  <text x="600" y="320" fill="#171614" font-family="Georgia,serif" font-size="82" font-weight="600" text-anchor="middle">BDSM Test</text>
+  <text x="600" y="386" fill="#45413d" font-family="Trebuchet MS,sans-serif" font-size="26" text-anchor="middle">A private preference map for adults</text>
+  <text x="600" y="486" fill="#7c1f2a" font-family="Trebuchet MS,sans-serif" font-size="22" font-weight="600" text-anchor="middle">BDSMTEST.TOP</text>
+</svg>

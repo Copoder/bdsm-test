@@ -1,0 +1,87 @@
+<footer class="site-footer">
+  <div class="site-shell footer-grid">
+    <div>
+      <a class="footer-brand" href="/">BDSMTest.top</a>
+      <p>A private, research-informed preference map for adults.</p>
+    </div>
+    <nav aria-label="Product links">
+      <strong>Explore</strong>
+      <a href="/methodology/">Methodology</a>
+      <a href="/bdsm-roles/">BDSM roles</a>
+      <a href="/consent-and-safety/">Consent & safety</a>
+    </nav>
+    <nav aria-label="Legal links">
+      <strong>Trust</strong>
+      <a href="/about/">About</a>
+      <a href="/privacy/">Privacy</a>
+      <a href="/terms/">Terms</a>
+    </nav>
+  </div>
+  <div class="site-shell footer-base">
+    <span>For adults 18+ only.</span>
+    <span>Not a diagnosis or a substitute for communication.</span>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding: var(--space-7) 0 var(--space-5);
+    color: #eee9df;
+    background: var(--ink);
+    border-top: 3px solid var(--oxblood);
+  }
+
+  .footer-grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .footer-brand {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .footer-grid p {
+    max-width: 24rem;
+    margin: 0.6rem 0 0;
+    color: #bdb5aa;
+  }
+
+  .footer-grid nav {
+    display: grid;
+    align-content: start;
+    gap: 0.55rem;
+  }
+
+  .footer-grid nav strong {
+    margin-bottom: 0.3rem;
+    color: white;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+  }
+
+  .footer-grid nav a {
+    color: #cec7bd;
+    text-decoration: none;
+  }
+
+  .footer-base {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-top: var(--space-7);
+    padding-top: var(--space-4);
+    border-top: 1px solid #3c3935;
+    color: #9e978e;
+    font-size: 0.78rem;
+  }
+
+  @media (min-width: 48rem) {
+    .footer-grid {
+      grid-template-columns: 2fr 1fr 1fr;
+    }
+  }
+</style>

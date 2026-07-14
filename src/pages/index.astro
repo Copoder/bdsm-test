@@ -1,0 +1,32 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "BDSM Test: Free Kink Preference Quiz | BDSMTest.top";
+const description = "Take a free, private BDSM test to explore your current kink preferences. Get an 8-dimension profile in about 4 minutes.";
+---
+
+<BaseLayout {title} {description}>
+  <section class="placeholder site-shell">
+    <p class="eyebrow">Private by design · Adults 18+</p>
+    <h1>Free BDSM Test</h1>
+    <p>Explore your current preferences across eight dimensions. The complete interactive test is being assembled here.</p>
+  </section>
+</BaseLayout>
+
+<style>
+  .placeholder {
+    min-height: 65vh;
+    padding-block: var(--space-8);
+  }
+
+  .placeholder h1 {
+    max-width: 12ch;
+    margin-bottom: var(--space-5);
+  }
+
+  .placeholder > p:last-child {
+    max-width: 42rem;
+    color: var(--ink-soft);
+    font-size: 1.18rem;
+  }
+</style>
