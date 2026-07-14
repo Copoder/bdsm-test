@@ -8,7 +8,7 @@ import { ArrowLeft, Check, Copy, Download, Ellipsis, ImageDown, Link, QrCode, Ro
       <div class="shared-intro">
         <p class="eyebrow">A BDSM Test result was shared with you</p>
         <p class="result-kicker">Their current profile</p>
-        <h1 data-shared-primary>Shared profile</h1>
+        <h2 data-shared-primary>Shared profile</h2>
         <p>This is a shared self-reflection result, not a verified identity or diagnosis.</p>
         <button class="button shared-cta" type="button" data-action="shared-start">Take your own BDSM Test</button>
       </div>
@@ -394,9 +394,10 @@ import { ArrowLeft, Check, Copy, Download, Ellipsis, ImageDown, Link, QrCode, Ro
     gap: var(--space-7);
   }
 
-  .shared-intro h1 {
+  .shared-intro h2 {
     max-width: 14ch;
     margin-bottom: var(--space-4);
+    font-size: clamp(2.65rem, 8vw, 5.75rem);
   }
 
   .shared-intro > p:not(.eyebrow, .result-kicker) {

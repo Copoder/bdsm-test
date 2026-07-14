@@ -1,0 +1,37 @@
+---
+import ContentLayout from "../layouts/ContentLayout.astro";
+import { breadcrumbSchema } from "../lib/seo";
+const title = "BDSM Test Terms of Use | BDSMTest.top";
+const description = "Terms for using the adult BDSM preference test, including age, educational scope, no professional advice, and acceptable use.";
+---
+
+<ContentLayout
+  {title}
+  {description}
+  eyebrow="Terms of use"
+  heading="Use this tool as reflection, not instruction"
+  intro="These terms define the limited educational purpose of BDSMTest.top and the responsibilities that remain with each user."
+  breadcrumbs={[{ label: "Home", href: "/" }, { label: "Terms" }]}
+  structuredData={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Terms", path: "/terms/" }])}
+>
+  <h2>Adults only</h2>
+  <p>You must be at least 18 years old and legally able to access adult-oriented educational material in your location. Do not use the interactive test if you are under 18.</p>
+
+  <h2>Educational and self-reflection purpose</h2>
+  <p>The site provides a research-informed preference map and general educational content. It is not medical, psychological, legal, relationship, safety, or emergency advice. A result is not a diagnosis, identity verification, compatibility assessment, consent record, or certification of competence.</p>
+
+  <h2>No activity recommendation</h2>
+  <p>A score or profile does not recommend trying an activity. Users remain responsible for seeking relevant education, considering health and legal context, communicating specifically, and obtaining informed, voluntary, ongoing consent.</p>
+
+  <h2>Acceptable use</h2>
+  <p>Do not use this service to involve minors, facilitate non-consensual conduct, harass another person, misrepresent a shared result as verified, interfere with the site, or distribute maliciously modified links.</p>
+
+  <h2>Availability and changes</h2>
+  <p>The site may change questions, models, features, or availability. Model versions are included in shared results so a future decoder can reject unsupported formats instead of silently changing their meaning.</p>
+
+  <h2>No warranty</h2>
+  <p>The service is provided as available without a guarantee that a result will feel personally accurate or that every browser feature will work on every device. Where local law does not permit a limitation, the limitation applies only to the extent allowed.</p>
+
+  <h2>Effective date</h2>
+  <p>These terms are effective July 14, 2026.</p>
+</ContentLayout>

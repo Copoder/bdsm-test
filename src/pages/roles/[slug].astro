@@ -1,0 +1,54 @@
+---
+import { dimensions } from "../../data/questions";
+import { roleGuides, type RoleGuide } from "../../data/roles";
+import ContentLayout from "../../layouts/ContentLayout.astro";
+import { breadcrumbSchema } from "../../lib/seo";
+
+export function getStaticPaths() {
+  return roleGuides.map((role) => ({ params: { slug: role.slug }, props: { role } }));
+}
+
+interface Props { role: RoleGuide }
+const { role } = Astro.props;
+const title = `${role.name} in BDSM: Meaning, Myths & Communication`;
+const description = `${role.name} BDSM role guide: meaning, common misconceptions, related preferences, and consent-focused questions for clearer communication.`;
+const relatedDimensions = role.dimensions.map((id) => dimensions.find((dimension) => dimension.id === id)!);
+---
+
+<ContentLayout
+  {title}
+  {description}
+  eyebrow="BDSM role guide"
+  heading={role.name}
+  intro={role.summary}
+  breadcrumbs={[{ label: "Home", href: "/" }, { label: "BDSM roles", href: "/bdsm-roles/" }, { label: role.name }]}
+  structuredData={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "BDSM roles", path: "/bdsm-roles/" }, { name: role.name, path: `/roles/${role.slug}/` }])}
+>
+  {role.commonTerm && <div class="callout"><strong>Related community language:</strong> {role.commonTerm}. People choose their own terms; this guide does not assign an identity.</div>}
+
+  <h2>What does {role.name} mean?</h2>
+  <p>{role.definition}</p>
+  <p>{role.distinction}</p>
+
+  <h2>What the label does not tell you</h2>
+  <p>{role.notMeaning}</p>
+  <p>No role label establishes consent to a particular activity, the breadth of a relationship agreement, technical competence, risk tolerance, or how someone behaves outside the negotiated context.</p>
+
+  <h2>Interests that may overlap</h2>
+  <ul>{role.interests.map((interest) => <li>{interest}</li>)}</ul>
+  <p>These are possibilities rather than requirements. Two people using the same role word may care about entirely different parts of it.</p>
+
+  <h2>Related test dimensions</h2>
+  <table>
+    <thead><tr><th>Dimension</th><th>Why it may contribute</th></tr></thead>
+    <tbody>{relatedDimensions.map((dimension) => <tr><td><strong>{dimension.name}</strong></td><td>{dimension.description}</td></tr>)}</tbody>
+  </table>
+  <p>The profile is a weighted summary of current answers, not a population percentile or a stable personality diagnosis. A high dimension can also contribute to other profiles.</p>
+
+  <h2>Questions worth discussing</h2>
+  <ol>{role.questions.map((question) => <li>{question}</li>)}</ol>
+
+  <h2>Consent remains specific</h2>
+  <p>Role language can make a conversation easier, but it cannot replace the conversation. Agreements need a defined scope, relevant information, a way to check in, and the freedom for anyone involved to pause or withdraw consent.</p>
+  <p><a href="/consent-and-safety/">Read the consent and safety framework</a> or return to the <a href="/bdsm-roles/">complete BDSM role guide</a>.</p>
+</ContentLayout>

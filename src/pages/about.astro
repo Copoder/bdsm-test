@@ -1,0 +1,34 @@
+---
+import ContentLayout from "../layouts/ContentLayout.astro";
+import { breadcrumbSchema } from "../lib/seo";
+const title = "About BDSMTest.top | Product and Editorial Standards";
+const description = "Learn why BDSMTest.top exists, how its content is sourced, what the current model can claim, and how corrections and reviews are handled.";
+---
+
+<ContentLayout
+  {title}
+  {description}
+  eyebrow="About BDSMTest.top"
+  heading="A quieter, more honest preference tool"
+  intro="BDSMTest.top is built to give adults useful language for reflection without uploading intimate answers or turning a profile into a diagnosis."
+  breadcrumbs={[{ label: "Home", href: "/" }, { label: "About" }]}
+  structuredData={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "About", path: "/about/" }])}
+>
+  <h2>Why this project exists</h2>
+  <p>Many role quizzes collapse attraction, identity, experience, behavior, boundaries, and safety knowledge into one result. This project deliberately narrows the measured construct to current self-reported appeal, keeps giving and receiving dimensions separate, and puts boundaries in an independent private tool.</p>
+
+  <h2>Current evidence status</h2>
+  <div class="callout"><strong>Model 1.0.0 is not a validated psychometric instrument.</strong> Public copy uses “research-informed preference map,” “affinity score,” and “profile match.” It does not use clinical, diagnostic, most accurate, or scientifically proven claims.</div>
+  <p>The question model draws on published measurement approaches and professional material, but its eight dimensions and profile formulas remain product hypotheses. The <a href="/methodology/">methodology page</a> documents the formulas, thresholds, sources, and validation roadmap.</p>
+
+  <h2>Editorial and review standard</h2>
+  <p>Factual claims should trace to primary research, a systematic review, professional guidance, or clearly identified community professional material. Wikipedia is used only as a terminology map and citation lead. Competitor copy is not treated as evidence.</p>
+  <p>The reviewer panel required for formal content validation is not yet presented as complete. No reviewer name, credential, endorsement, or user count will be invented. Before the product claims validation, it requires documented review from psychometric research, kink-aware education or therapy, and experienced community education perspectives.</p>
+
+  <h2>Privacy standard</h2>
+  <p>Questions, progress, scores, the optional Boundary Map, and generated images are handled in the browser. The site has no account system and no scoring API. A result summary leaves the device only after the user explicitly shares it.</p>
+
+  <h2>Corrections and versioning</h2>
+  <p>Material changes to questions, weights, thresholds, or payload meaning receive a new version. Sources are scheduled for review at least every six months. The public GitHub repository provides a transparent record of code and model changes.</p>
+  <p><a href="https://github.com/Copoder/bdsm-test" rel="noreferrer">View the source repository</a> or <a href="https://github.com/Copoder/bdsm-test/issues" rel="noreferrer">report a factual or technical correction</a>.</p>
+</ContentLayout>

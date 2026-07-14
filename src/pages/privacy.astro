@@ -1,0 +1,39 @@
+---
+import ContentLayout from "../layouts/ContentLayout.astro";
+import { breadcrumbSchema } from "../lib/seo";
+const title = "Private BDSM Test Data | Privacy | BDSMTest.top";
+const description = "How BDSMTest.top stores test progress locally, what shared result links contain, and which sensitive information is never sent for scoring.";
+---
+
+<ContentLayout
+  {title}
+  {description}
+  eyebrow="Privacy"
+  heading="Your raw answers stay in your browser"
+  intro="The test is designed around data minimization: no account, no answer API, and no server-side result database."
+  breadcrumbs={[{ label: "Home", href: "/" }, { label: "Privacy" }]}
+  structuredData={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Privacy", path: "/privacy/" }])}
+>
+  <h2>Information the test does not ask for</h2>
+  <p>Version 1 does not request a name, email address, birthday, gender, sexual orientation, relationship status, or demographic profile. It does not require an account or server session.</p>
+
+  <h2>Local test data</h2>
+  <p>Progress, raw answers, the latest result, and Private Boundary Map choices are stored in your browser's local storage when available. This allows refresh recovery on that device. If storage is blocked, the test continues in memory and progress may disappear on refresh.</p>
+  <p>You can remove test data by selecting Retake from the result and starting over, by clearing the Private Boundary Map, or by clearing site data in your browser. Local data does not automatically synchronize across devices.</p>
+
+  <h2>Shared result links</h2>
+  <p>A link is created only after a user chooses a share action. Its URL fragment contains a model version, a profile name, an optional ordinary secondary tendency, and eight rounded affinity scores. It does not contain raw answers, question IDs, uncertainty locations, boundary choices, a sender ID, or a timestamp.</p>
+  <p>The fragment is not sent to BDSMTest.top in the HTTP request. After a receiving browser validates it, the fragment is removed from the address bar and the summary is held in memory. However, the app used to send the link and anyone holding the link can see the encoded summary. It is not encrypted or proof against modification.</p>
+
+  <h2>Result images and QR codes</h2>
+  <p>Result PNGs and QR codes are generated locally. They are not uploaded to an image service. A result image shows the profile and top three affinity scores, but never raw answers or the Boundary Map.</p>
+
+  <h2>Analytics and advertising</h2>
+  <p>No analytics or advertising script is enabled in the current release. If event analytics are introduced, they must not receive answers, scores, profiles, shared payloads, boundary data, or free-form user content. Advertising is prohibited during the test, around the shared-result call to action, and inside the private boundary area.</p>
+
+  <h2>Hosting logs and external platforms</h2>
+  <p>Cloudflare may process ordinary request information needed to deliver static files, such as IP address, user agent, requested path, and security signals. URL fragments are not part of those HTTP requests. When you deliberately open WhatsApp, Telegram, Bluesky, X, Reddit, Facebook, or another share destination, that destination applies its own privacy terms.</p>
+
+  <h2>Policy changes</h2>
+  <p>Material changes to data collection will be reflected here before they are enabled. The effective date for this version is July 14, 2026.</p>
+</ContentLayout>

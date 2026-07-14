@@ -1,0 +1,27 @@
+---
+import { ArrowLeft } from "@lucide/astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+const title = "Page Not Found | BDSMTest.top";
+const description = "The requested BDSMTest.top page could not be found.";
+---
+
+<BaseLayout {title} {description} noindex>
+  <section class="not-found site-shell">
+    <div class="error-mark" aria-hidden="true"><span>404</span></div>
+    <div>
+      <p class="eyebrow">The line ends here</p>
+      <h1>Page not found.</h1>
+      <p>The address may have changed, or the shared link may be incomplete.</p>
+      <a class="button" href="/"><ArrowLeft size={18} /> Return to the BDSM Test</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found { display: grid; min-height: 70vh; align-items: center; gap: var(--space-7); padding-block: var(--space-8); }
+  .not-found h1 { margin-bottom: var(--space-4); }
+  .not-found p:not(.eyebrow) { max-width: 34rem; color: var(--ink-soft); font-size: 1.1rem; }
+  .error-mark { display: grid; width: min(18rem, 70vw); aspect-ratio: 1; place-items: center; border: 1px solid var(--line-strong); border-radius: 50%; }
+  .error-mark span { display: grid; width: 55%; height: 55%; place-items: center; color: var(--oxblood); border: 1px solid currentColor; border-radius: 50%; font-family: var(--font-display); font-size: 2.3rem; }
+  @media (min-width: 48rem) { .not-found { grid-template-columns: 5fr 7fr; } }
+</style>

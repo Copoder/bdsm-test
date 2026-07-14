@@ -1,0 +1,60 @@
+---
+import { ArrowRight } from "@lucide/astro";
+import { roleGuides } from "../data/roles";
+import ContentLayout from "../layouts/ContentLayout.astro";
+import { breadcrumbSchema } from "../lib/seo";
+
+const title = "BDSM Roles Explained: Dominant, Submissive, Switch & More";
+const description = "Understand common BDSM roles, how activity positions differ from power roles, and why interests can overlap without forcing one identity.";
+---
+
+<ContentLayout
+  {title}
+  {description}
+  eyebrow="Role guide"
+  heading="BDSM roles are useful language, not fixed boxes"
+  intro="Dominant, submissive, switch, rigger, brat, and other terms describe different parts of an interaction. Context matters more than a label alone."
+  breadcrumbs={[{ label: "Home", href: "/" }, { label: "BDSM roles" }]}
+  structuredData={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "BDSM roles", path: "/bdsm-roles/" }])}
+>
+  <h2>Role, position, and interest are different</h2>
+  <p>A BDSM role can refer to negotiated authority, the action someone performs, the action someone receives, a preferred style of interaction, or a community identity. Treating all those meanings as one axis produces confusing results.</p>
+  <table>
+    <thead><tr><th>Term type</th><th>Typical question</th><th>Examples</th></tr></thead>
+    <tbody>
+      <tr><td>Power role</td><td>Who holds agreed authority in this scope?</td><td>Dominant, submissive, switch</td></tr>
+      <tr><td>Activity position</td><td>Who is doing or receiving this action?</td><td>Top, bottom, rigger, rope receiver</td></tr>
+      <tr><td>Interaction style</td><td>What kind of energy creates appeal?</td><td>Brat, caregiver, experimentalist</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Profiles used in this test</h2>
+  <div class="role-guide-grid">
+    {roleGuides.map((role, index) => (
+      <a href={`/roles/${role.slug}/`}>
+        <span>{String(index + 1).padStart(2, "0")}</span>
+        <h3>{role.name}</h3>
+        <p>{role.summary}</p>
+        <strong>Read the guide <ArrowRight size={16} /></strong>
+      </a>
+    ))}
+  </div>
+
+  <h2>Why one person can hold several roles</h2>
+  <p>Leading and surrendering can both appeal. A person can direct restraint while receiving intensity, enjoy service without power exchange, or switch by partner and activity. That is why the test reports eight affinities before presenting any profile match.</p>
+  <blockquote><p>A role tells you very little about consent to a specific activity. The useful conversation is always about this person, this context, this agreement, and the ability to change it.</p></blockquote>
+</ContentLayout>
+
+<style>
+  .role-guide-grid { display: grid; margin: var(--space-5) 0; border-top: 1px solid var(--line-strong); }
+  .role-guide-grid > a { min-height: 15rem; padding: var(--space-5) 0; border-bottom: 1px solid var(--line); color: inherit; text-decoration: none; }
+  .role-guide-grid > a > span { color: var(--oxblood); font-size: 0.72rem; }
+  .role-guide-grid h3 { margin: var(--space-5) 0 var(--space-2); }
+  .role-guide-grid p { color: var(--ink-soft); }
+  .role-guide-grid strong { display: flex; align-items: center; gap: var(--space-2); font-size: 0.8rem; }
+  @media (min-width: 42rem) {
+    .role-guide-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .role-guide-grid > a { padding: var(--space-5); border-right: 1px solid var(--line); }
+    .role-guide-grid > a:nth-child(2n) { border-right: 0; }
+  }
+</style>

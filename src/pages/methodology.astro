@@ -1,0 +1,60 @@
+---
+import { dimensions } from "../data/questions";
+import ContentLayout from "../layouts/ContentLayout.astro";
+import { breadcrumbSchema } from "../lib/seo";
+
+const title = "How the BDSM Preference Test Works | Methodology";
+const description = "See how BDSMTest.top separates eight affinity dimensions, scores 32 questions, handles blended profiles, and limits its claims.";
+---
+
+<ContentLayout
+  {title}
+  {description}
+  eyebrow="Methodology · Model 1.0.0"
+  heading="How this preference map is built"
+  intro="A transparent account of what the questions measure, how the scores are calculated, and what this first model cannot establish."
+  breadcrumbs={[{ label: "Home", href: "/" }, { label: "Methodology" }]}
+  structuredData={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Methodology", path: "/methodology/" }])}
+>
+  <div class="callout"><strong>Current status:</strong> research-informed self-reflection tool. Model 1.0.0 has not been validated as a psychometric scale and must not be presented as clinical, diagnostic, or scientifically proven.</div>
+
+  <h2>One construct: current self-reported appeal</h2>
+  <p>Every core question asks how appealing a negotiated adult scenario feels right now. The answer scale runs symmetrically from strongly unappealing to strongly appealing, with <em>It depends / unsure</em> at the midpoint. The test does not ask whether you have done the activity, identify with a role, possess technical skill, or would immediately consent to try it.</p>
+  <p>That separation is intentional. Published measurement work distinguishes orientation, attitudes, practices, communication, and experience rather than treating them as one interchangeable signal. Our first model narrows its public claim to attraction and context.</p>
+
+  <h2>The eight affinity dimensions</h2>
+  <table>
+    <thead><tr><th>Dimension</th><th>What contributes</th><th>What it does not establish</th></tr></thead>
+    <tbody>{dimensions.map((dimension) => <tr><td><strong>{dimension.name}</strong></td><td>{dimension.description}</td><td>{dimension.disclaimer}</td></tr>)}</tbody>
+  </table>
+
+  <h2>Question order and scoring</h2>
+  <p>There are four questions per dimension. Each answer is scored 0, 1, 2, 3, or 4. A dimension score is the sum of its four answers divided by 16, then multiplied by 100. Scores are affinity indexes for this response set, not population percentiles.</p>
+  <p>Questions are shown in a fixed interleaved order instead of grouping one dimension at a time. This makes the scoring structure less obvious and reduces repetitive agreement patterns. Answers stay in the browser and the calculation does not call an external API.</p>
+
+  <h2>How profile matches work</h2>
+  <p>Ten profile candidates combine the eight dimensions with narrower internal tags such as restraint-giving, ritual-planning, or playful-resistance. These weighted formulas are product hypotheses, not discovered personality types. Threshold decisions use unrounded scores:</p>
+  <ul>
+    <li>If the highest profile match is below 45, the result is <strong>Open-ended Explorer</strong>.</li>
+    <li>If the two highest matches are within 7 points and the highest is at least 45, they form a blended profile.</li>
+    <li>Switch receives its full formula only when Direction and Surrender are both at least 60.</li>
+    <li>Displayed numbers are rounded only after comparisons are complete.</li>
+  </ul>
+
+  <h2>Why boundaries are separate</h2>
+  <p>Low appeal is not automatically a hard limit, and strong appeal is not automatic permission. The optional Private Boundary Map appears only after the result. Its categorical choices never affect scores and never enter a result link or image.</p>
+
+  <h2>Evidence used — and not overextended</h2>
+  <p>The content model was cross-checked against measurement research, a systematic review, consent research, clinical guidance, and community professional material. Each source answers a narrower question; no single paper validates this tool.</p>
+  <ul class="source-list">
+    <li><a href="https://pubmed.ncbi.nlm.nih.gov/39115366/" rel="noreferrer">Kink Orientation Scale</a> — supports separating multiple constructs.</li>
+    <li><a href="https://pubmed.ncbi.nlm.nih.gov/27488306/" rel="noreferrer">Sadomasochism Checklist</a> — distinguishes attraction from behavior frequency and giving from receiving.</li>
+    <li><a href="https://pubmed.ncbi.nlm.nih.gov/35790610/" rel="noreferrer">BDSM Proclivity Scale</a> — separates attitudes and experiences.</li>
+    <li><a href="https://pubmed.ncbi.nlm.nih.gov/31617765/" rel="noreferrer">Systematic scoping review</a> — informs non-pathologizing language.</li>
+    <li><a href="https://pubmed.ncbi.nlm.nih.gov/37439228/" rel="noreferrer">Clinical guidelines for kink-involved clients</a> — informs respectful professional boundaries.</li>
+    <li><a href="https://ncsfreedom.org/2021/01/16/best-practices-for-consent-to-kink/" rel="noreferrer">NCSF Best Practices for Consent to Kink</a> — informs the consent premise.</li>
+  </ul>
+
+  <h2>Validation roadmap</h2>
+  <p>Before calling a future version validated, the work requires expert content review, cognitive interviews, a larger independent sample, exploratory and confirmatory factor analysis on separate samples, test–retest assessment, and convergent and discriminant validity checks. Material model changes will receive a new version rather than silently altering old shared results.</p>
+</ContentLayout>

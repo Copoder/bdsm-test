@@ -1,0 +1,50 @@
+---
+import ContentLayout from "../layouts/ContentLayout.astro";
+import { breadcrumbSchema } from "../lib/seo";
+const title = "BDSM Consent and Safety: A Practical Framework";
+const description = "Understand explicit, informed, ongoing BDSM consent, negotiation, withdrawal, risk context, and why a test result never replaces communication.";
+---
+
+<ContentLayout
+  {title}
+  {description}
+  eyebrow="Consent & safety"
+  heading="Consent is the condition, not a score"
+  intro="Every test question assumes informed adults, prior negotiation, and the ability to pause or stop. Real consent remains specific to the actual people and activity."
+  breadcrumbs={[{ label: "Home", href: "/" }, { label: "Consent & safety" }]}
+  structuredData={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Consent & safety", path: "/consent-and-safety/" }])}
+>
+  <div class="callout"><strong>A preference result is not permission.</strong> Interest, willingness, practical safety, relationship agreements, and personal boundaries are separate decisions.</div>
+
+  <h2>What meaningful consent requires</h2>
+  <ul>
+    <li><strong>Adults with capacity:</strong> everyone can understand the relevant information and make a voluntary decision.</li>
+    <li><strong>Specific scope:</strong> agreement to one activity, intensity, role, or occasion does not imply agreement to another.</li>
+    <li><strong>Relevant information:</strong> foreseeable risks, expectations, health considerations, and uncertainty are discussed honestly.</li>
+    <li><strong>Active communication:</strong> consent is not inferred only from clothing, role labels, past behavior, silence, or a relationship status.</li>
+    <li><strong>Ongoing choice:</strong> anyone can pause, change, or withdraw consent at any time, including after an activity has started.</li>
+  </ul>
+
+  <h2>Negotiation is more than a checklist</h2>
+  <p>Useful negotiation clarifies what each person wants, what is off the table, what depends on conditions, and what signals will be used when words become difficult. It also includes practical context: current health, medication or substances, fatigue, emotional state, privacy, environment, relevant skill, and an aftercare or reconnection plan.</p>
+  <p>A safeword can be one communication tool, but it is not the only valid tool and does not transfer all responsibility to the person receiving an activity. Partners still need to observe, check in, and respond to changing capacity or distress.</p>
+
+  <h2>SSC, RACK, and personal responsibility</h2>
+  <p><strong>Safe, Sane, and Consensual (SSC)</strong> and <strong>Risk-Aware Consensual Kink (RACK)</strong> are community frameworks for thinking and talking. They emphasize different language around risk, but neither is a certification or a substitute for activity-specific education.</p>
+  <blockquote><p>No framework makes every BDSM activity safe. “Consensual” does not mean risk-free, and “risk-aware” requires more than acknowledging that risk exists.</p></blockquote>
+
+  <h2>Why this site does not teach high-risk techniques</h2>
+  <p>This first version does not test or instruct activities involving breath restriction, blood, knives, drugs, permanent injury, or consensual non-consent. A short quiz cannot evaluate health context, technical skill, local law, emergency readiness, or compatibility.</p>
+  <p>For any unfamiliar activity, seek current, activity-specific education from qualified and accountable sources. Stop when communication, capacity, or conditions no longer match the agreement.</p>
+
+  <h2>Boundaries after the result</h2>
+  <p>The optional Private Boundary Map keeps <em>Hard limit</em>, <em>Depends on conditions</em>, <em>Open to discuss</em>, and <em>Prefer not to answer</em> separate from attraction scores. The map stays on the device and is not included in result links or images.</p>
+
+  <h2>Sources and scope</h2>
+  <ul class="source-list">
+    <li><a href="https://ncsfreedom.org/2021/01/16/best-practices-for-consent-to-kink/" rel="noreferrer">National Coalition for Sexual Freedom — Best Practices for Consent to Kink</a></li>
+    <li><a href="https://pubmed.ncbi.nlm.nih.gov/39576567/" rel="noreferrer">Consent Norms in the BDSM Community</a></li>
+    <li><a href="https://pubmed.ncbi.nlm.nih.gov/38017253/" rel="noreferrer">Sexual Consent Norms in a Sexually Diverse Sample</a></li>
+  </ul>
+  <p>This page provides general education, not medical, legal, mental-health, or emergency advice.</p>
+</ContentLayout>

@@ -15,9 +15,31 @@ const faqs = [
   ["Does an appealing answer mean I should try it?", "No. Appeal, willingness, practical safety, relationship agreements, and personal boundaries are different questions. Any real activity needs specific, informed, ongoing consent."],
   ["Do I need BDSM experience?", "No. The questions ask about current appeal, not past behavior. It is fine to choose It depends / unsure whenever trust, context, or unfamiliar language matters."]
 ];
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "BDSM Test",
+    url: "https://bdsmtest.top/",
+    applicationCategory: "LifestyleApplication",
+    operatingSystem: "Any",
+    audience: { "@type": "PeopleAudience", requiredMinAge: 18 },
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    description
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map(([name, text]) => ({
+      "@type": "Question",
+      name,
+      acceptedAnswer: { "@type": "Answer", text }
+    }))
+  }
+];
 ---
 
-<BaseLayout {title} {description}>
+<BaseLayout {title} {description} {structuredData}>
   <TestApp />
 
   <section class="trust-band" aria-label="Privacy facts">

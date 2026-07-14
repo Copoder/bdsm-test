@@ -1,0 +1,89 @@
+---
+import { ArrowRight } from "@lucide/astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  eyebrow: string;
+  heading: string;
+  intro: string;
+  breadcrumbs: Array<{ label: string; href?: string }>;
+  updated?: string;
+  structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
+}
+
+const { title, description, eyebrow, heading, intro, breadcrumbs, updated = "July 14, 2026", structuredData } = Astro.props;
+---
+
+<BaseLayout {title} {description} {structuredData}>
+  <header class="content-hero">
+    <div class="site-shell">
+      <Breadcrumbs items={breadcrumbs} />
+      <div class="content-hero-grid">
+        <div>
+          <p class="eyebrow">{eyebrow}</p>
+          <h1>{heading}</h1>
+        </div>
+        <div class="hero-intro">
+          <p>{intro}</p>
+          <span>Reviewed {updated}</span>
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="site-shell content-grid">
+    <article class="prose">
+      <slot />
+    </article>
+    <aside class="content-aside">
+      <p class="insight-label">Start with your own pattern</p>
+      <h2>Preference becomes clearer with context.</h2>
+      <p>Answer 32 private questions and see eight separate affinity scores.</p>
+      <a class="button" href="/#start">Take the BDSM Test <ArrowRight size={17} /></a>
+      <p class="aside-note">For adults 18+. Research-informed, not diagnostic.</p>
+    </aside>
+  </div>
+</BaseLayout>
+
+<style is:global>
+  .content-hero { padding: var(--space-5) 0 var(--space-8); border-bottom: 1px solid var(--line); background: var(--paper-deep); }
+  .content-hero-grid { display: grid; gap: var(--space-6); margin-top: var(--space-7); }
+  .content-hero h1 { max-width: 15ch; margin: 0; font-size: clamp(2.7rem, 7vw, 5rem); }
+  .hero-intro { align-self: end; max-width: 36rem; }
+  .hero-intro p { color: var(--ink-soft); font-size: 1.12rem; }
+  .hero-intro span { color: var(--steel); font-size: 0.75rem; }
+  .content-grid { display: grid; gap: var(--space-7); padding-block: var(--space-8); }
+  .prose { min-width: 0; }
+  .prose > :first-child { margin-top: 0; }
+  .prose h2 { margin: var(--space-8) 0 var(--space-4); font-size: clamp(1.8rem, 4vw, 2.6rem); }
+  .prose h3 { margin: var(--space-6) 0 var(--space-3); }
+  .prose p,
+  .prose li { color: var(--ink-soft); }
+  .prose p,
+  .prose ul,
+  .prose ol { max-width: var(--reading); }
+  .prose li + li { margin-top: 0.55rem; }
+  .prose a { font-weight: 600; }
+  .prose table { width: 100%; margin: var(--space-5) 0; border-collapse: collapse; font-size: 0.87rem; }
+  .prose th,
+  .prose td { padding: 0.85rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+  .prose th { color: var(--ink); background: var(--paper-deep); }
+  .prose blockquote,
+  .callout { max-width: var(--reading); margin: var(--space-5) 0; padding: var(--space-4) var(--space-5); border-left: 3px solid var(--teal); background: rgb(56 107 104 / 7%); }
+  .prose blockquote p,
+  .callout p { margin-bottom: 0; }
+  .source-list { padding-top: var(--space-4); border-top: 1px solid var(--line-strong); font-size: 0.85rem; }
+  .content-aside { align-self: start; padding: var(--space-5); color: var(--paper); background: var(--ink); border-top: 3px solid var(--oxblood); }
+  .content-aside .insight-label { color: #d68e94; }
+  .content-aside h2 { margin-bottom: var(--space-3); font-family: var(--font-display); font-size: 1.65rem; }
+  .content-aside > p:not(.insight-label) { color: #c1bab1; }
+  .content-aside .button { margin-top: var(--space-3); color: var(--ink); background: var(--paper); border-color: var(--paper); }
+  .content-aside .aside-note { margin: var(--space-4) 0 0; font-size: 0.72rem; }
+  @media (min-width: 56rem) {
+    .content-hero-grid { grid-template-columns: 7fr 5fr; }
+    .content-grid { grid-template-columns: minmax(0, 8fr) minmax(16rem, 4fr); align-items: start; }
+    .content-aside { position: sticky; top: 2rem; }
+  }
+</style>
