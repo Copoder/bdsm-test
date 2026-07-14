@@ -1,0 +1,670 @@
+---
+import { ArrowLeft, Check, RotateCcw, ShieldCheck } from "@lucide/astro";
+---
+
+<section class="test-app" id="start" data-test-app data-state="intro" aria-labelledby="test-heading">
+  <div class="test-frame">
+    <div class="intro-view" data-view="intro">
+      <div class="hero-copy">
+        <p class="eyebrow">Private by design · Adults 18+</p>
+        <h1 id="test-heading">Free BDSM Test</h1>
+        <p class="hero-lede">Map what feels appealing to you right now across eight dimensions. No account, no answer uploads, no judgment.</p>
+        <div class="hero-meta" aria-label="Test details">
+          <span><strong>32</strong> questions</span>
+          <span><strong>4–6</strong> minutes</span>
+          <span><strong>100%</strong> local scoring</span>
+        </div>
+        <div class="intro-actions">
+          <button class="button start-button" type="button" data-action="start">Start the test</button>
+          <a href="#what-it-measures">See what it measures</a>
+        </div>
+        <div class="resume-panel" data-resume hidden>
+          <p>You have an unfinished test on this device.</p>
+          <div>
+            <button class="button" type="button" data-action="resume">Resume</button>
+            <button class="button button--secondary" type="button" data-action="restart">Start over</button>
+          </div>
+        </div>
+      </div>
+      <div class="hero-object" aria-hidden="true">
+        <div class="tension-disc">
+          <span class="disc-ring ring-one"></span>
+          <span class="disc-ring ring-two"></span>
+          <span class="disc-line"></span>
+          <span class="disc-pin"></span>
+          <span class="disc-label">01—08</span>
+        </div>
+        <p>Eight affinities.<br/>No forced identity.</p>
+      </div>
+    </div>
+
+    <div class="gate-view" data-view="gate" hidden>
+      <button class="icon-back" type="button" data-action="gate-back" aria-label="Back to introduction"><ArrowLeft size={22} /></button>
+      <div class="gate-content">
+        <span class="gate-icon"><ShieldCheck size={26} /></span>
+        <p class="eyebrow">Before you begin</p>
+        <h2>Keep the frame clear.</h2>
+        <p>This test measures current self-reported appeal. It does not measure experience, skill, identity, consent knowledge, or compatibility.</p>
+        <label class="confirm-row">
+          <input type="checkbox" data-confirm="age" />
+          <span><strong>I am 18 or older.</strong><small>This tool is intended only for adults.</small></span>
+        </label>
+        <label class="confirm-row">
+          <input type="checkbox" data-confirm="context" />
+          <span><strong>I understand the shared premise.</strong><small>Every question assumes informed consent, prior negotiation, adults only, and the ability to stop.</small></span>
+        </label>
+        <button class="button gate-continue" type="button" data-action="confirm" disabled>Continue</button>
+        <p class="storage-note" data-storage-note hidden>Private browsing settings prevent progress from surviving a refresh. You can still finish in this tab.</p>
+      </div>
+    </div>
+
+    <div class="quiz-view" data-view="quiz" hidden>
+      <header class="quiz-header">
+        <button class="button button--secondary button--icon" type="button" data-action="back" aria-label="Previous question"><ArrowLeft size={21} /></button>
+        <div class="quiz-progress-copy">
+          <span data-dimension-label>Current preferences</span>
+          <strong data-progress-label aria-live="polite">1 of 32</strong>
+        </div>
+        <span class="quiz-mark" aria-hidden="true"></span>
+      </header>
+      <div class="progress-track" aria-hidden="true"><span data-progress-bar></span></div>
+      <form class="question-form" data-question-form>
+        <div class="question-context"><ShieldCheck size={16} /><span>Informed consent · Prior negotiation · Adults only</span></div>
+        <fieldset>
+          <legend data-question-text></legend>
+          <p>How appealing does this feel to you right now?</p>
+          <div class="answer-list" data-answer-list></div>
+        </fieldset>
+        <button class="button continue-button" type="submit" disabled>Continue</button>
+        <p class="keyboard-note">Keyboard: press 1–5 to choose, then Enter to continue.</p>
+      </form>
+    </div>
+
+    <div class="result-view" data-view="result" hidden aria-live="polite">
+      <div class="result-header">
+        <div>
+          <p class="eyebrow">Your current preference map</p>
+          <p class="result-kicker">Your answers suggest</p>
+          <h2 data-result-primary>Profile</h2>
+          <p class="result-summary" data-result-summary></p>
+          <p class="result-secondary" data-result-secondary hidden></p>
+        </div>
+        <div class="result-seal" aria-hidden="true"><Check size={28} /><span>LOCAL<br/>RESULT</span></div>
+      </div>
+      <p class="result-disclaimer">This result is a reflection tool, not a diagnosis or a rule for who you are.</p>
+      <div class="result-grid">
+        <section class="dimension-results" aria-labelledby="affinity-heading">
+          <div class="section-title-row"><h3 id="affinity-heading">Eight affinities</h3><span>0–100</span></div>
+          <div data-dimension-results></div>
+        </section>
+        <aside class="result-insights">
+          <section>
+            <p class="insight-label">What seems core</p>
+            <div class="tag-list" data-core-dimensions></div>
+          </section>
+          <section data-context-section>
+            <p class="insight-label">What may depend on context</p>
+            <div class="tag-list" data-context-dimensions></div>
+          </section>
+          <section>
+            <p class="insight-label">Questions worth discussing</p>
+            <ol class="prompt-list" data-communication-prompts></ol>
+          </section>
+        </aside>
+      </div>
+      <div class="result-actions">
+        <button class="button" type="button" data-action="boundary">Build a private boundary map</button>
+        <button class="button button--secondary" type="button" data-action="retake"><RotateCcw size={18} /> Retake</button>
+      </div>
+      <div class="boundary-placeholder" data-boundary-placeholder hidden>
+        <p><strong>Private Boundary Map is the next section.</strong> Your test result is already complete and will not change.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initTestApp } from "../lib/test-app";
+  document.querySelectorAll<HTMLElement>("[data-test-app]").forEach(initTestApp);
+</script>
+
+<style is:global>
+  .test-app {
+    position: relative;
+    min-height: calc(100dvh - 4.5rem);
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+    background:
+      linear-gradient(90deg, transparent calc(50% - 0.5px), rgb(124 31 42 / 12%) calc(50% - 0.5px), rgb(124 31 42 / 12%) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
+      var(--paper);
+  }
+
+  .test-app::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: clamp(1rem, 4vw, 4rem);
+    width: 1px;
+    background: var(--oxblood);
+    opacity: 0.45;
+    content: "";
+  }
+
+  .test-frame {
+    width: min(calc(100% - 2rem), var(--content));
+    min-height: inherit;
+    margin-inline: auto;
+  }
+
+  .intro-view {
+    display: grid;
+    min-height: inherit;
+    align-items: center;
+    gap: var(--space-6);
+    padding: var(--space-7) 0;
+  }
+
+  .hero-copy {
+    position: relative;
+    z-index: 2;
+    max-width: 45rem;
+  }
+
+  .hero-copy h1 {
+    margin-bottom: var(--space-4);
+  }
+
+  .hero-lede {
+    max-width: 38rem;
+    margin-bottom: var(--space-5);
+    color: var(--ink-soft);
+    font-size: clamp(1.08rem, 2vw, 1.3rem);
+  }
+
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-5);
+    margin-bottom: var(--space-6);
+    color: var(--ink-soft);
+    font-size: 0.84rem;
+  }
+
+  .hero-meta strong {
+    color: var(--ink);
+    font-size: 1rem;
+  }
+
+  .intro-actions,
+  .resume-panel > div,
+  .result-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .intro-actions > a {
+    padding: 0.75rem;
+    font-weight: 600;
+  }
+
+  .start-button {
+    min-width: 11.5rem;
+  }
+
+  .resume-panel {
+    max-width: 34rem;
+    margin-top: var(--space-5);
+    padding: var(--space-4);
+    border: 1px solid var(--line-strong);
+    border-left: 3px solid var(--teal);
+    background: var(--surface);
+  }
+
+  .resume-panel p {
+    margin-bottom: var(--space-3);
+    font-weight: 600;
+  }
+
+  .hero-object {
+    display: none;
+  }
+
+  .tension-disc {
+    position: relative;
+    width: min(30vw, 21rem);
+    aspect-ratio: 1;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+
+  .disc-ring {
+    position: absolute;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+  }
+
+  .ring-one { inset: 13%; }
+  .ring-two { inset: 31%; border-color: var(--ink); }
+
+  .disc-line {
+    position: absolute;
+    top: -8%;
+    left: 50%;
+    width: 3px;
+    height: 116%;
+    background: var(--oxblood);
+    transform: rotate(34deg);
+    transform-origin: center;
+  }
+
+  .disc-pin {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--oxblood);
+    transform: translate(-50%, -50%);
+  }
+
+  .disc-label {
+    position: absolute;
+    right: 13%;
+    bottom: 17%;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+
+  .hero-object p {
+    margin: var(--space-4) 0 0;
+    color: var(--ink-soft);
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    text-align: right;
+  }
+
+  .gate-view,
+  .quiz-view,
+  .result-view {
+    min-height: inherit;
+    padding: var(--space-5) 0 var(--space-7);
+  }
+
+  .gate-view {
+    position: relative;
+    display: grid;
+    place-items: center;
+  }
+
+  .icon-back {
+    position: absolute;
+    top: var(--space-5);
+    left: 0;
+    display: grid;
+    width: 3rem;
+    height: 3rem;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .gate-content {
+    width: min(100%, 40rem);
+    padding-top: var(--space-7);
+  }
+
+  .gate-icon {
+    display: grid;
+    width: 3.25rem;
+    height: 3.25rem;
+    margin-bottom: var(--space-5);
+    place-items: center;
+    color: var(--teal);
+    border: 1px solid var(--teal);
+    border-radius: 50%;
+  }
+
+  .gate-content h2 {
+    margin-bottom: var(--space-4);
+  }
+
+  .gate-content > p:not(.eyebrow, .storage-note) {
+    color: var(--ink-soft);
+  }
+
+  .confirm-row {
+    display: grid;
+    grid-template-columns: 1.5rem 1fr;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+    padding: var(--space-4);
+    border: 1px solid var(--line);
+    background: var(--surface);
+    cursor: pointer;
+  }
+
+  .confirm-row input {
+    width: 1.3rem;
+    height: 1.3rem;
+    margin-top: 0.15rem;
+    accent-color: var(--oxblood);
+  }
+
+  .confirm-row span,
+  .confirm-row small {
+    display: block;
+  }
+
+  .confirm-row small {
+    margin-top: 0.15rem;
+    color: var(--ink-soft);
+  }
+
+  .gate-continue {
+    width: 100%;
+    margin-top: var(--space-5);
+  }
+
+  .storage-note {
+    margin-top: var(--space-3);
+    color: var(--warning);
+    font-size: 0.84rem;
+  }
+
+  .quiz-header {
+    display: grid;
+    grid-template-columns: 3rem 1fr 3rem;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .quiz-progress-copy {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+    font-size: 0.78rem;
+  }
+
+  .quiz-progress-copy span { color: var(--ink-soft); }
+
+  .quiz-mark {
+    justify-self: end;
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 0.4rem var(--paper), inset 0 0 0 0.52rem var(--oxblood);
+  }
+
+  .progress-track {
+    height: 3px;
+    margin-top: var(--space-3);
+    background: var(--line);
+  }
+
+  .progress-track span {
+    display: block;
+    width: 3.125%;
+    height: 100%;
+    background: var(--oxblood);
+    transition: width 240ms ease;
+  }
+
+  .question-form {
+    width: min(100%, 48rem);
+    margin: var(--space-6) auto 0;
+  }
+
+  .question-context {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+    color: var(--teal);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .question-form fieldset {
+    padding: 0;
+    margin: 0;
+    border: 0;
+  }
+
+  .question-form legend {
+    display: block;
+    max-width: 27ch;
+    margin-bottom: var(--space-3);
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 6vw, 3.25rem);
+    font-weight: 600;
+    line-height: 1.08;
+  }
+
+  .question-form fieldset > p {
+    margin-bottom: var(--space-5);
+    color: var(--ink-soft);
+  }
+
+  .answer-list {
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .answer-option {
+    position: relative;
+    display: grid;
+    min-height: 3.4rem;
+    grid-template-columns: 2rem 1fr;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: rgb(255 253 248 / 76%);
+    cursor: pointer;
+    transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+  }
+
+  .answer-option:hover {
+    border-color: var(--line-strong);
+    transform: translateX(2px);
+  }
+
+  .answer-option:has(input:checked) {
+    border-color: var(--oxblood);
+    background: #f4e8e7;
+  }
+
+  .answer-option input {
+    position: absolute;
+    opacity: 0;
+  }
+
+  .answer-number {
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  .answer-option:has(input:checked) .answer-number {
+    color: white;
+    background: var(--oxblood);
+    border-color: var(--oxblood);
+  }
+
+  .answer-copy strong,
+  .answer-copy small {
+    display: block;
+  }
+
+  .answer-copy small {
+    color: var(--ink-soft);
+    font-size: 0.74rem;
+    line-height: 1.35;
+  }
+
+  .continue-button {
+    width: 100%;
+    margin-top: var(--space-4);
+  }
+
+  .keyboard-note {
+    display: none;
+    margin: var(--space-3) 0 0;
+    color: var(--steel);
+    font-size: 0.72rem;
+    text-align: center;
+  }
+
+  .result-view {
+    width: min(100%, 66rem);
+    margin-inline: auto;
+  }
+
+  .result-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-5);
+    padding: var(--space-6) 0;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .result-kicker {
+    margin-bottom: 0.25rem;
+    color: var(--ink-soft);
+  }
+
+  .result-header h2 {
+    max-width: 18ch;
+    margin-bottom: var(--space-3);
+  }
+
+  .result-summary {
+    max-width: 38rem;
+    color: var(--ink-soft);
+    font-size: 1.08rem;
+  }
+
+  .result-secondary {
+    margin: 0;
+    color: var(--teal);
+    font-weight: 600;
+  }
+
+  .result-seal {
+    display: none;
+  }
+
+  .result-disclaimer {
+    margin: var(--space-4) 0;
+    padding: var(--space-3) var(--space-4);
+    color: var(--ink-soft);
+    border-left: 3px solid var(--teal);
+    background: rgb(56 107 104 / 7%);
+    font-size: 0.82rem;
+  }
+
+  .result-grid {
+    display: grid;
+    gap: var(--space-6);
+    padding: var(--space-5) 0;
+  }
+
+  .section-title-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .section-title-row h3 { margin: 0; }
+  .section-title-row span { color: var(--steel); font-size: 0.75rem; }
+
+  .dimension-row {
+    display: grid;
+    grid-template-columns: minmax(7rem, 1fr) 3fr 2.5rem;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .dimension-row span:first-child { font-size: 0.82rem; font-weight: 600; }
+  .dimension-row strong { text-align: right; }
+  .dimension-bar { height: 0.45rem; background: var(--paper-deep); }
+  .dimension-bar span { display: block; width: var(--score); height: 100%; background: var(--bar-color); }
+
+  .result-insights {
+    display: grid;
+    align-content: start;
+    gap: var(--space-5);
+  }
+
+  .result-insights section {
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .insight-label {
+    margin-bottom: var(--space-3);
+    color: var(--steel);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .tag-list { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .result-tag { padding: 0.35rem 0.6rem; border: 1px solid var(--line-strong); border-radius: 999px; font-size: 0.78rem; }
+  .prompt-list { display: grid; gap: var(--space-3); padding-left: 1.2rem; margin: 0; }
+  .prompt-list li { padding-left: 0.3rem; }
+  .result-actions { padding-top: var(--space-4); border-top: 1px solid var(--line-strong); }
+  .boundary-placeholder { margin-top: var(--space-4); padding: var(--space-4); border: 1px dashed var(--line-strong); }
+  .boundary-placeholder p { margin: 0; }
+
+  [hidden] { display: none !important; }
+
+  @media (min-width: 48rem) {
+    .test-frame { width: min(calc(100% - 4rem), var(--content)); }
+    .intro-view { grid-template-columns: minmax(0, 7fr) minmax(17rem, 5fr); }
+    .hero-object { display: grid; justify-items: end; }
+    .keyboard-note { display: block; }
+    .result-seal {
+      display: grid;
+      width: 6.5rem;
+      height: 6.5rem;
+      place-items: center;
+      align-content: center;
+      gap: 0.25rem;
+      color: var(--oxblood);
+      border: 1px solid currentColor;
+      border-radius: 50%;
+      font-size: 0.58rem;
+      font-weight: 600;
+      line-height: 1.2;
+      text-align: center;
+      transform: rotate(5deg);
+    }
+    .result-grid { grid-template-columns: minmax(0, 7fr) minmax(17rem, 5fr); }
+  }
+
+  @media (max-height: 44rem) and (max-width: 47.99rem) {
+    .question-form { margin-top: var(--space-4); }
+    .question-form legend { font-size: 1.7rem; }
+    .answer-option { min-height: 3rem; }
+  }
+</style>

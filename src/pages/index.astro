@@ -1,32 +1,197 @@
 ---
+import { ArrowRight, LockKeyhole, ShieldCheck } from "@lucide/astro";
+import DimensionGlyph from "../components/DimensionGlyph.astro";
+import TestApp from "../components/TestApp.astro";
+import { dimensions } from "../data/questions";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const title = "BDSM Test: Free Kink Preference Quiz | BDSMTest.top";
 const description = "Take a free, private BDSM test to explore your current kink preferences. Get an 8-dimension profile in about 4 minutes.";
+const faqs = [
+  ["What does this BDSM test measure?", "It measures how appealing 32 negotiated adult scenarios feel to you right now, then maps the answers across eight affinity dimensions. It does not measure experience, skill, safety knowledge, or a fixed identity."],
+  ["Is the BDSM test private?", "Yes. The questions, scoring, progress, and personal result run in your browser. Raw answers are not sent to BDSMTest.top. A shared result contains only the profile and eight rounded scores you choose to share."],
+  ["Is this a scientific or diagnostic test?", "No. The model is research-informed but has not yet been validated as a psychometric scale. Treat the result as a structured starting point for reflection and conversation, not a diagnosis."],
+  ["Can a result include more than one role?", "Yes. Direction and surrender are scored separately, and closely matched profiles can appear as a blend. A low or diffuse pattern returns Open-ended Explorer instead of forcing a label."],
+  ["Does an appealing answer mean I should try it?", "No. Appeal, willingness, practical safety, relationship agreements, and personal boundaries are different questions. Any real activity needs specific, informed, ongoing consent."],
+  ["Do I need BDSM experience?", "No. The questions ask about current appeal, not past behavior. It is fine to choose It depends / unsure whenever trust, context, or unfamiliar language matters."]
+];
 ---
 
 <BaseLayout {title} {description}>
-  <section class="placeholder site-shell">
-    <p class="eyebrow">Private by design · Adults 18+</p>
-    <h1>Free BDSM Test</h1>
-    <p>Explore your current preferences across eight dimensions. The complete interactive test is being assembled here.</p>
+  <TestApp />
+
+  <section class="trust-band" aria-label="Privacy facts">
+    <div class="site-shell trust-grid">
+      <div><LockKeyhole size={22} /><span><strong>Answers stay here</strong>Scored in your browser</span></div>
+      <div><ShieldCheck size={22} /><span><strong>Consent assumed</strong>Adults and prior negotiation</span></div>
+      <div><span class="fact-number">8</span><span><strong>Affinity dimensions</strong>Not forced into one axis</span></div>
+    </div>
+  </section>
+
+  <section class="measure-section site-shell" id="what-it-measures">
+    <div class="measure-intro">
+      <p class="eyebrow">What this BDSM test measures</p>
+      <h2>A map of attraction, not a verdict.</h2>
+      <p>The test separates leading from surrendering, giving intensity from receiving it, and adds craft, care, play, and exploration. That matters because BDSM interests often overlap rather than fitting one tidy role.</p>
+      <a class="text-link" href="/methodology/">Read the scoring method <ArrowRight size={17} /></a>
+    </div>
+    <div class="example-result" aria-label="Example result chart">
+      <div class="example-top"><span>Example map</span><strong>Profile preview</strong></div>
+      {dimensions.slice(0, 5).map((dimension, index) => (
+        <div class="example-row">
+          <span>{dimension.shortName}</span>
+          <i><b style={`--example-score:${[78, 62, 45, 53, 70][index]}%;--example-color:${dimension.color}`}></b></i>
+          <strong>{[78, 62, 45, 53, 70][index]}</strong>
+        </div>
+      ))}
+      <p>Illustrative only — your pattern is calculated after all 32 answers.</p>
+    </div>
+  </section>
+
+  <section class="dimensions-band">
+    <div class="site-shell">
+      <div class="section-heading">
+        <p class="eyebrow">Eight distinct lenses</p>
+        <h2>Preferences can cross familiar role lines.</h2>
+      </div>
+      <div class="dimension-grid">
+        {dimensions.map((dimension, index) => (
+          <article style={`--dimension-color:${dimension.color}`}>
+            <div class="dimension-index"><span>{String(index + 1).padStart(2, "0")}</span><DimensionGlyph id={dimension.id} /></div>
+            <h3>{dimension.name}</h3>
+            <p>{dimension.description}</p>
+            <small>{dimension.disclaimer}</small>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="principles-section site-shell">
+    <div>
+      <p class="eyebrow">Designed for honest answers</p>
+      <h2>Clear distinctions make a more useful result.</h2>
+    </div>
+    <div class="principle-list">
+      <article><span>01</span><div><h3>Appeal is not experience</h3><p>You can be curious without having tried something. The test never infers skill or behavior from attraction.</p></div></article>
+      <article><span>02</span><div><h3>Preference is not permission</h3><p>A score never replaces an explicit conversation. Consent stays specific, informed, ongoing, and reversible.</p></div></article>
+      <article><span>03</span><div><h3>A result is not identity</h3><p>Profiles summarize this set of answers. They are language for reflection, not a rule about who you must be.</p></div></article>
+    </div>
+  </section>
+
+  <section class="roles-band">
+    <div class="site-shell roles-inner">
+      <div>
+        <p class="eyebrow">Profiles without a box</p>
+        <h2>Dominant, submissive, switch — and the patterns between.</h2>
+      </div>
+      <div>
+        <p>A profile is calculated from all eight affinities. Closely matched patterns can form a blended result, while diffuse or lower scores remain Open-ended Explorer.</p>
+        <a class="button button--secondary" href="/bdsm-roles/">Explore BDSM roles <ArrowRight size={17} /></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="safety-section site-shell">
+    <div class="safety-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="reading-width">
+      <p class="eyebrow">The premise beneath every question</p>
+      <h2>Consent is not one of the scores. It is the condition for the whole test.</h2>
+      <p>Every scenario assumes informed adults, prior negotiation, and the freedom to pause or stop. We do not award a “consent score,” because ethical communication is not a kink intensity or personality trait.</p>
+      <a class="text-link" href="/consent-and-safety/">Read the consent and safety framework <ArrowRight size={17} /></a>
+    </div>
+  </section>
+
+  <section class="faq-band">
+    <div class="site-shell faq-layout">
+      <div><p class="eyebrow">Questions, answered plainly</p><h2>BDSM test FAQ</h2></div>
+      <div class="faq-list">
+        {faqs.map(([question, answer], index) => (
+          <details open={index === 0}>
+            <summary>{question}<span aria-hidden="true">+</span></summary>
+            <p>{answer}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="final-cta site-shell">
+    <p class="eyebrow">Your answers stay yours</p>
+    <h2>Take the BDSM test when you are ready.</h2>
+    <a class="button" href="#start">Start the 32-question test <ArrowRight size={17} /></a>
   </section>
 </BaseLayout>
 
 <style>
-  .placeholder {
-    min-height: 65vh;
-    padding-block: var(--space-8);
-  }
-
-  .placeholder h1 {
-    max-width: 12ch;
-    margin-bottom: var(--space-5);
-  }
-
-  .placeholder > p:last-child {
-    max-width: 42rem;
-    color: var(--ink-soft);
-    font-size: 1.18rem;
+  .trust-band { border-bottom: 1px solid var(--line); background: var(--ink); color: var(--paper); }
+  .trust-grid { display: grid; }
+  .trust-grid > div { display: grid; min-height: 6rem; grid-template-columns: 2rem 1fr; align-items: center; gap: var(--space-3); padding: var(--space-3) 0; border-bottom: 1px solid #3f3b37; }
+  .trust-grid > div:last-child { border-bottom: 0; }
+  .trust-grid span { display: block; color: #aaa39a; font-size: 0.78rem; }
+  .trust-grid strong { display: block; color: white; font-size: 0.9rem; }
+  .fact-number { color: var(--paper) !important; font-family: var(--font-display); font-size: 1.7rem !important; }
+  .measure-section { display: grid; gap: var(--space-7); padding-block: var(--space-8); }
+  .measure-intro > p { color: var(--ink-soft); font-size: 1.06rem; }
+  .text-link { display: inline-flex; align-items: center; gap: var(--space-2); font-weight: 600; }
+  .example-result { align-self: center; padding: var(--space-5); border: 1px solid var(--line-strong); background: var(--surface); box-shadow: var(--shadow); }
+  .example-top { display: flex; justify-content: space-between; margin-bottom: var(--space-4); padding-bottom: var(--space-3); border-bottom: 1px solid var(--line); font-size: 0.75rem; }
+  .example-top span { color: var(--steel); text-transform: uppercase; }
+  .example-row { display: grid; grid-template-columns: minmax(7rem, 1fr) 2fr 2rem; align-items: center; gap: var(--space-3); padding: 0.65rem 0; font-size: 0.8rem; }
+  .example-row i { height: 0.4rem; background: var(--paper-deep); }
+  .example-row b { display: block; width: var(--example-score); height: 100%; background: var(--example-color); }
+  .example-result > p { margin: var(--space-3) 0 0; color: var(--steel); font-size: 0.72rem; }
+  .dimensions-band { padding-block: var(--space-8); background: var(--paper-deep); border-block: 1px solid var(--line); }
+  .section-heading { max-width: 46rem; margin-bottom: var(--space-7); }
+  .dimension-grid { display: grid; border-top: 1px solid var(--line-strong); }
+  .dimension-grid article { min-height: 18rem; padding: var(--space-5) 0; border-bottom: 1px solid var(--line-strong); }
+  .dimension-index { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-6); color: var(--dimension-color); }
+  .dimension-index > span { color: var(--steel); font-size: 0.72rem; }
+  .dimension-grid h3 { margin-bottom: var(--space-3); }
+  .dimension-grid p { color: var(--ink-soft); }
+  .dimension-grid small { display: block; color: var(--steel); line-height: 1.5; }
+  .principles-section { display: grid; gap: var(--space-7); padding-block: var(--space-8); }
+  .principle-list article { display: grid; grid-template-columns: 3rem 1fr; gap: var(--space-4); padding: var(--space-5) 0; border-top: 1px solid var(--line); }
+  .principle-list article > span { color: var(--oxblood); font-size: 0.75rem; }
+  .principle-list h3 { margin-bottom: var(--space-2); }
+  .principle-list p { margin: 0; color: var(--ink-soft); }
+  .roles-band { padding-block: var(--space-8); color: var(--paper); background: var(--ink); }
+  .roles-inner { display: grid; gap: var(--space-6); }
+  .roles-band .eyebrow { color: #d47b84; }
+  .roles-band p { color: #bdb6ad; }
+  .roles-band .button--secondary { color: white; border-color: #77716a; }
+  .roles-band .button--secondary:hover { color: var(--ink); }
+  .safety-section { position: relative; display: grid; gap: var(--space-7); padding-block: var(--space-8); }
+  .safety-mark { display: grid; width: min(18rem, 70vw); aspect-ratio: 1; place-items: center; border: 1px solid var(--line-strong); border-radius: 50%; }
+  .safety-mark span { grid-area: 1/1; border: 1px solid var(--teal); border-radius: 50%; }
+  .safety-mark span:nth-child(1) { width: 70%; height: 70%; }
+  .safety-mark span:nth-child(2) { width: 42%; height: 42%; }
+  .safety-mark span:nth-child(3) { width: 0.8rem; height: 0.8rem; background: var(--teal); }
+  .safety-section .reading-width > p:not(.eyebrow) { color: var(--ink-soft); font-size: 1.08rem; }
+  .faq-band { padding-block: var(--space-8); background: var(--surface); border-block: 1px solid var(--line); }
+  .faq-layout { display: grid; gap: var(--space-6); }
+  .faq-list { border-top: 1px solid var(--line-strong); }
+  .faq-list details { border-bottom: 1px solid var(--line); }
+  .faq-list summary { display: flex; min-height: 4.5rem; align-items: center; justify-content: space-between; gap: var(--space-4); font-weight: 600; cursor: pointer; list-style: none; }
+  .faq-list summary::-webkit-details-marker { display: none; }
+  .faq-list summary span { color: var(--oxblood); font-size: 1.5rem; font-weight: 400; transition: transform 160ms ease; }
+  .faq-list details[open] summary span { transform: rotate(45deg); }
+  .faq-list details p { max-width: 44rem; padding: 0 2rem var(--space-5) 0; color: var(--ink-soft); }
+  .final-cta { padding-block: var(--space-8); text-align: center; }
+  .final-cta .eyebrow { justify-content: center; }
+  .final-cta h2 { max-width: 18ch; margin-inline: auto; }
+  @media (min-width: 48rem) {
+    .trust-grid { grid-template-columns: repeat(3, 1fr); }
+    .trust-grid > div { padding: var(--space-3) var(--space-5); border-right: 1px solid #3f3b37; border-bottom: 0; }
+    .trust-grid > div:first-child { padding-left: 0; }
+    .trust-grid > div:last-child { border-right: 0; }
+    .measure-section { grid-template-columns: 7fr 5fr; align-items: center; }
+    .dimension-grid { grid-template-columns: repeat(4, 1fr); }
+    .dimension-grid article { padding: var(--space-5); border-right: 1px solid var(--line-strong); }
+    .dimension-grid article:nth-child(4n) { border-right: 0; }
+    .principles-section { grid-template-columns: 5fr 7fr; }
+    .roles-inner { grid-template-columns: 7fr 5fr; align-items: end; }
+    .safety-section { grid-template-columns: 5fr 7fr; align-items: center; }
+    .faq-layout { grid-template-columns: 4fr 8fr; }
   }
 </style>

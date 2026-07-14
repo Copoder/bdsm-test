@@ -1,0 +1,32 @@
+---
+interface Props {
+  id: "DIR" | "SUR" | "IGV" | "IRC" | "RST" | "CAR" | "PLY" | "EXP";
+  size?: number;
+}
+const { id, size = 40 } = Astro.props;
+---
+
+<svg class="dimension-glyph" width={size} height={size} viewBox="0 0 48 48" fill="none" aria-hidden="true">
+  {id === "DIR" && <><path d="M8 35 24 11l16 24"/><path d="M15 35h18M24 11v24"/></>}
+  {id === "SUR" && <><path d="M8 13 24 37l16-24"/><path d="M15 13h18M24 13v24"/></>}
+  {id === "IGV" && <><circle cx="24" cy="24" r="15"/><path d="M24 9v30M24 24l12-8"/><circle cx="24" cy="24" r="3"/></>}
+  {id === "IRC" && <><circle cx="24" cy="24" r="15"/><path d="M24 9v30M12 16l12 8"/><circle cx="24" cy="24" r="3"/></>}
+  {id === "RST" && <><circle cx="16" cy="24" r="8"/><circle cx="32" cy="24" r="8"/><path d="M20 17l8 14M20 31l8-14"/></>}
+  {id === "CAR" && <><path d="M24 39S8 30 8 18c0-8 10-11 16-3 6-8 16-5 16 3 0 12-16 21-16 21Z"/><path d="M24 15v18M17 24h14"/></>}
+  {id === "PLY" && <><path d="M9 28c6 0 6-10 12-10s6 12 12 12c3 0 5-2 6-5"/><circle cx="9" cy="28" r="3"/><circle cx="39" cy="25" r="3"/></>}
+  {id === "EXP" && <><path d="M24 7 29 19 41 24 29 29 24 41 19 29 7 24 19 19 24 7Z"/><circle cx="24" cy="24" r="4"/></>}
+</svg>
+
+<style>
+  .dimension-glyph {
+    color: currentColor;
+    overflow: visible;
+  }
+  .dimension-glyph :global(path),
+  .dimension-glyph :global(circle) {
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+</style>

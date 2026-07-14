@@ -71,6 +71,15 @@ body::before {
   content: "";
 }
 
+body.test-active .site-header,
+body.test-active .site-footer {
+  display: none;
+}
+
+body.test-active .test-app {
+  min-height: 100dvh;
+}
+
 a {
   color: inherit;
   text-decoration-color: rgb(124 31 42 / 45%);

@@ -50,7 +50,7 @@ export function calculateProfileScores(
   dimensionScores: NumericMap<DimensionId>,
   tags: NumericMap<QuestionTag>
 ): NumericMap<ProfileId> {
-  const { DIR, SUR, IGV, IRC, RST, CAR, PLY, EXP } = dimensionScores;
+  const { DIR, SUR, IGV, IRC, RST, PLY, EXP } = dimensionScores;
   const balance = 100 - Math.abs(DIR - SUR);
   const switchScore =
     DIR >= scoringConfig.switchFullThreshold && SUR >= scoringConfig.switchFullThreshold

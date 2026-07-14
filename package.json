@@ -10,7 +10,7 @@
     "check": "astro check",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test",
+    "test:e2e": "npm run build && playwright test",
     "deploy": "npm run build && wrangler pages deploy dist --project-name bdsm-test"
   },
   "dependencies": {
@@ -23,6 +23,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.6",
     "@playwright/test": "^1.61.1",
+    "serve": "^14.2.5",
     "typescript": "^5.9.2",
     "vitest": "^4.1.10",
     "wrangler": "^4.110.0"
