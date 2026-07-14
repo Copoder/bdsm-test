@@ -1,9 +1,10 @@
 # BDSMTest.top
 
-A private, research-informed BDSM preference test built as a static Astro site for Cloudflare Pages.
+A private, research-informed BDSM preference test built as a static Astro site for Cloudflare Workers Static Assets.
 
-- Production deployment: <https://bdsm-test-dy4.pages.dev>
-- Canonical domain: <https://bdsmtest.top> (DNS activation pending)
+- Production deployment: <https://bdsmtest.top>
+- Workers fallback: <https://bdsm-test.th-houtong.workers.dev>
+- Canonical domain: <https://bdsmtest.top>
 - Repository: <https://github.com/Copoder/bdsm-test>
 
 ## Development
@@ -24,12 +25,15 @@ npm run test:e2e
 
 ## Deployment
 
-Cloudflare Pages settings:
+Cloudflare Workers Builds settings:
 
 - Build command: `npm run build`
-- Build output: `dist`
+- Deploy command: `npx wrangler deploy`
 - Node.js: `22`
 - Production branch: `main`
+
+The asset directory is declared in `wrangler.jsonc`; the Cloudflare dashboard
+does not need a separate build-output-directory setting.
 
 The only canonical origin is `https://bdsmtest.top`.
 
@@ -39,6 +43,7 @@ Direct production deployment:
 npm run deploy
 ```
 
-Cloudflare Pages project: `bdsm-test`. The apex and `www` custom domains are registered on the project. Activating them requires adding `bdsmtest.top` as a Cloudflare zone and changing the registrar nameservers from DNSPod to the two nameservers assigned by Cloudflare.
+Cloudflare Worker: `bdsm-test`. The apex and `www` custom domains are active on the Cloudflare zone.
 
-Preview builds use the apex canonical, append `X-Robots-Tag: noindex`, and omit the sitemap when `CF_PAGES_BRANCH` is set to a branch other than `main`. The `pages.dev` runtime also receives a client-side noindex meta tag as defense in depth until it can redirect to the active custom domain.
+The `workers.dev` fallback uses the apex canonical and receives a client-side
+`noindex` meta tag so search engines prefer the production domain.

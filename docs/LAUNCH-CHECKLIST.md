@@ -1,11 +1,11 @@
 # BDSMTest.top Launch Checklist
 
-Updated: 2026-07-14
+Updated: 2026-07-15
 
 ## Completed
 
 - [x] Public GitHub repository with small, reviewable commits
-- [x] Static Astro production build on Cloudflare Pages
+- [x] Static Astro production build on Cloudflare Workers Static Assets
 - [x] 32-question test, local scoring, progress recovery, results, and retake
 - [x] Private Boundary Map excluded from scores, links, images, and analytics
 - [x] Versioned result fragment, CRC32 validation, receiver view, and viral CTA
@@ -13,36 +13,31 @@ Updated: 2026-07-14
 - [x] Homepage plus methodology, consent, privacy, terms, about, role hub, and 10 role guides
 - [x] Canonical, sitemap, robots, JSON-LD, OG image, security headers, redirects, and real 404
 - [x] Mobile/desktop responsive matrix, axe audit, unit tests, browser tests, and Lighthouse audit
-- [x] Pages custom-domain entries created for `bdsmtest.top` and `www.bdsmtest.top`
+- [x] Worker custom domains active for `bdsmtest.top` and `www.bdsmtest.top`
 
-## DNS Activation
+## Public Deployment
 
-Current Pages project: `bdsm-test`  
-Current Pages hostname: `bdsm-test-dy4.pages.dev`  
-Current authoritative nameservers: `train.dnspod.net`, `golf.dnspod.net`
+Current Worker: `bdsm-test`
 
-1. In the Cloudflare dashboard, add `bdsmtest.top` as a website/zone under account `Th.houtong@gmail.com's Account`.
-2. Copy the two Cloudflare nameservers assigned to the new zone.
-3. At the domain registrar, replace the current DNSPod nameservers with those two Cloudflare nameservers.
-4. Wait until the Cloudflare zone reports `Active`.
-5. In Workers & Pages > `bdsm-test` > Custom domains, confirm both domains become `Active`.
-6. If Cloudflare does not create them automatically, add proxied CNAME records:
-   - `@` -> `bdsm-test-dy4.pages.dev`
-   - `www` -> `bdsm-test-dy4.pages.dev`
-7. Verify `https://www.bdsmtest.top/*` returns 301 to the equivalent apex URL.
-8. Enable DNSSEC in Cloudflare, then add the provided DS record at the registrar if required.
+Current Workers hostname: `bdsm-test.th-houtong.workers.dev`
 
-Do not publish or promote result links before the apex domain resolves: generated links intentionally use `https://bdsmtest.top/#r=...` rather than the temporary Pages hostname.
+Current authoritative nameservers: `jakub.ns.cloudflare.com`, `dell.ns.cloudflare.com`
+
+- [x] Cloudflare zone active
+- [x] Apex HTTPS returns the production site
+- [x] Worker deployment and certificate active
+- [ ] Redirect `https://www.bdsmtest.top/*` to the equivalent apex URL
+- [ ] Enable DNSSEC and add the DS record at the registrar if required
 
 ## Search Activation
 
-- [ ] Confirm the apex homepage returns 200 with a valid certificate
-- [ ] Confirm `robots.txt` and both sitemap files resolve on the apex
+- [x] Confirm the apex homepage returns 200 with a valid certificate
+- [x] Confirm `robots.txt` and both sitemap files resolve on the apex
 - [ ] Add a Google Search Console Domain property using the provided DNS TXT record
 - [ ] Submit `https://bdsmtest.top/sitemap-index.xml`
 - [ ] Request indexing for the homepage after custom-domain checks pass
 - [ ] Update the GitHub repository homepage from Pages to `https://bdsmtest.top`
-- [ ] Redirect or otherwise retire the public `pages.dev` alias after the apex is stable
+- [ ] Disable or retain `noindex` on the public `workers.dev` fallback
 
 ## Editorial Gate
 
@@ -58,17 +53,21 @@ The transparent public-beta wording may be used before validation as long as the
 
 ## Release Commands
 
+For Cloudflare Git builds, use `npm run build` as the build command and
+`npx wrangler deploy` as the deploy command. The `dist` asset directory is
+declared in `wrangler.jsonc`, so no dashboard output-directory field is needed.
+
 ```bash
 npm ci
 npm test
 npm run test:e2e
 npm run build
-npx wrangler pages deploy dist --project-name bdsm-test --branch main
+npm run deploy:assets
 ```
 
 ## First 72 Hours
 
-- [ ] Check Cloudflare Pages deployment and certificate status
+- [ ] Check Cloudflare Worker deployment and certificate status
 - [ ] Check Search Console indexing and selected canonical
 - [ ] Test one real iPhone share and one real Android share
 - [ ] Test WhatsApp and Telegram result links end to end

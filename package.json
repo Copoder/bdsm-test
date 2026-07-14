@@ -12,7 +12,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "npm run build && playwright test",
-    "deploy": "npm run build && wrangler pages deploy dist --project-name bdsm-test"
+    "deploy": "npm run build && npm run deploy:assets",
+    "deploy:assets": "wrangler deploy"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

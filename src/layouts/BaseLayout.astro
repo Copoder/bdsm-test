@@ -40,7 +40,7 @@ const schemas = structuredData ? (Array.isArray(structuredData) ? [schema, ...st
     <meta name="theme-color" content="#f8f5ee" />
     <meta name="description" content={description} />
     <script is:inline>
-      if (location.hostname.endsWith(".pages.dev")) {
+      if (location.hostname.endsWith(".pages.dev") || location.hostname.endsWith(".workers.dev")) {
         const robots = document.createElement("meta");
         robots.name = "robots";
         robots.content = "noindex, nofollow";
