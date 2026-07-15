@@ -48,16 +48,21 @@ const { title, description, eyebrow, heading, intro, breadcrumbs, updated = "Jul
 </BaseLayout>
 
 <style is:global>
-  .content-hero { padding: var(--space-5) 0 var(--space-8); border-bottom: 1px solid var(--line); background: var(--paper-deep); }
+  .content-hero { position: relative; overflow: hidden; padding: var(--space-5) 0 var(--space-8); color: var(--paper); border-bottom: 1px solid var(--line-dark); background: var(--night); }
+  .content-hero::after { position: absolute; right: -7rem; bottom: -11rem; width: 22rem; aspect-ratio: 1; border: 1px solid var(--line-dark); border-radius: 50%; box-shadow: 0 0 0 3rem rgb(255 255 255 / 2%), 0 0 0 6rem rgb(213 88 107 / 4%); content: ""; }
   .content-hero-grid { display: grid; gap: var(--space-6); margin-top: var(--space-7); }
-  .content-hero h1 { max-width: 15ch; margin: 0; font-size: clamp(2.7rem, 7vw, 5rem); }
+  .content-hero .breadcrumbs,
+  .content-hero .breadcrumbs span[aria-current="page"] { color: #aaa3a8 !important; }
+  .content-hero .breadcrumbs a { color: #d5ced2 !important; }
+  .content-hero .eyebrow { color: var(--signal-soft); }
+  .content-hero h1 { max-width: 15ch; margin: 0; color: var(--surface); font-size: 3rem; }
   .hero-intro { align-self: end; max-width: 36rem; }
-  .hero-intro p { color: var(--ink-soft); font-size: 1.12rem; }
-  .hero-intro span { color: var(--steel); font-size: 0.75rem; }
+  .hero-intro p { color: #c9c1c5; font-size: 1.12rem; }
+  .hero-intro span { color: #9f989d; font-size: 0.75rem; }
   .content-grid { display: grid; gap: var(--space-7); padding-block: var(--space-8); }
   .prose { min-width: 0; }
   .prose > :first-child { margin-top: 0; }
-  .prose h2 { margin: var(--space-8) 0 var(--space-4); font-size: clamp(1.8rem, 4vw, 2.6rem); }
+  .prose h2 { margin: var(--space-8) 0 var(--space-4); font-size: 2rem; }
   .prose h3 { margin: var(--space-6) 0 var(--space-3); }
   .prose p,
   .prose li { color: var(--ink-soft); }
@@ -75,13 +80,15 @@ const { title, description, eyebrow, heading, intro, breadcrumbs, updated = "Jul
   .prose blockquote p,
   .callout p { margin-bottom: 0; }
   .source-list { padding-top: var(--space-4); border-top: 1px solid var(--line-strong); font-size: 0.85rem; }
-  .content-aside { align-self: start; padding: var(--space-5); color: var(--paper); background: var(--ink); border-top: 3px solid var(--oxblood); }
+  .content-aside { align-self: start; padding: var(--space-5); color: var(--paper); background: var(--night-raised); border-top: 3px solid var(--signal); }
   .content-aside .insight-label { color: #d68e94; }
   .content-aside h2 { margin-bottom: var(--space-3); font-family: var(--font-display); font-size: 1.65rem; }
   .content-aside > p:not(.insight-label) { color: #c1bab1; }
   .content-aside .button { margin-top: var(--space-3); color: var(--ink); background: var(--paper); border-color: var(--paper); }
   .content-aside .aside-note { margin: var(--space-4) 0 0; font-size: 0.72rem; }
   @media (min-width: 56rem) {
+    .content-hero h1 { font-size: 5rem; }
+    .prose h2 { font-size: 2.6rem; }
     .content-hero-grid { grid-template-columns: 7fr 5fr; }
     .content-grid { grid-template-columns: minmax(0, 8fr) minmax(16rem, 4fr); align-items: start; }
     .content-aside { position: sticky; top: 2rem; }

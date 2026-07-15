@@ -35,9 +35,9 @@ export async function createResultImage(result: TestResult): Promise<Blob> {
   const context = canvas.getContext("2d");
   if (!context) throw new Error("Canvas is not available");
 
-  context.fillStyle = "#f8f5ee";
+  context.fillStyle = "#101011";
   context.fillRect(0, 0, WIDTH, HEIGHT);
-  context.strokeStyle = "#ded6ca";
+  context.strokeStyle = "#242126";
   context.lineWidth = 1;
   for (let y = 70; y < HEIGHT; y += 38) {
     context.beginPath();
@@ -45,52 +45,59 @@ export async function createResultImage(result: TestResult): Promise<Blob> {
     context.lineTo(WIDTH - 72, y);
     context.stroke();
   }
-  context.strokeStyle = "#7c1f2a";
+  context.strokeStyle = "#d5586b";
   context.lineWidth = 3;
   context.beginPath();
   context.moveTo(84, 0);
   context.lineTo(84, HEIGHT);
   context.stroke();
 
-  context.strokeStyle = "#171614";
-  context.lineWidth = 5;
+  context.strokeStyle = "#f3efe8";
+  context.lineWidth = 4;
+  context.setLineDash([86, 26]);
   context.beginPath();
   context.arc(154, 132, 36, 0, Math.PI * 2);
   context.stroke();
-  context.strokeStyle = "#7c1f2a";
+  context.setLineDash([]);
+  context.strokeStyle = "#d5586b";
   context.beginPath();
-  context.moveTo(130, 172);
-  context.lineTo(178, 92);
+  context.moveTo(164, 98);
+  context.bezierCurveTo(150, 116, 145, 140, 140, 168);
   context.stroke();
-  context.fillStyle = "#7c1f2a";
+  context.fillStyle = "#d5586b";
   context.beginPath();
-  context.arc(154, 132, 6, 0, Math.PI * 2);
+  context.arc(164, 98, 6, 0, Math.PI * 2);
+  context.fill();
+  context.beginPath();
+  context.arc(140, 168, 6, 0, Math.PI * 2);
   context.fill();
 
-  context.fillStyle = "#171614";
+  context.fillStyle = "#f3efe8";
   context.font = "600 34px 'Newsreader Variable', Georgia, serif";
   context.fillText("BDSMTest.top", 214, 144);
-  context.fillStyle = "#7c1f2a";
+  context.fillStyle = "#ef8798";
   context.font = "600 20px 'DM Sans Variable', sans-serif";
   context.fillText("MY BDSM TEST RESULT", 106, 252);
 
-  context.fillStyle = "#171614";
+  context.fillStyle = "#f3efe8";
   context.font = "600 78px 'Newsreader Variable', Georgia, serif";
   const profileLines = wrappedLines(context, result.primary, 840).slice(0, 3);
   profileLines.forEach((line, index) => context.fillText(line, 106, 350 + index * 76));
   let y = 418 + (profileLines.length - 1) * 76;
-  context.fillStyle = "#45413d";
+  context.fillStyle = "#aaa3a8";
   context.font = "500 24px 'DM Sans Variable', sans-serif";
-  context.fillText("Best profile match, followed by all ten role scores.", 106, y);
+  context.fillText("Your strongest match right now, followed by all ten role scores.", 106, y);
 
   y += 62;
-  context.strokeStyle = "#aaa096";
+  context.fillStyle = "#1b191d";
+  context.fillRect(106, y, 868, 606);
+  context.strokeStyle = "#3b363b";
   context.lineWidth = 2;
   roundRect(context, 106, y, 868, 606, 8);
-  context.fillStyle = "#171614";
+  context.fillStyle = "#f3efe8";
   context.font = "600 25px 'DM Sans Variable', sans-serif";
   context.fillText("ROLE AFFINITIES", 144, y + 55);
-  context.fillStyle = "#6f6962";
+  context.fillStyle = "#aaa3a8";
   context.font = "500 18px 'DM Sans Variable', sans-serif";
   context.textAlign = "right";
   context.fillText("0–100 · highest first", 936, y + 55);
@@ -103,31 +110,31 @@ export async function createResultImage(result: TestResult): Promise<Blob> {
     const columnX = column === 0 ? 144 : 558;
     const rowY = y + 108 + row * 96;
     const score = Math.round(result.profileScores[profile]);
-    context.fillStyle = "#171614";
+    context.fillStyle = "#f3efe8";
     context.font = "600 18px 'DM Sans Variable', sans-serif";
     context.fillText(profileDisplayNames[profile], columnX, rowY);
-    context.fillStyle = "#7c1f2a";
+    context.fillStyle = "#ef8798";
     context.font = "600 22px 'Newsreader Variable', Georgia, serif";
     context.textAlign = "right";
     context.fillText(`${score}%`, columnX + 372, rowY);
     context.textAlign = "left";
-    context.fillStyle = "#e3ddd3";
+    context.fillStyle = "#3b363b";
     context.fillRect(columnX, rowY + 20, 372, 9);
-    context.fillStyle = "#7c1f2a";
+    context.fillStyle = "#d5586b";
     context.fillRect(columnX, rowY + 20, 372 * (score / 100), 9);
   });
 
-  context.fillStyle = "#386b68";
+  context.fillStyle = "#78b6ae";
   context.font = "600 20px 'DM Sans Variable', sans-serif";
   context.fillText("PRIVATE BY DESIGN", 106, 1242);
-  context.fillStyle = "#45413d";
+  context.fillStyle = "#aaa3a8";
   context.font = "500 20px 'DM Sans Variable', sans-serif";
   context.fillText("No answers or private limits are included.", 106, 1280);
-  context.fillStyle = "#7c1f2a";
+  context.fillStyle = "#ef8798";
   context.font = "600 24px 'DM Sans Variable', sans-serif";
   context.textAlign = "right";
   context.fillText("TAKE THE BDSM TEST →", 974, 1242);
-  context.fillStyle = "#171614";
+  context.fillStyle = "#f3efe8";
   context.font = "600 21px 'DM Sans Variable', sans-serif";
   context.fillText("bdsmtest.top", 974, 1280);
 

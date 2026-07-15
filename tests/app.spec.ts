@@ -10,36 +10,48 @@ test.describe("BDSM Test", () => {
     await page.goto("/");
     await expect(page).toHaveTitle("BDSM Test: Free Kink Preference Quiz | BDSMTest.top");
     await expect(page.getByRole("heading", { name: "Free BDSM Test", exact: true })).toBeVisible();
-    await page.getByRole("button", { name: "Start the test" }).click();
+    await page.getByRole("button", { name: "Begin privately" }).click();
     await page.locator("[data-confirm='age']").check();
     await page.locator("[data-confirm='context']").check();
     await page.getByRole("button", { name: "Continue" }).click();
-    await expect(page.locator("[data-progress-label]")).toHaveText("1 of 32");
+    await expect(page.locator("[data-progress-label]")).toHaveText("01 / 32");
     await page.getByText("Strongly appealing", { exact: true }).click();
-    await expect(page.locator("[data-progress-label]")).toHaveText("2 of 32");
+    await expect(page.locator("[data-progress-label]")).toHaveText("01 / 32");
+    await page.getByRole("button", { name: "Save and exit" }).click();
+    await expect(page.locator("[data-resume]")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Begin privately" })).toBeHidden();
+    await expect(page.locator("[data-resume-label]")).toContainText("Continue at 01 / 32");
+    await page.getByRole("button", { name: "Continue test" }).click();
+    await page.getByRole("button", { name: "Continue", exact: true }).click();
+    await expect(page.locator("[data-progress-label]")).toHaveText("02 / 32");
 
     await page.getByRole("button", { name: "Previous question" }).click();
-    await expect(page.locator("[data-progress-label]")).toHaveText("1 of 32");
+    await expect(page.locator("[data-progress-label]")).toHaveText("01 / 32");
     await page.getByText("Somewhat appealing", { exact: true }).click();
-    await expect(page.locator("[data-progress-label]")).toHaveText("2 of 32");
+    await page.getByRole("button", { name: "Continue", exact: true }).click();
+    await expect(page.locator("[data-progress-label]")).toHaveText("02 / 32");
 
     await page.reload();
     await expect(page.locator("[data-resume]")).toBeVisible();
-    await page.getByRole("button", { name: "Resume" }).click();
-    await expect(page.locator("[data-progress-label]")).toHaveText("2 of 32");
+    await page.getByRole("button", { name: "Continue test" }).click();
+    await expect(page.locator("[data-progress-label]")).toHaveText("02 / 32");
 
     for (let current = 2; current <= 32; current += 1) {
       await page.getByText("Somewhat appealing", { exact: true }).click();
-      if (current < 32) await expect(page.locator("[data-progress-label]")).toHaveText(`${current + 1} of 32`);
+      await page.getByRole("button", { name: "Continue", exact: true }).click();
+      if (current < 32) await expect(page.locator("[data-progress-label]")).toHaveText(`${String(current + 1).padStart(2, "0")} / 32`);
     }
 
     await expect(page.locator("[data-result-primary]")).toBeVisible();
     await expect(page.locator(".dimension-row")).toHaveCount(8);
     await expect(page.locator("[data-role-results] .role-score-row")).toHaveCount(10);
+    await expect(page.locator("[data-role-results] .role-score-row:visible")).toHaveCount(3);
+    await page.getByRole("button", { name: "Show all 10 matches" }).click();
+    await expect(page.locator("[data-role-results] .role-score-row:visible")).toHaveCount(10);
     await expect(page.locator("[data-result-radar] svg")).toBeVisible();
     await expect(page.locator("[data-result-radar] .radar-points circle")).toHaveCount(8);
 
-    await page.getByRole("button", { name: "Build a private boundary map" }).click();
+    await page.getByRole("button", { name: "Map my boundaries" }).click();
     await page.locator(".boundary-row").first().getByText("Hard limit", { exact: true }).click();
     const storedBoundaries = await page.evaluate(() => localStorage.getItem("bdsm-test:v1:boundaries"));
     expect(storedBoundaries).toContain("giving-control");
@@ -83,8 +95,8 @@ test.describe("BDSM Test", () => {
     await expect(page.locator("[data-shared-dimensions] .dimension-row")).toHaveCount(8);
     await expect(page.locator("[data-shared-role-section]")).toBeHidden();
     expect(await page.evaluate(() => location.hash)).toBe("");
-    await page.getByRole("button", { name: "Take your own BDSM Test" }).click();
-    await expect(page.getByRole("heading", { name: "Two things before you start" })).toBeVisible();
+    await page.getByRole("button", { name: "Explore yours privately" }).click();
+    await expect(page.getByRole("heading", { name: "A quick boundary check" })).toBeVisible();
   });
 
   test("fits the mobile viewport without horizontal overflow", async ({ page }, testInfo) => {
@@ -92,14 +104,16 @@ test.describe("BDSM Test", () => {
     await page.goto("/");
     const hasNoOverflow = await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth);
     expect(hasNoOverflow).toBe(true);
-    await expect(page.getByRole("button", { name: "Start the test" })).toBeVisible();
-    await page.getByRole("button", { name: "Start the test" }).click();
+    await expect(page.getByRole("button", { name: "Begin privately" })).toBeVisible();
+    await page.getByRole("button", { name: "Begin privately" }).click();
     await page.locator("[data-confirm='age']").check();
     await page.locator("[data-confirm='context']").check();
     await page.getByRole("button", { name: "Continue" }).click();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
     const optionHeights = await page.locator(".answer-option").evaluateAll((options) => options.map((option) => option.getBoundingClientRect().height));
     expect(optionHeights.every((height) => height >= 48)).toBe(true);
+    await page.getByText("Somewhat appealing", { exact: true }).click();
+    await expect(page.getByRole("button", { name: "Continue", exact: true })).toBeEnabled();
   });
 
   test("stays stable across required viewport widths", async ({ page }, testInfo) => {

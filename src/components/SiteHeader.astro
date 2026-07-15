@@ -5,12 +5,12 @@ import { Menu } from "@lucide/astro";
 <header class="site-header">
   <div class="site-shell header-inner">
     <a class="brand" href="/" aria-label="BDSMTest.top home">
-      <span class="brand-mark" aria-hidden="true"><span></span></span>
+      <span class="brand-mark" aria-hidden="true"><i></i><b></b></span>
       <span>BDSMTest<span>.top</span></span>
     </a>
 
     <nav class="desktop-nav" aria-label="Primary navigation">
-      <a href="/methodology/">Method</a>
+      <a href="/methodology/">How scoring works</a>
       <a href="/bdsm-roles/">Roles</a>
       <a href="/consent-and-safety/">Consent & safety</a>
       <a class="nav-cta" href="/#start">Take the test</a>
@@ -19,7 +19,7 @@ import { Menu } from "@lucide/astro";
     <details class="mobile-nav">
       <summary aria-label="Open navigation"><Menu size={22} aria-hidden="true" /></summary>
       <nav aria-label="Mobile navigation">
-        <a href="/methodology/">Method</a>
+        <a href="/methodology/">How scoring works</a>
         <a href="/bdsm-roles/">Roles</a>
         <a href="/consent-and-safety/">Consent & safety</a>
         <a href="/#start">Take the test</a>
@@ -64,28 +64,38 @@ import { Menu } from "@lucide/astro";
     width: 1.7rem;
     height: 1.7rem;
     place-items: center;
-    border: 2px solid var(--ink);
+    border: 1.5px solid var(--ink);
+    border-right-color: transparent;
     border-radius: 50%;
+    transform: rotate(-18deg);
   }
 
+  .brand-mark::before,
   .brand-mark::after,
-  .brand-mark span {
+  .brand-mark i {
     position: absolute;
-    background: var(--oxblood);
     content: "";
   }
 
+  .brand-mark::before,
   .brand-mark::after {
-    width: 0.36rem;
-    height: 0.36rem;
+    width: 0.34rem;
+    height: 0.34rem;
     border-radius: 50%;
+    background: var(--oxblood);
   }
 
-  .brand-mark span {
-    width: 0.12rem;
-    height: 2.05rem;
-    transform: rotate(38deg);
+  .brand-mark::before { top: 0.17rem; right: 0.05rem; }
+  .brand-mark::after { right: 0.03rem; bottom: 0.2rem; }
+
+  .brand-mark i {
+    width: 1.25rem;
+    height: 1px;
+    background: var(--oxblood);
+    transform: rotate(70deg);
   }
+
+  .brand-mark b { display: none; }
 
   .desktop-nav {
     display: none;
@@ -101,7 +111,7 @@ import { Menu } from "@lucide/astro";
     height: 3rem;
     place-items: center;
     border: 1px solid var(--line);
-    border-radius: var(--radius);
+    border-radius: 50%;
     list-style: none;
     cursor: pointer;
   }
@@ -119,7 +129,8 @@ import { Menu } from "@lucide/astro";
     padding: 0.5rem;
     border: 1px solid var(--line);
     border-radius: var(--radius);
-    background: var(--surface);
+    color: var(--paper);
+    background: var(--night-raised);
     box-shadow: var(--shadow);
   }
 
@@ -127,6 +138,8 @@ import { Menu } from "@lucide/astro";
     padding: 0.85rem;
     text-decoration: none;
   }
+
+  .mobile-nav nav a + a { border-top: 1px solid var(--line-dark); }
 
   @media (min-width: 52rem) {
     .desktop-nav {

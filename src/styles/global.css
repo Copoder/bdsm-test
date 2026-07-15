@@ -3,26 +3,33 @@
 
 :root {
   color-scheme: light;
-  --ink: #171614;
-  --ink-soft: #45413d;
-  --paper: #f8f5ee;
-  --paper-deep: #eee9df;
-  --surface: #fffdf8;
-  --line: #d8d0c4;
-  --line-strong: #aaa096;
-  --oxblood: #7c1f2a;
-  --oxblood-dark: #58151d;
-  --teal: #386b68;
-  --steel: #55595a;
+  --night: #101011;
+  --night-raised: #1b191d;
+  --night-soft: #262227;
+  --ink: #171416;
+  --ink-soft: #4b4549;
+  --paper: #f3efe8;
+  --paper-deep: #e5ded4;
+  --surface: #fbf8f2;
+  --line: #cec5ba;
+  --line-strong: #9f968f;
+  --line-dark: #3b363b;
+  --oxblood: #922a3e;
+  --oxblood-dark: #701d31;
+  --signal: #d5586b;
+  --signal-soft: #ef8798;
+  --teal: #2d7069;
+  --teal-light: #78b6ae;
+  --steel: #5f595e;
   --success: #285f4b;
   --warning: #8a5425;
   --danger: #8b2731;
-  --shadow: 0 18px 60px rgb(38 28 22 / 8%);
+  --shadow: 0 18px 60px rgb(20 12 17 / 12%);
   --font-display: "Newsreader Variable", Georgia, serif;
   --font-body: "DM Sans Variable", "Trebuchet MS", sans-serif;
   --content: 76rem;
   --reading: 46rem;
-  --radius: 6px;
+  --radius: 3px;
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -48,11 +55,7 @@ body {
   margin: 0;
   min-width: 20rem;
   color: var(--ink);
-  background:
-    linear-gradient(rgb(255 255 255 / 22%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(83 68 55 / 3%) 1px, transparent 1px),
-    var(--paper);
-  background-size: 100% 2rem, 2rem 100%, auto;
+  background: var(--paper);
   font-family: var(--font-body);
   font-size: 1rem;
   line-height: 1.65;
@@ -66,7 +69,7 @@ body::before {
   inset: 0;
   background-image: url("/assets/material-grain.webp");
   background-size: 18rem;
-  opacity: 0.12;
+  opacity: 0.09;
   pointer-events: none;
   content: "";
 }
@@ -78,6 +81,10 @@ body.test-active .site-footer {
 
 body.test-active .test-app {
   min-height: 100dvh;
+}
+
+body.test-active main > :not(.test-app) {
+  display: none;
 }
 
 a {
@@ -129,11 +136,11 @@ h3 {
 }
 
 h1 {
-  font-size: clamp(2.65rem, 8vw, 5.75rem);
+  font-size: 3rem;
 }
 
 h2 {
-  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-size: 2.15rem;
 }
 
 h3 {
@@ -195,7 +202,7 @@ h3 {
 
 .button {
   display: inline-flex;
-  min-height: 3rem;
+  min-height: 3.25rem;
   align-items: center;
   justify-content: center;
   gap: 0.65rem;
@@ -208,7 +215,7 @@ h3 {
   line-height: 1.2;
   text-decoration: none;
   cursor: pointer;
-  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+  transition: transform 130ms ease, background-color 160ms ease, border-color 160ms ease, color 160ms ease;
 }
 
 .button:hover {
@@ -217,6 +224,10 @@ h3 {
   border-color: var(--oxblood-dark);
   text-decoration: none;
   transform: translateY(-1px);
+}
+
+.button:active {
+  transform: translateY(1px);
 }
 
 .button--secondary {
@@ -257,6 +268,14 @@ h3 {
 @media (min-width: 48rem) {
   .site-shell {
     width: min(calc(100% - 4rem), var(--content));
+  }
+
+  h1 {
+    font-size: 5.75rem;
+  }
+
+  h2 {
+    font-size: 3.25rem;
   }
 }
 

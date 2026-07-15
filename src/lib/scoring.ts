@@ -101,7 +101,7 @@ export function selectProfile(
 
   return {
     primary: first,
-    secondary: second,
+    secondary: scores[second] === scores[third] ? undefined : second,
     isBlended: false,
     isOpenEnded: false
   };

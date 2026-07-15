@@ -52,7 +52,7 @@ test("homepage owns the primary BDSM test intent and renders static content", as
   test.skip(testInfo.project.name !== "desktop-chromium", "SEO route audit runs once.");
   await page.goto("/");
   await expect(page.locator("h1")).toHaveText("Free BDSM Test");
-  await expect(page.getByText("What this BDSM test measures", { exact: true })).toBeVisible();
+  await expect(page.getByText("What this BDSM test reveals", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "BDSM test FAQ" })).toBeVisible();
   const schemas = JSON.parse(await page.locator("script[type='application/ld+json']").textContent() ?? "[]");
   expect(schemas.some((schema: { "@type"?: string }) => schema["@type"] === "WebApplication")).toBe(true);

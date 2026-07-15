@@ -50,7 +50,6 @@ const resultSummaryText = (result: TestResult): string => {
 export function initTestApp(root: HTMLElement): void {
   let index = 0;
   let answers: Answers = {};
-  let advanceTimer: number | undefined;
   let storageEnabled = isStorageAvailable();
   let currentResult: TestResult | null = storageEnabled ? loadResult() : null;
   let imagePromise: Promise<Blob> | null = null;
@@ -59,7 +58,7 @@ export function initTestApp(root: HTMLElement): void {
   const form = required<HTMLFormElement>(root, "[data-question-form]");
   const answerList = required<HTMLElement>(form, "[data-answer-list]");
   const backButton = required<HTMLButtonElement>(root, "[data-action='back']");
-  const nextButton = required<HTMLButtonElement>(root, "[data-action='next']");
+  const nextButtons = [...root.querySelectorAll<HTMLButtonElement>("[data-action='next']")];
   const confirmationInputs = [...root.querySelectorAll<HTMLInputElement>("[data-confirm]")];
   const shareStatus = required<HTMLElement>(root, "[data-share-status]");
 
@@ -73,15 +72,29 @@ export function initTestApp(root: HTMLElement): void {
   };
 
   if (!storageEnabled) required<HTMLElement>(root, "[data-storage-note]").hidden = false;
-  if (session && Object.keys(session.answers).length > 0) required<HTMLElement>(root, "[data-resume]").hidden = false;
-  if (currentResult) required<HTMLElement>(root, "[data-saved-result]").hidden = false;
+
+  const showResumeState = (savedIndex: number): void => {
+    root.dataset.hasResume = "true";
+    required<HTMLElement>(root, "[data-resume]").hidden = false;
+    required<HTMLElement>(root, "[data-saved-result]").hidden = true;
+    setText(root, "[data-resume-label]", storageEnabled
+      ? `Continue at ${String(savedIndex + 1).padStart(2, "0")} / ${questionOrder.length}. Saved on this device.`
+      : `Continue at ${String(savedIndex + 1).padStart(2, "0")} / ${questionOrder.length}. Kept in this tab.`);
+  };
+
+  if (session && Object.keys(session.answers).length > 0) {
+    showResumeState(session.index);
+  } else if (currentResult) {
+    root.dataset.hasResult = "true";
+    required<HTMLElement>(root, "[data-saved-result]").hidden = false;
+  }
 
   const showView = (view: View): void => {
     root.dataset.state = view;
     root.querySelectorAll<HTMLElement>("[data-view]").forEach((element) => {
       element.hidden = element.dataset.view !== view;
     });
-    document.body.classList.toggle("test-active", view === "quiz");
+    document.body.classList.toggle("test-active", view !== "intro");
     if (view !== "intro") root.scrollIntoView({ behavior: "auto", block: "start" });
   };
 
@@ -252,16 +265,9 @@ export function initTestApp(root: HTMLElement): void {
     container.replaceChildren(svg);
   };
 
-  const clearAdvanceTimer = (): void => {
-    if (advanceTimer !== undefined) window.clearTimeout(advanceTimer);
-    advanceTimer = undefined;
-    delete form.dataset.advancing;
-  };
-
   const goNext = (expectedQuestionId?: number): void => {
     const question = questionOrder[index];
     if (!question || (expectedQuestionId !== undefined && question.id !== expectedQuestionId) || answers[question.id] === undefined) return;
-    clearAdvanceTimer();
     if (index === questionOrder.length - 1) {
       renderResult(scoreTest(answers));
       return;
@@ -272,27 +278,15 @@ export function initTestApp(root: HTMLElement): void {
     form.scrollIntoView({ behavior: "auto", block: "start" });
   };
 
-  const advanceFromAnswer = (questionId: number): void => {
-    clearAdvanceTimer();
-    form.dataset.advancing = "true";
-    advanceTimer = window.setTimeout(() => {
-      advanceTimer = undefined;
-      delete form.dataset.advancing;
-      goNext(questionId);
-    }, 180);
-  };
-
   const renderQuestion = (): void => {
-    clearAdvanceTimer();
     const question = questionOrder[index];
     const selected = answers[question.id];
-    const dimension = dimensions.find((item) => item.id === question.dimension)!;
     setText(root, "[data-question-text]", question.text);
-    setText(root, "[data-dimension-label]", dimension.shortName);
-    setText(root, "[data-progress-label]", `${index + 1} of ${questionOrder.length}`);
+    setText(root, "[data-dimension-label]", "Current appeal");
+    setText(root, "[data-progress-label]", `${String(index + 1).padStart(2, "0")} / ${questionOrder.length}`);
     required<HTMLElement>(root, "[data-progress-bar]").style.width = `${((index + 1) / questionOrder.length) * 100}%`;
     backButton.disabled = index === 0;
-    nextButton.disabled = selected === undefined;
+    nextButtons.forEach((button) => { button.disabled = selected === undefined; });
     answerList.replaceChildren(
       ...answerOptions.map((option, optionIndex) => {
         const label = document.createElement("label");
@@ -304,9 +298,8 @@ export function initTestApp(root: HTMLElement): void {
         input.checked = selected === option.value;
         input.addEventListener("change", () => {
           answers[question.id] = option.value;
-          nextButton.disabled = false;
+          nextButtons.forEach((button) => { button.disabled = false; });
           persist();
-          advanceFromAnswer(question.id);
         });
         const number = document.createElement("span");
         number.className = "answer-number";
@@ -424,6 +417,13 @@ export function initTestApp(root: HTMLElement): void {
     required<HTMLElement>(root, "[data-qr-panel]").hidden = true;
     shareStatus.textContent = "";
     if (persistResult) saveResult(result);
+    delete root.dataset.hasResume;
+    root.dataset.hasResult = "true";
+    const roleGrid = required<HTMLElement>(root, "[data-role-results]");
+    roleGrid.classList.remove("is-expanded");
+    const roleToggle = required<HTMLButtonElement>(root, "[data-action='toggle-roles']");
+    roleToggle.textContent = "Show all 10 matches";
+    roleToggle.setAttribute("aria-expanded", "false");
     showView("result");
   };
 
@@ -443,7 +443,9 @@ export function initTestApp(root: HTMLElement): void {
   };
 
   const beginQuiz = (resume: boolean): void => {
-    if (resume && session) {
+    if (resume && Object.keys(answers).length > 0) {
+      // Keep the in-memory state after an explicit Save & exit action.
+    } else if (resume && session) {
       index = session.index;
       answers = session.answers;
     } else {
@@ -478,7 +480,7 @@ export function initTestApp(root: HTMLElement): void {
     }
     const copied = await copyText(url);
     if (!copied) showManualCopy(url);
-    shareStatus.textContent = copied ? "Result link copied." : "Clipboard access is blocked. The link is selected for manual copying.";
+    shareStatus.textContent = copied ? "Result link copied." : "We couldn't copy automatically. The link is selected for you.";
   };
 
   const shareImage = async (): Promise<void> => {
@@ -514,9 +516,13 @@ export function initTestApp(root: HTMLElement): void {
         case "resume": beginQuiz(true); break;
         case "restart": showView("gate"); break;
         case "saved-result": if (currentResult) renderResult(currentResult, false); break;
+        case "exit":
+          persist();
+          if (Object.keys(answers).length > 0) showResumeState(index);
+          showView("intro");
+          break;
         case "back":
           if (index > 0) {
-            clearAdvanceTimer();
             index -= 1;
             persist();
             renderQuestion();
@@ -529,6 +535,10 @@ export function initTestApp(root: HTMLElement): void {
           boundaries = {};
           answers = {};
           index = 0;
+          delete root.dataset.hasResume;
+          delete root.dataset.hasResult;
+          required<HTMLElement>(root, "[data-resume]").hidden = true;
+          required<HTMLElement>(root, "[data-saved-result]").hidden = true;
           confirmationInputs.forEach((input) => { input.checked = false; });
           required<HTMLButtonElement>(root, "[data-action='confirm']").disabled = true;
           showView("gate");
@@ -537,6 +547,14 @@ export function initTestApp(root: HTMLElement): void {
           required<HTMLElement>(root, "[data-boundary-map]").hidden = false;
           required<HTMLElement>(root, "[data-boundary-map]").scrollIntoView({ behavior: "smooth", block: "start" });
           break;
+        case "scroll-share": required<HTMLElement>(root, ".share-panel").scrollIntoView({ behavior: "smooth", block: "start" }); break;
+        case "toggle-roles": {
+          const grid = required<HTMLElement>(root, "[data-role-results]");
+          const expanded = grid.classList.toggle("is-expanded");
+          target.textContent = expanded ? "Show top 3 only" : "Show all 10 matches";
+          target.setAttribute("aria-expanded", String(expanded));
+          break;
+        }
         case "close-boundary": required<HTMLElement>(root, "[data-boundary-map]").hidden = true; break;
         case "clear-boundaries":
           boundaries = {};
@@ -599,6 +617,9 @@ export function initTestApp(root: HTMLElement): void {
       const input = answerList.querySelectorAll<HTMLInputElement>("input")[number - 1];
       input.checked = true;
       input.dispatchEvent(new Event("change", { bubbles: true }));
+      event.preventDefault();
+    } else if (event.key === "Enter") {
+      goNext();
       event.preventDefault();
     }
   });

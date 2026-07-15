@@ -6,11 +6,11 @@ import { ArrowLeft, ArrowRight, Check, Copy, Download, Ellipsis, ImageDown, Link
   <div class="test-frame">
     <div class="shared-view" data-view="shared" hidden>
       <div class="shared-intro">
-        <p class="eyebrow">A BDSM Test result was shared with you</p>
-        <p class="result-kicker">Their best profile match</p>
+        <p class="eyebrow">Shared by choice</p>
+        <p class="result-kicker">Someone shared this part of their result</p>
         <h2 data-shared-primary>Shared profile</h2>
-        <p>These are the scores they chose to share. They are not proof of identity, experience, or consent.</p>
-        <button class="button shared-cta" type="button" data-action="shared-start">Take your own BDSM Test</button>
+        <p>You can see their rounded scores, but never their answers, limits, or private boundary map. A shared result is not consent, identity, experience, or compatibility.</p>
+        <button class="button shared-cta" type="button" data-action="shared-start">Explore yours privately</button>
       </div>
       <div class="shared-map">
         <section data-shared-role-section>
@@ -28,22 +28,23 @@ import { ArrowLeft, ArrowRight, Check, Copy, Download, Ellipsis, ImageDown, Link
 
     <div class="intro-view" data-view="intro">
       <div class="hero-copy">
-        <p class="eyebrow">Private by design · Adults 18+</p>
+        <p class="eyebrow">Private on this device · Adults 18+</p>
         <h1 id="test-heading">Free BDSM Test</h1>
-        <p class="hero-lede">Answer 32 questions and get scores for 10 BDSM roles and eight preference dimensions. No account required; scoring stays in your browser.</p>
+        <p class="hero-hook">Name what draws you in.</p>
+        <p class="hero-lede">Explore how control, surrender, intensity, restraint, care, play, and ritual feel to you right now. No account. Your answers never leave this device.</p>
         <div class="hero-meta" aria-label="Test details">
           <span><strong>32</strong> questions</span>
-          <span><strong>4–6</strong> minutes</span>
-          <span><strong>100%</strong> local scoring</span>
+          <span><strong>≈5</strong> minutes</span>
+          <span><strong>Local</strong> scoring</span>
         </div>
         <div class="intro-actions">
-          <button class="button start-button" type="button" data-action="start">Start the test</button>
-          <a href="#what-it-measures">See what it measures</a>
+          <button class="button start-button" type="button" data-action="start">Begin privately <ArrowRight size={18} /></button>
+          <a href="#what-it-measures">See the eight dimensions</a>
         </div>
         <div class="resume-panel" data-resume hidden>
-          <p>You have an unfinished test on this device.</p>
+          <p data-resume-label>Your progress is saved on this device.</p>
           <div>
-            <button class="button" type="button" data-action="resume">Resume</button>
+            <button class="button" type="button" data-action="resume">Continue test</button>
             <button class="button button--secondary" type="button" data-action="restart">Start over</button>
           </div>
         </div>
@@ -61,7 +62,7 @@ import { ArrowLeft, ArrowRight, Check, Copy, Download, Ellipsis, ImageDown, Link
           <span class="disc-pin"></span>
           <span class="disc-label">01—08</span>
         </div>
-        <p>10 role scores.<br/>8 preference dimensions.</p>
+        <p>Curiosity without judgment.<br/>Clarity without exposure.</p>
       </div>
     </div>
 
@@ -69,18 +70,18 @@ import { ArrowLeft, ArrowRight, Check, Copy, Download, Ellipsis, ImageDown, Link
       <button class="icon-back" type="button" data-action="gate-back" aria-label="Back to introduction"><ArrowLeft size={22} /></button>
       <div class="gate-content">
         <span class="gate-icon"><ShieldCheck size={26} /></span>
-        <p class="eyebrow">Before you begin</p>
-        <h2>Two things before you start</h2>
-        <p>The questions ask what appeals to you now. They do not test experience, skill, identity, consent knowledge, or compatibility.</p>
+        <p class="eyebrow">Before you enter</p>
+        <h2>A quick boundary check</h2>
+        <p>This maps current appeal. It does not measure experience, identity, skill, compatibility, or permission.</p>
         <label class="confirm-row">
           <input type="checkbox" data-confirm="age" />
           <span><strong>I am 18 or older.</strong><small>This tool is intended only for adults.</small></span>
         </label>
         <label class="confirm-row">
           <input type="checkbox" data-confirm="context" />
-          <span><strong>I understand what the test assumes.</strong><small>Every question assumes informed consent, prior negotiation, adults only, and the ability to stop.</small></span>
+          <span><strong>I understand every scenario assumes consent.</strong><small>Negotiated, adult-only, and reversible at any time.</small></span>
         </label>
-        <button class="button gate-continue" type="button" data-action="confirm" disabled>Continue</button>
+        <button class="button gate-continue" type="button" data-action="confirm" disabled>Continue privately <ArrowRight size={18} /></button>
         <p class="storage-note" data-storage-note hidden>Private browsing settings prevent progress from surviving a refresh. You can still finish in this tab.</p>
       </div>
     </div>
@@ -89,10 +90,10 @@ import { ArrowLeft, ArrowRight, Check, Copy, Download, Ellipsis, ImageDown, Link
       <header class="quiz-header">
         <button class="button button--secondary button--icon" type="button" data-action="back" aria-label="Previous question"><ArrowLeft size={21} /></button>
         <div class="quiz-progress-copy">
-          <span data-dimension-label>Current preferences</span>
-          <strong data-progress-label aria-live="polite">1 of 32</strong>
+          <span data-dimension-label>Current appeal</span>
+          <strong data-progress-label aria-live="polite">01 / 32</strong>
         </div>
-        <button class="button button--secondary button--icon" type="button" data-action="next" aria-label="Next question" disabled><ArrowRight size={21} /></button>
+        <button class="button button--secondary button--icon" type="button" data-action="exit" aria-label="Save and exit"><X size={20} /></button>
       </header>
       <div class="progress-track" aria-hidden="true"><span data-progress-bar></span></div>
       <form class="question-form" data-question-form>
@@ -102,45 +103,47 @@ import { ArrowLeft, ArrowRight, Check, Copy, Download, Ellipsis, ImageDown, Link
           <p>How appealing does this feel to you right now?</p>
           <div class="answer-list" data-answer-list></div>
         </fieldset>
-        <p class="keyboard-note">Keyboard: press 1–5 to answer. Use the arrow above to revisit a question.</p>
+        <button class="button question-continue" type="button" data-action="next" disabled>Continue <ArrowRight size={19} /></button>
+        <p class="keyboard-note">Keyboard: press 1–5 to choose, then Enter to continue.</p>
       </form>
     </div>
 
     <div class="result-view" data-view="result" hidden aria-live="polite">
       <div class="result-header">
         <div>
-          <p class="eyebrow">Your BDSM test result</p>
-          <p class="result-kicker">Best profile match</p>
+          <p class="eyebrow">Your private map</p>
+          <p class="result-kicker">Strongest match right now</p>
           <h2 data-result-primary>Profile</h2>
           <p class="result-summary" data-result-summary></p>
           <p class="result-secondary" data-result-secondary hidden></p>
         </div>
         <div class="result-seal" aria-hidden="true"><Check size={28} /><span>LOCAL<br/>RESULT</span></div>
       </div>
-      <p class="result-disclaimer">Role scores show how closely your answers match this test's formulas. They are not population percentiles or fixed identities.</p>
+      <p class="result-disclaimer"><strong>A mirror, not a verdict.</strong> Role scores show how closely your answers match this test's formulas. They are not population percentiles or fixed identities.</p>
       <section class="role-results" aria-labelledby="role-score-heading">
         <div class="section-title-row role-title-row">
-          <div><h3 id="role-score-heading">Your role scores</h3><p>All ten matches, ranked from highest to lowest.</p></div>
+          <div><h3 id="role-score-heading">All ten role matches</h3><p>Ranked from highest to lowest for this set of answers.</p></div>
           <span>0–100</span>
         </div>
         <div class="role-score-grid" data-role-results></div>
+        <button class="button button--secondary role-toggle" type="button" data-action="toggle-roles" aria-expanded="false">Show all 10 matches</button>
       </section>
       <div class="result-grid">
         <section class="radar-results" aria-labelledby="shape-heading">
-          <div class="section-title-row"><h3 id="shape-heading">Why these roles matched</h3><span>8 dimensions</span></div>
+          <div class="section-title-row"><h3 id="shape-heading">How your profile takes shape</h3><span>8 dimensions</span></div>
           <div class="radar-chart" data-result-radar></div>
         </section>
         <aside class="result-insights">
           <section>
-            <p class="insight-label">Highest dimensions</p>
+            <p class="insight-label">Your strongest currents</p>
             <div class="tag-list" data-core-dimensions></div>
           </section>
           <section data-context-section>
-            <p class="insight-label">Context-sensitive dimensions</p>
+            <p class="insight-label">Where context matters</p>
             <div class="tag-list" data-context-dimensions></div>
           </section>
           <section>
-            <p class="insight-label">Questions to discuss</p>
+            <p class="insight-label">Take this into a conversation</p>
             <ol class="prompt-list" data-communication-prompts></ol>
           </section>
         </aside>
@@ -154,10 +157,10 @@ import { ArrowLeft, ArrowRight, Check, Copy, Download, Ellipsis, ImageDown, Link
       </section>
       <section class="share-panel" aria-labelledby="share-heading">
         <div class="share-heading-row">
-          <div><p class="insight-label">Made for sharing</p><h3 id="share-heading">Share your BDSM test result</h3></div>
+          <div><p class="insight-label">You decide what travels</p><h3 id="share-heading">Share the shape. Keep the details.</h3></div>
           <Share2 size={26} aria-hidden="true" />
         </div>
-        <p>The link and result image show your profile, role scores, and eight preference scores. They never include individual answers or your private boundary choices.</p>
+        <p>Your profile and rounded scores can travel. Individual answers and your boundary map never do.</p>
         <div class="share-primary-actions">
           <button class="button" type="button" data-action="share-link"><Link size={18} /> Share result link</button>
           <button class="button button--secondary" type="button" data-action="share-image"><ImageDown size={18} /> Share result image</button>
@@ -189,12 +192,13 @@ import { ArrowLeft, ArrowRight, Check, Copy, Download, Ellipsis, ImageDown, Link
         </div>
       </section>
       <div class="result-actions">
-        <button class="button" type="button" data-action="boundary">Build a private boundary map</button>
+        <button class="button" type="button" data-action="boundary">Map my boundaries</button>
+        <button class="button button--secondary" type="button" data-action="scroll-share"><Share2 size={18} /> Share safely</button>
         <button class="button button--secondary" type="button" data-action="retake"><RotateCcw size={18} /> Retake</button>
       </div>
       <section class="boundary-map" data-boundary-map hidden aria-labelledby="boundary-heading">
         <div class="boundary-heading-row">
-          <div><p class="insight-label">Saved on this device only</p><h3 id="boundary-heading">Private Boundary Map</h3></div>
+          <div><p class="insight-label">Saved on this device only</p><h3 id="boundary-heading">Your limits are not your score.</h3></div>
           <button class="button button--secondary button--icon" type="button" data-action="close-boundary" aria-label="Close boundary map"><X size={19} /></button>
         </div>
         <p>Something can be appealing and still be a boundary for practical, emotional, relational, or health reasons. These choices do not change your result and never enter a shared link or image.</p>
@@ -263,7 +267,7 @@ import { ArrowLeft, ArrowRight, Check, Copy, Download, Ellipsis, ImageDown, Link
     max-width: 38rem;
     margin-bottom: var(--space-5);
     color: var(--ink-soft);
-    font-size: clamp(1.08rem, 2vw, 1.3rem);
+    font-size: 1.08rem;
   }
 
   .hero-meta {
@@ -417,7 +421,7 @@ import { ArrowLeft, ArrowRight, Check, Copy, Download, Ellipsis, ImageDown, Link
   .shared-intro h2 {
     max-width: 14ch;
     margin-bottom: var(--space-4);
-    font-size: clamp(2.65rem, 8vw, 5.75rem);
+    font-size: 3rem;
   }
 
   .shared-intro > p:not(.eyebrow, .result-kicker) {
@@ -601,7 +605,7 @@ import { ArrowLeft, ArrowRight, Check, Copy, Download, Ellipsis, ImageDown, Link
     max-width: 27ch;
     margin-bottom: var(--space-3);
     font-family: var(--font-display);
-    font-size: clamp(1.8rem, 6vw, 3.25rem);
+    font-size: 2rem;
     font-weight: 600;
     line-height: 1.08;
   }
@@ -1075,6 +1079,129 @@ import { ArrowLeft, ArrowRight, Check, Copy, Download, Ellipsis, ImageDown, Link
   .boundary-option:has(input[value="hard"]:checked) { background: var(--oxblood); border-color: var(--oxblood); }
   .boundary-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); padding-top: var(--space-4); }
   .boundary-footer p { margin: 0; color: var(--teal); font-size: 0.8rem; }
+
+  /* Private Voltage: dark, self-contained states for exploration and results. */
+  .test-app {
+    min-height: calc(84svh - 4.5rem);
+    color: var(--paper);
+    border-color: var(--line-dark);
+    background:
+      linear-gradient(90deg, transparent calc(50% - 0.5px), rgb(213 88 107 / 14%) calc(50% - 0.5px), rgb(213 88 107 / 14%) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
+      var(--night);
+  }
+
+  .test-app::before { background: var(--signal); opacity: 0.58; }
+  .test-app .eyebrow { color: var(--signal-soft); }
+
+  .intro-view { position: relative; min-height: inherit; padding: 3rem 0 2.5rem; }
+  .hero-copy { max-width: 43rem; }
+  .hero-copy h1 { margin-bottom: var(--space-5); color: var(--paper); font-size: 3rem; font-weight: 500; }
+  .hero-hook { max-width: 16ch; margin: -0.75rem 0 var(--space-4); color: var(--signal-soft); font-family: var(--font-display); font-size: 2rem; font-style: italic; font-weight: 400; line-height: 1.05; }
+  .hero-lede { max-width: 35rem; color: #c5bec2; font-size: 1.05rem; }
+  .hero-meta { gap: 0; color: #a8a1a6; border-block: 1px solid var(--line-dark); }
+  .hero-meta span { padding: 0.75rem 0; }
+  .hero-meta span + span { margin-left: 1rem; padding-left: 1rem; border-left: 1px solid var(--line-dark); }
+  .hero-meta strong { display: block; color: var(--paper); font-size: 0.95rem; }
+  .intro-actions { align-items: stretch; }
+  .intro-actions > a { display: inline-flex; min-height: 3.25rem; align-items: center; color: #d8d1d5; }
+  .start-button { color: var(--night); background: var(--paper); border-color: var(--paper); }
+  .start-button:hover { color: white; background: var(--signal); border-color: var(--signal); }
+  .resume-panel { color: var(--paper); border-color: var(--line-dark); border-left-color: var(--teal-light); background: var(--night-raised); }
+  .resume-panel .button,
+  .saved-panel .button { color: var(--night); background: var(--paper); border-color: var(--paper); }
+  .saved-panel { color: var(--paper); border-color: var(--line-dark); background: var(--night-raised); }
+
+  .hero-object { position: absolute; top: 3.5rem; right: -7rem; display: block; opacity: 0.28; pointer-events: none; }
+  .tension-disc { width: 16rem; border-color: #655d63; background: transparent; box-shadow: none; }
+  .disc-ring { border-color: #655d63; }
+  .ring-two { border-color: var(--paper); }
+  .disc-line { background: var(--signal); }
+  .disc-pin { background: var(--signal); box-shadow: 0 0 0 0.55rem rgb(213 88 107 / 15%); }
+  .disc-label { color: var(--paper); }
+  .hero-object p { display: none; color: #aaa2a8; }
+
+  .gate-view,
+  .quiz-view,
+  .shared-view { color: var(--paper); }
+  .gate-view { min-height: 100dvh; align-content: end; padding-bottom: max(2rem, env(safe-area-inset-bottom)); }
+  .icon-back { top: var(--space-4); color: var(--paper); border-color: var(--line-dark); }
+  .gate-content { padding-top: 5.5rem; }
+  .gate-content h2 { color: var(--paper); font-size: 2.35rem; }
+  .gate-content > p:not(.eyebrow, .storage-note) { color: #bdb6ba; }
+  .gate-icon { color: var(--teal-light); border-color: var(--teal-light); }
+  .confirm-row { min-height: 4.75rem; border-color: var(--line-dark); background: var(--night-raised); }
+  .confirm-row small { color: #aaa3a8; }
+  .confirm-row input { accent-color: var(--signal); }
+  .gate-continue { color: var(--night); background: var(--paper); border-color: var(--paper); }
+
+  .quiz-view { min-height: 100dvh; padding-top: 0; padding-bottom: calc(6.5rem + env(safe-area-inset-bottom)); }
+  .quiz-header { position: sticky; z-index: 10; top: 0; min-height: 4.75rem; padding-block: 0.75rem; background: rgb(16 16 17 / 92%); backdrop-filter: blur(14px); }
+  .quiz-header .button--secondary { color: var(--paper); background: transparent; border-color: var(--line-dark); }
+  .quiz-progress-copy { align-items: center; color: #a9a1a6; font-size: 0.75rem; text-transform: uppercase; }
+  .quiz-progress-copy span { color: #a9a1a6; }
+  .quiz-progress-copy strong { color: var(--paper); font-variant-numeric: tabular-nums; }
+  .progress-track { height: 2px; margin-top: 0; background: var(--line-dark); }
+  .progress-track span { background: var(--signal); }
+  .question-form { margin-top: var(--space-5); }
+  .question-context { color: var(--teal-light); }
+  .question-form legend { color: var(--paper); font-size: 2rem; font-weight: 500; }
+  .question-form fieldset > p { color: #aaa3a8; }
+  .answer-option { min-height: 3.5rem; color: #d7d1d4; border-color: var(--line-dark); background: var(--night-raised); }
+  .answer-option:hover { border-color: #6f666c; background: var(--night-soft); }
+  .answer-option:has(input:checked) { color: white; border-color: var(--signal); background: rgb(213 88 107 / 13%); transform: translateX(2px); }
+  .answer-number { border-color: #6d656b; color: #b7afb4; }
+  .answer-option:has(input:checked) .answer-number { color: var(--night); background: var(--signal-soft); border-color: var(--signal-soft); }
+  .question-continue { position: fixed; z-index: 30; right: 1rem; bottom: max(1rem, env(safe-area-inset-bottom)); left: 1rem; width: calc(100% - 2rem); color: var(--night); background: var(--paper); border-color: var(--paper); box-shadow: 0 -1rem 2.5rem rgb(0 0 0 / 35%); }
+  .keyboard-note { color: #8f888d; }
+
+  .shared-intro h2 { color: var(--paper); font-size: 3rem; }
+  .shared-intro > p:not(.eyebrow, .result-kicker) { color: #bbb4b8; }
+  .shared-map { color: var(--paper); border-color: var(--line-dark); background: var(--night-raised); box-shadow: none; }
+  .shared-map > p,
+  .shared-dimensions > summary { color: #aaa3a8; }
+
+  .test-app[data-state="result"] { min-height: 100dvh; color: var(--ink); border-color: var(--line); background: var(--paper); }
+  .test-app[data-state="result"]::before { display: none; }
+  .result-view { display: flex; width: min(100%, 66rem); flex-direction: column; padding-top: 0; }
+  .result-header { order: 1; width: 100vw; min-height: 72svh; margin-left: calc(50% - 50vw); padding: 4.5rem max(1rem, calc((100vw - 66rem) / 2)); align-items: center; color: var(--paper); border-color: var(--line-dark); background: var(--night); }
+  .result-header h2 { color: var(--paper); font-size: 3.2rem; font-weight: 500; }
+  .result-kicker { color: #aaa3a8; }
+  .result-summary { color: #d0c9cd; }
+  .result-secondary { color: var(--teal-light); }
+  .result-seal { color: var(--signal-soft); border-color: currentColor; }
+  .result-disclaimer { order: 2; margin: 0; padding: var(--space-5) 0; border: 0; border-bottom: 1px solid var(--line); background: transparent; }
+  .result-disclaimer strong { display: block; margin-bottom: 0.2rem; color: var(--ink); font-family: var(--font-display); font-size: 1.35rem; }
+  .result-grid { order: 3; }
+  .result-actions { order: 4; padding-block: var(--space-5); }
+  .role-results { order: 5; }
+  .dimension-results { order: 6; }
+  .boundary-map { order: 7; }
+  .share-panel { order: 8; }
+  .result-view .role-score-row,
+  .result-view .dimension-row { background: rgb(251 248 242 / 78%); }
+  .result-view .section-title-row { border-color: var(--line); }
+  .result-view .radar-shape { fill: rgb(146 42 62 / 20%); stroke: var(--oxblood); }
+  .result-view .radar-points circle { fill: var(--paper); }
+  .result-view .result-tag { border-radius: var(--radius); }
+  .result-view [data-role-results]:not(.is-expanded) .role-score-row:nth-child(n + 4) { display: none; }
+  .role-toggle { width: 100%; margin-top: var(--space-3); }
+  .test-app[data-has-resume="true"] .intro-actions,
+  .test-app[data-has-result="true"]:not([data-has-resume="true"]) .intro-actions { display: none; }
+  .share-panel { background: var(--night-raised); border-color: var(--signal); }
+  .boundary-map { background: var(--surface); }
+
+  @media (min-width: 48rem) {
+    .hero-copy h1 { font-size: 5.75rem; }
+    .hero-hook { font-size: 3.25rem; }
+    .hero-lede { font-size: 1.2rem; }
+    .hero-object { position: static; display: grid; opacity: 1; }
+    .hero-object p { display: block; }
+    .tension-disc { width: min(30vw, 21rem); }
+    .question-form legend { font-size: 3.25rem; }
+    .question-continue { right: auto; left: 50%; width: min(24rem, calc(100% - 4rem)); transform: translateX(-50%); }
+    .question-continue:active { transform: translate(-50%, 1px); }
+    .result-header h2 { font-size: 5.75rem; }
+  }
 
   [hidden] { display: none !important; }
 

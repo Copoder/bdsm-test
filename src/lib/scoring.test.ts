@@ -51,6 +51,15 @@ describe("profile selection", () => {
     const selected = selectProfile(profileMap({ Dominant: 60, Submissive: 60 }), dimensionMap({ DIR: 60, SUR: 60 }));
     expect(selected.primary).toBe("Dominant / Submissive");
   });
+
+  it("does not present an arbitrary secondary profile when second place is tied", () => {
+    const selected = selectProfile(
+      profileMap({ Switch: 83, Dominant: 75, Submissive: 75 }),
+      dimensionMap({ DIR: 75, SUR: 75 })
+    );
+    expect(selected.primary).toBe("Switch");
+    expect(selected.secondary).toBeUndefined();
+  });
 });
 
 describe("full scoring", () => {

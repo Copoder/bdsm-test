@@ -1,5 +1,5 @@
 ---
-import { ArrowRight, LockKeyhole, ShieldCheck } from "@lucide/astro";
+import { ArrowRight } from "@lucide/astro";
 import DimensionGlyph from "../components/DimensionGlyph.astro";
 import TestApp from "../components/TestApp.astro";
 import { dimensions } from "../data/questions";
@@ -44,17 +44,18 @@ const structuredData = [
 
   <section class="trust-band" aria-label="Privacy facts">
     <div class="site-shell trust-grid">
-      <div><LockKeyhole size={22} /><span><strong>Answers stay here</strong>Scored in your browser</span></div>
-      <div><ShieldCheck size={22} /><span><strong>Consent assumed</strong>Adults and prior negotiation</span></div>
-      <div><span class="fact-number">10</span><span><strong>Role scores</strong>Plus eight preference dimensions</span></div>
+      <div><b>01</b><span><strong>You answer</strong>Raw answers stay in this browser</span></div>
+      <div><b>02</b><span><strong>Your browser scores</strong>No account or scoring API</span></div>
+      <div><b>03</b><span><strong>You choose what leaves</strong>Only a summary when you share</span></div>
     </div>
+    <p class="site-shell analytics-note">Ordinary page analytics are separate. They never receive answers, progress, scores, boundaries, or shared-result fragments.</p>
   </section>
 
   <section class="measure-section site-shell" id="what-it-measures">
     <div class="measure-intro">
-      <p class="eyebrow">What this BDSM test measures</p>
-      <h2>What you get after 32 questions</h2>
-      <p>You get a best profile match, scores for all 10 supported roles, and eight preference scores. The separate scores show where roles overlap and where they do not.</p>
+      <p class="eyebrow">What this BDSM test reveals</p>
+      <h2>A map, not a label</h2>
+      <p>See your strongest current role match, all 10 role scores, and eight preference dimensions. The shape matters more than a single winner.</p>
       <a class="text-link" href="/methodology/">Read the scoring method <ArrowRight size={17} /></a>
     </div>
     <div class="example-result" aria-label="Example result chart">
@@ -74,7 +75,7 @@ const structuredData = [
     <div class="site-shell">
       <div class="section-heading">
         <p class="eyebrow">Eight preference dimensions</p>
-        <h2>Role labels do not explain everything</h2>
+        <h2>See the currents beneath the label</h2>
       </div>
       <div class="dimension-grid">
         {dimensions.map((dimension, index) => (
@@ -92,7 +93,7 @@ const structuredData = [
   <section class="principles-section site-shell">
     <div>
       <p class="eyebrow">How to read the scores</p>
-      <h2>What a BDSM test result can and cannot tell you</h2>
+      <h2>Read the result on your terms</h2>
     </div>
     <div class="principle-list">
       <article><span>01</span><div><h3>Appeal is not experience</h3><p>You can be curious without having tried something. The test never infers skill or behavior from attraction.</p></div></article>
@@ -108,7 +109,7 @@ const structuredData = [
         <h2>See every role match, not only the winner</h2>
       </div>
       <div>
-        <p>The result ranks every supported role from 0 to 100. The highest match becomes your profile, or a blended profile when two scores are close.</p>
+        <p>Your result ranks every supported role from 0 to 100, then shows the dimensions that shaped those matches. Mixed patterns stay mixed.</p>
         <a class="button button--secondary" href="/bdsm-roles/">Explore BDSM roles <ArrowRight size={17} /></a>
       </div>
     </div>
@@ -117,9 +118,9 @@ const structuredData = [
   <section class="safety-section site-shell">
     <div class="safety-mark" aria-hidden="true"><span></span><span></span><span></span></div>
     <div class="reading-width">
-      <p class="eyebrow">Built into every question</p>
-      <h2>Consent is assumed, not scored</h2>
-      <p>Every scenario assumes informed adults, prior negotiation, and the freedom to pause or stop. There is no consent score because communication is not a kink preference.</p>
+      <p class="eyebrow">Built into every scenario</p>
+      <h2>Consent is the baseline, not a score</h2>
+      <p>Every scenario starts with informed adults, prior negotiation, and the freedom to pause or stop. Communication is required context, never a kink preference.</p>
       <a class="text-link" href="/consent-and-safety/">Read the consent and safety framework <ArrowRight size={17} /></a>
     </div>
   </section>
@@ -140,23 +141,24 @@ const structuredData = [
 
   <section class="final-cta site-shell">
     <p class="eyebrow">Private browser-based scoring</p>
-    <h2>Take the free BDSM test</h2>
-    <a class="button" href="#start">Start the 32-question test <ArrowRight size={17} /></a>
+    <h2>Ready when you are.</h2>
+    <a class="button" href="#start">Begin privately <ArrowRight size={17} /></a>
   </section>
 </BaseLayout>
 
 <style>
-  .trust-band { border-bottom: 1px solid var(--line); background: var(--ink); color: var(--paper); }
+  .trust-band { padding-bottom: var(--space-3); border-bottom: 1px solid var(--line-dark); background: var(--night-raised); color: var(--paper); }
   .trust-grid { display: grid; }
-  .trust-grid > div { display: grid; min-height: 6rem; grid-template-columns: 2rem 1fr; align-items: center; gap: var(--space-3); padding: var(--space-3) 0; border-bottom: 1px solid #3f3b37; }
+  .trust-grid > div { display: grid; min-height: 5.5rem; grid-template-columns: 2rem 1fr; align-items: center; gap: var(--space-3); padding: var(--space-3) 0; border-bottom: 1px solid var(--line-dark); }
   .trust-grid > div:last-child { border-bottom: 0; }
-  .trust-grid span { display: block; color: #aaa39a; font-size: 0.78rem; }
+  .trust-grid b { color: var(--signal-soft); font-size: 0.72rem; font-weight: 600; }
+  .trust-grid span { display: block; color: #aaa3a8; font-size: 0.78rem; }
   .trust-grid strong { display: block; color: white; font-size: 0.9rem; }
-  .fact-number { color: var(--paper) !important; font-family: var(--font-display); font-size: 1.7rem !important; }
+  .analytics-note { margin-block: var(--space-2); color: #888187; font-size: 0.72rem; line-height: 1.45; }
   .measure-section { display: grid; gap: var(--space-7); padding-block: var(--space-8); }
   .measure-intro > p { color: var(--ink-soft); font-size: 1.06rem; }
   .text-link { display: inline-flex; align-items: center; gap: var(--space-2); font-weight: 600; }
-  .example-result { align-self: center; padding: var(--space-5); border: 1px solid var(--line-strong); background: var(--surface); box-shadow: var(--shadow); }
+  .example-result { align-self: center; padding: var(--space-5); border: 1px solid var(--line-strong); background: var(--surface); box-shadow: var(--shadow); transform: rotate(0.7deg); }
   .example-top { display: flex; justify-content: space-between; margin-bottom: var(--space-4); padding-bottom: var(--space-3); border-bottom: 1px solid var(--line); font-size: 0.75rem; }
   .example-top span { color: var(--steel); text-transform: uppercase; }
   .example-row { display: grid; grid-template-columns: minmax(7rem, 1fr) 2fr 2rem; align-items: center; gap: var(--space-3); padding: 0.65rem 0; font-size: 0.8rem; }
@@ -166,7 +168,7 @@ const structuredData = [
   .dimensions-band { padding-block: var(--space-8); background: var(--paper-deep); border-block: 1px solid var(--line); }
   .section-heading { max-width: 46rem; margin-bottom: var(--space-7); }
   .dimension-grid { display: grid; border-top: 1px solid var(--line-strong); }
-  .dimension-grid article { min-height: 18rem; padding: var(--space-5) 0; border-bottom: 1px solid var(--line-strong); }
+  .dimension-grid article { padding: var(--space-5) 0; border-bottom: 1px solid var(--line-strong); }
   .dimension-index { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-6); color: var(--dimension-color); }
   .dimension-index > span { color: var(--steel); font-size: 0.72rem; }
   .dimension-grid h3 { margin-bottom: var(--space-3); }
@@ -177,7 +179,7 @@ const structuredData = [
   .principle-list article > span { color: var(--oxblood); font-size: 0.75rem; }
   .principle-list h3 { margin-bottom: var(--space-2); }
   .principle-list p { margin: 0; color: var(--ink-soft); }
-  .roles-band { padding-block: var(--space-8); color: var(--paper); background: var(--ink); }
+  .roles-band { padding-block: var(--space-8); color: var(--paper); background: var(--night); }
   .roles-inner { display: grid; gap: var(--space-6); }
   .roles-band .eyebrow { color: #d47b84; }
   .roles-band p { color: #bdb6ad; }
@@ -209,7 +211,7 @@ const structuredData = [
     .trust-grid > div:last-child { border-right: 0; }
     .measure-section { grid-template-columns: 7fr 5fr; align-items: center; }
     .dimension-grid { grid-template-columns: repeat(4, 1fr); }
-    .dimension-grid article { padding: var(--space-5); border-right: 1px solid var(--line-strong); }
+    .dimension-grid article { min-height: 18rem; padding: var(--space-5); border-right: 1px solid var(--line-strong); }
     .dimension-grid article:nth-child(4n) { border-right: 0; }
     .principles-section { grid-template-columns: 5fr 7fr; }
     .roles-inner { grid-template-columns: 7fr 5fr; align-items: end; }
