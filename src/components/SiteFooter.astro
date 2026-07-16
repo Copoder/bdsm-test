@@ -7,6 +7,18 @@ import { CONTACT_EMAIL } from "../data/site";
     <div>
       <a class="footer-brand" href="/">BDSMTest.top</a>
       <p>Name the pull. Keep the details yours.</p>
+      <a
+        class="listbulb-badge"
+        href="https://www.listbulb.com/tools/bdsmtest"
+        target="_blank"
+        rel="noopener"
+      >
+        <img
+          src="https://www.listbulb.com/featured-on-listbulb-light.svg"
+          alt="Featured on ListBulb"
+          height="240"
+        />
+      </a>
     </div>
     <nav aria-label="Product links">
       <strong>Explore</strong>
@@ -53,6 +65,22 @@ import { CONTACT_EMAIL } from "../data/site";
     max-width: 24rem;
     margin: 0.6rem 0 0;
     color: #bdb5aa;
+  }
+
+  .listbulb-badge {
+    display: inline-flex;
+    margin-top: var(--space-5);
+    text-decoration: none;
+    transition: opacity 160ms ease;
+  }
+
+  .listbulb-badge:hover {
+    opacity: 0.82;
+  }
+
+  .listbulb-badge img {
+    width: 11.5rem;
+    height: auto;
   }
 
   .footer-grid nav {
