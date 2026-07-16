@@ -24,15 +24,16 @@ with sync_playwright() as playwright:
         has_touch=True,
     )
     capture(mobile, "homepage-mobile")
-    mobile.get_by_role("button", name="Begin privately").click()
+    mobile.get_by_role("button", name="Show me what pulls").click()
     mobile.screenshot(path=OUTPUT / "gate-mobile.png", full_page=True)
     mobile.locator("[data-confirm='age']").check()
-    mobile.locator("[data-confirm='context']").check()
-    mobile.get_by_role("button", name="Continue").click()
+    mobile.get_by_role("button", name="Enter the test").click()
     mobile.screenshot(path=OUTPUT / "question-mobile.png", full_page=True)
-    for _ in range(32):
-        mobile.get_by_text("Somewhat appealing", exact=True).click()
-        mobile.get_by_role("button", name="Continue", exact=True).click()
+    for current in range(1, 33):
+        mobile.get_by_text("I'd lean in", exact=True).click()
+        if current < 32:
+            mobile.locator("[data-progress-label]").filter(has_text=f"{current + 1:02d} / 32").wait_for()
+    mobile.locator("[data-result-primary]").wait_for(state="visible")
     mobile.screenshot(path=OUTPUT / "result-reveal-mobile.png", full_page=False)
     mobile.screenshot(path=OUTPUT / "result-mobile.png", full_page=True)
     mobile.goto(f"{BASE_URL}/consent-and-safety/", wait_until="networkidle")

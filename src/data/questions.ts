@@ -1,14 +1,15 @@
 import type { AnswerValue, DimensionMeta, Question } from "../lib/model";
 
 export const MODEL_VERSION = "1.0.0";
-export const QUESTION_VERSION = "1.0.0";
+export const QUESTION_VERSION = "1.1.0";
 
+/** Five-point pull scale: 0 = no desire … 4 = strong desire. Midpoint stays contextual/unsure. */
 export const answerOptions: Array<{ value: AnswerValue; label: string }> = [
-  { value: 0, label: "Strongly unappealing" },
-  { value: 1, label: "Somewhat unappealing" },
-  { value: 2, label: "It depends / unsure" },
-  { value: 3, label: "Somewhat appealing" },
-  { value: 4, label: "Strongly appealing" }
+  { value: 0, label: "Turns me off" },
+  { value: 1, label: "Leaves me cold" },
+  { value: 2, label: "It depends" },
+  { value: 3, label: "I'd lean in" },
+  { value: 4, label: "Lights me up" }
 ];
 
 export const dimensions: DimensionMeta[] = [
@@ -86,39 +87,44 @@ export const dimensions: DimensionMeta[] = [
   }
 ];
 
+/**
+ * Scene prompts rated on the pull scale above.
+ * Consent is assumed at the age gate—items stay vivid without repeating legal framing.
+ * Tags and dimension ids must stay stable for scoring.v1.json.
+ */
 export const questions: Question[] = [
-  { id: 1, dimension: "DIR", text: "Setting the pace and structure of a consensual scene feels appealing to me.", tags: ["control-giving"] },
-  { id: 2, dimension: "DIR", text: "I like the idea of a partner looking to me for clear decisions within agreed limits.", tags: ["control-giving"] },
-  { id: 3, dimension: "DIR", text: "Creating rules for a scene, then taking responsibility for them, appeals to me.", tags: ["control-giving"] },
-  { id: 4, dimension: "DIR", text: "Guiding another person through anticipation and resolution sounds appealing.", tags: ["control-giving"] },
-  { id: 5, dimension: "SUR", text: "Letting a trusted partner set the pace within negotiated limits feels appealing.", tags: ["control-receiving"] },
-  { id: 6, dimension: "SUR", text: "Following clear instructions in a consensual scene sounds freeing to me.", tags: ["control-receiving"] },
-  { id: 7, dimension: "SUR", text: "Temporarily handing over decisions to someone I trust feels exciting.", tags: ["control-receiving"] },
-  { id: 8, dimension: "SUR", text: "Being held to agreed expectations appeals to me.", tags: ["control-receiving"] },
-  { id: 9, dimension: "IGV", text: "Carefully creating strong sensations for a consenting partner appeals to me.", tags: ["sensation-giving"] },
-  { id: 10, dimension: "IGV", text: "Watching a partner's reactions and adjusting the intensity sounds satisfying.", tags: ["sensation-giving"] },
-  { id: 11, dimension: "IGV", text: "Building intensity toward a clearly agreed limit feels appealing.", tags: ["sensation-giving"] },
-  { id: 12, dimension: "IGV", text: "Controlled discomfort can be an appealing part of a consensual scene for me to give.", tags: ["sensation-giving"] },
-  { id: 13, dimension: "IRC", text: "Experiencing strong sensations within clear limits feels appealing to me.", tags: ["sensation-receiving"] },
-  { id: 14, dimension: "IRC", text: "A consensual test of endurance or composure sounds exciting.", tags: ["sensation-receiving"] },
-  { id: 15, dimension: "IRC", text: "Letting a trusted partner build intensity while I stay present appeals to me.", tags: ["sensation-receiving"] },
-  { id: 16, dimension: "IRC", text: "Controlled discomfort can be an appealing part of a consensual scene for me to receive.", tags: ["sensation-receiving"] },
-  { id: 17, dimension: "RST", text: "Restraining a consenting partner with care and skill sounds appealing.", tags: ["restraint-giving"] },
-  { id: 18, dimension: "RST", text: "Being safely restrained by someone I trust sounds appealing.", tags: ["restraint-receiving"] },
-  { id: 19, dimension: "RST", text: "The planning, precision, or visual craft of restraint interests me.", tags: ["craft"] },
-  { id: 20, dimension: "RST", text: "Limited movement can heighten anticipation for me.", tags: ["restraint-receiving"] },
-  { id: 21, dimension: "CAR", text: "Taking care of a partner before, during, and after an intense experience feels meaningful and appealing.", tags: ["service-care-giving"] },
-  { id: 22, dimension: "CAR", text: "Doing meaningful acts of service within an agreed dynamic appeals to me.", tags: ["service-care-giving"] },
-  { id: 23, dimension: "CAR", text: "Receiving attentive care after a demanding experience feels appealing.", tags: ["care-receiving"] },
-  { id: 24, dimension: "CAR", text: "An agreed ritual of responsibility, permission, or appreciation appeals to me.", tags: ["ritual-planning"] },
-  { id: 25, dimension: "PLY", text: "Playful resistance inside clearly agreed rules sounds exciting.", tags: ["playful-resistance"] },
-  { id: 26, dimension: "PLY", text: "Teasing or testing an agreed power dynamic can add enjoyable tension for me.", tags: ["challenge"] },
-  { id: 27, dimension: "PLY", text: "Earning an agreed consequence through playful behavior appeals to me.", tags: ["playful-resistance"] },
-  { id: 28, dimension: "PLY", text: "A dynamic with wit, challenge, and back-and-forth energy suits me.", tags: ["challenge"] },
-  { id: 29, dimension: "EXP", text: "Exploring an unfamiliar but negotiated dynamic feels appealing.", tags: ["novelty-role"] },
-  { id: 30, dimension: "EXP", text: "Atmosphere, anticipation, and ritual feel appealing to me.", tags: ["ritual-planning"] },
-  { id: 31, dimension: "EXP", text: "Stepping into a role or carefully designed scenario sounds engaging.", tags: ["novelty-role"] },
-  { id: 32, dimension: "EXP", text: "Designing a consensual scene together in advance feels like part of the appeal.", tags: ["ritual-planning"] }
+  { id: 1, dimension: "DIR", text: "Being the one who decides when we speed up, slow down, or wait.", tags: ["control-giving"] },
+  { id: 2, dimension: "DIR", text: "Having a partner look to me for the next move while things are charged.", tags: ["control-giving"] },
+  { id: 3, dimension: "DIR", text: "Setting the rules for a scene—then owning every one of them.", tags: ["control-giving"] },
+  { id: 4, dimension: "DIR", text: "Guiding someone through the build-up until the release lands.", tags: ["control-giving"] },
+  { id: 5, dimension: "SUR", text: "Letting a trusted partner set the pace while I follow.", tags: ["control-receiving"] },
+  { id: 6, dimension: "SUR", text: "Being given clear instructions—and feeling freer for it.", tags: ["control-receiving"] },
+  { id: 7, dimension: "SUR", text: "Handing over decisions for a while to someone I trust.", tags: ["control-receiving"] },
+  { id: 8, dimension: "SUR", text: "Being held to expectations we named together.", tags: ["control-receiving"] },
+  { id: 9, dimension: "IGV", text: "Creating sharp sensation for a partner and watching them take it.", tags: ["sensation-giving"] },
+  { id: 10, dimension: "IGV", text: "Reading their reactions—and dialing the intensity up or down.", tags: ["sensation-giving"] },
+  { id: 11, dimension: "IGV", text: "Building intensity right up to a limit we both know.", tags: ["sensation-giving"] },
+  { id: 12, dimension: "IGV", text: "Giving controlled discomfort as part of the play.", tags: ["sensation-giving"] },
+  { id: 13, dimension: "IRC", text: "Taking strong sensation inside limits we set.", tags: ["sensation-receiving"] },
+  { id: 14, dimension: "IRC", text: "Being tested for endurance or composure by someone I trust.", tags: ["sensation-receiving"] },
+  { id: 15, dimension: "IRC", text: "Staying present while a trusted partner turns the intensity up.", tags: ["sensation-receiving"] },
+  { id: 16, dimension: "IRC", text: "Receiving controlled discomfort as part of the play.", tags: ["sensation-receiving"] },
+  { id: 17, dimension: "RST", text: "Binding a partner with care, skill, and full attention.", tags: ["restraint-giving"] },
+  { id: 18, dimension: "RST", text: "Being held still—safely—by someone I trust.", tags: ["restraint-receiving"] },
+  { id: 19, dimension: "RST", text: "The craft of restraint: the planning, the precision, the look of it.", tags: ["craft"] },
+  { id: 20, dimension: "RST", text: "Not being able to move while anticipation builds.", tags: ["restraint-receiving"] },
+  { id: 21, dimension: "CAR", text: "Looking after a partner before, during, and after intensity.", tags: ["service-care-giving"] },
+  { id: 22, dimension: "CAR", text: "Doing acts of service inside a power dynamic that means something.", tags: ["service-care-giving"] },
+  { id: 23, dimension: "CAR", text: "Being carefully looked after when the intensity is over.", tags: ["care-receiving"] },
+  { id: 24, dimension: "CAR", text: "A ritual of permission, responsibility, or appreciation between us.", tags: ["ritual-planning"] },
+  { id: 25, dimension: "PLY", text: "Pushing back on purpose—knowing they'll catch it.", tags: ["playful-resistance"] },
+  { id: 26, dimension: "PLY", text: "Teasing a power dynamic until the tension snaps taut.", tags: ["challenge"] },
+  { id: 27, dimension: "PLY", text: "Earning a consequence through playful defiance.", tags: ["playful-resistance"] },
+  { id: 28, dimension: "PLY", text: "Wit, challenge, and back-and-forth that keeps us both sharp.", tags: ["challenge"] },
+  { id: 29, dimension: "EXP", text: "Trying an unfamiliar dynamic with someone I trust.", tags: ["novelty-role"] },
+  { id: 30, dimension: "EXP", text: "Atmosphere, waiting, ritual—the charge before anything starts.", tags: ["ritual-planning"] },
+  { id: 31, dimension: "EXP", text: "Stepping into a role or a scene designed on purpose.", tags: ["novelty-role"] },
+  { id: 32, dimension: "EXP", text: "Planning a scene together in advance—and savoring that part.", tags: ["ritual-planning"] }
 ];
 
 export const questionOrder = Array.from({ length: 4 }, (_, round) =>

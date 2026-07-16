@@ -3,8 +3,10 @@ import { answerOptions, dimensions, questionOrder, QUESTION_VERSION } from "../d
 import { profileDisplayNames, profiles } from "../data/profiles";
 import { PROFILE_IDS, type Answers, type DimensionId, type ProfileId, type TestResult } from "./model";
 import { scoreTest } from "./scoring";
+import { buildResultSpotlight } from "./result-copy";
 import { createShareUrl, decodeShareEnvelope, type SharePayloadV1 } from "./share-codec";
 import { createResultImage, downloadBlob } from "./share-image";
+import { trackEvent } from "./analytics";
 import {
   clearBoundaryMap,
   clearLocalTestData,
@@ -38,14 +40,10 @@ const copyText = async (text: string): Promise<boolean> => {
   }
 };
 
-const resultSummaryText = (result: TestResult): string => {
-  const top = [...PROFILE_IDS]
-    .sort((a, b) => result.profileScores[b] - result.profileScores[a])
-    .slice(0, 3)
-    .map((profile) => `${profileDisplayNames[profile]} ${Math.round(result.profileScores[profile])}%`)
-    .join(", ");
-  return `My BDSM Test profile is ${result.primary}. Top role scores: ${top}.`;
-};
+const prefersReducedMotion = (): boolean =>
+  typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const resultSummaryText = (result: TestResult): string => buildResultSpotlight(result).shareText;
 
 export function initTestApp(root: HTMLElement): void {
   let index = 0;
@@ -53,14 +51,27 @@ export function initTestApp(root: HTMLElement): void {
   let storageEnabled = isStorageAvailable();
   let currentResult: TestResult | null = storageEnabled ? loadResult() : null;
   let imagePromise: Promise<Blob> | null = null;
+  let advanceTimer: number | undefined;
   let boundaries: BoundaryMap = storageEnabled ? loadBoundaryMap() : {};
   const session = storageEnabled ? loadSession() : null;
   const form = required<HTMLFormElement>(root, "[data-question-form]");
   const answerList = required<HTMLElement>(form, "[data-answer-list]");
   const backButton = required<HTMLButtonElement>(root, "[data-action='back']");
-  const nextButtons = [...root.querySelectorAll<HTMLButtonElement>("[data-action='next']")];
   const confirmationInputs = [...root.querySelectorAll<HTMLInputElement>("[data-confirm]")];
   const shareStatus = required<HTMLElement>(root, "[data-share-status]");
+  const trackedMilestones = new Set<number>();
+
+  const cancelAutoAdvance = (): void => {
+    if (advanceTimer !== undefined) window.clearTimeout(advanceTimer);
+    advanceTimer = undefined;
+    delete answerList.dataset.advancing;
+  };
+
+  const trackProgress = (questionNumber: number): void => {
+    if (![1, 8, 16, 24, 32].includes(questionNumber) || trackedMilestones.has(questionNumber)) return;
+    trackedMilestones.add(questionNumber);
+    trackEvent("test_progress", { question_number: questionNumber, total_questions: questionOrder.length });
+  };
 
   const showManualCopy = (text: string): void => {
     const panel = required<HTMLElement>(root, "[data-copy-fallback]");
@@ -95,7 +106,11 @@ export function initTestApp(root: HTMLElement): void {
       element.hidden = element.dataset.view !== view;
     });
     document.body.classList.toggle("test-active", view !== "intro");
-    if (view !== "intro") root.scrollIntoView({ behavior: "auto", block: "start" });
+    if (view === "result") {
+      window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? "auto" : "smooth" });
+    } else if (view !== "intro") {
+      root.scrollIntoView({ behavior: "auto", block: "start" });
+    }
   };
 
   const persist = (): void => {
@@ -269,6 +284,7 @@ export function initTestApp(root: HTMLElement): void {
     const question = questionOrder[index];
     if (!question || (expectedQuestionId !== undefined && question.id !== expectedQuestionId) || answers[question.id] === undefined) return;
     if (index === questionOrder.length - 1) {
+      trackEvent("test_complete", { total_questions: questionOrder.length, question_version: QUESTION_VERSION });
       renderResult(scoreTest(answers));
       return;
     }
@@ -279,14 +295,15 @@ export function initTestApp(root: HTMLElement): void {
   };
 
   const renderQuestion = (): void => {
+    cancelAutoAdvance();
     const question = questionOrder[index];
     const selected = answers[question.id];
     setText(root, "[data-question-text]", question.text);
-    setText(root, "[data-dimension-label]", "Current appeal");
+    setText(root, "[data-dimension-label]", "How hard does this pull?");
     setText(root, "[data-progress-label]", `${String(index + 1).padStart(2, "0")} / ${questionOrder.length}`);
     required<HTMLElement>(root, "[data-progress-bar]").style.width = `${((index + 1) / questionOrder.length) * 100}%`;
+    trackProgress(index + 1);
     backButton.disabled = index === 0;
-    nextButtons.forEach((button) => { button.disabled = selected === undefined; });
     answerList.replaceChildren(
       ...answerOptions.map((option, optionIndex) => {
         const label = document.createElement("label");
@@ -298,8 +315,14 @@ export function initTestApp(root: HTMLElement): void {
         input.checked = selected === option.value;
         input.addEventListener("change", () => {
           answers[question.id] = option.value;
-          nextButtons.forEach((button) => { button.disabled = false; });
           persist();
+          cancelAutoAdvance();
+          answerList.dataset.advancing = "true";
+          advanceTimer = window.setTimeout(() => {
+            advanceTimer = undefined;
+            delete answerList.dataset.advancing;
+            goNext(question.id);
+          }, 320);
         });
         const number = document.createElement("span");
         number.className = "answer-number";
@@ -313,23 +336,34 @@ export function initTestApp(root: HTMLElement): void {
         return label;
       })
     );
+    form.classList.remove("is-entering");
+    if (!prefersReducedMotion()) {
+      void form.offsetWidth;
+      form.classList.add("is-entering");
+    }
   };
 
-  const profileSummary = (result: TestResult): string => {
-    if (result.isOpenEnded) return "No single role scored high enough to become your main match. Your individual role and preference scores may be more useful than one label.";
-    if (result.isBlended) {
-      return result.primary
-        .split(" / ")
-        .map((id) => profiles.find((profile) => profile.id === id)?.summary)
-        .filter(Boolean)
-        .join(" ");
+  const animateMatchScore = (target: number): void => {
+    const scoreNode = required<HTMLElement>(root, "[data-result-match-score]");
+    if (prefersReducedMotion()) {
+      scoreNode.textContent = String(target);
+      return;
     }
-    return profiles.find((profile) => profile.id === result.primary)?.summary ?? "Your result is based on the role and preference scores below.";
+    const started = performance.now();
+    const duration = 560;
+    const tick = (now: number): void => {
+      const progress = Math.min(1, (now - started) / duration);
+      const eased = 1 - (1 - progress) ** 3;
+      scoreNode.textContent = String(Math.round(target * eased));
+      if (progress < 1) requestAnimationFrame(tick);
+    };
+    scoreNode.textContent = "0";
+    requestAnimationFrame(tick);
   };
 
   const updateShareChannels = (result: TestResult): void => {
     const url = createShareUrl(result);
-    const text = `I took the BDSM Test and got ${result.primary}. Compare my scores and take the test yourself.`;
+    const text = buildResultSpotlight(result).shareText;
     const urls: Record<string, string> = {
       whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(`${text} ${url}`)}`,
       telegram: `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`,
@@ -383,11 +417,24 @@ export function initTestApp(root: HTMLElement): void {
   const renderResult = (result: TestResult, persistResult = true): void => {
     currentResult = result;
     imagePromise = null;
+    const spotlight = buildResultSpotlight(result);
+    setText(root, "[data-result-kicker]", spotlight.kicker);
     setText(root, "[data-result-primary]", result.primary);
-    setText(root, "[data-result-summary]", profileSummary(result));
+    setText(root, "[data-result-hook]", spotlight.hook);
+    setText(root, "[data-result-topline]", spotlight.topLine);
+    setText(root, "[data-result-summary]", spotlight.summary);
+    const match = required<HTMLElement>(root, "[data-result-match]");
+    if (spotlight.matchScore === undefined) {
+      match.hidden = true;
+    } else {
+      match.hidden = false;
+      animateMatchScore(spotlight.matchScore);
+    }
     const secondary = required<HTMLElement>(root, "[data-result-secondary]");
     secondary.hidden = !result.secondary;
-    secondary.textContent = result.secondary ? `Secondary tendency: ${result.secondary}` : "";
+    secondary.textContent = result.secondary
+      ? `Also close: ${profileDisplayNames[result.secondary]} (${Math.round(result.profileScores[result.secondary])})`
+      : "";
     renderDimensionRows(required<HTMLElement>(root, "[data-dimension-results]"), result.dimensions);
     renderRoleRows(required<HTMLElement>(root, "[data-role-results]"), result.profileScores);
     renderRadar(required<HTMLElement>(root, "[data-result-radar]"), result.dimensions);
@@ -425,6 +472,7 @@ export function initTestApp(root: HTMLElement): void {
     roleToggle.textContent = "Show all 10 matches";
     roleToggle.setAttribute("aria-expanded", "false");
     showView("result");
+    trackEvent("result_view", { source: persistResult ? "completed_test" : "saved_result" });
   };
 
   const renderSharedResult = (payload: SharePayloadV1): void => {
@@ -440,6 +488,7 @@ export function initTestApp(root: HTMLElement): void {
       renderRoleRows(required<HTMLElement>(root, "[data-shared-role-results]"), roleScores);
     }
     showView("shared");
+    trackEvent("shared_result_view");
   };
 
   const beginQuiz = (resume: boolean): void => {
@@ -457,6 +506,7 @@ export function initTestApp(root: HTMLElement): void {
     }
     renderQuestion();
     showView("quiz");
+    if (resume) trackEvent("test_resume", { question_number: index + 1 });
   };
 
   const getImage = (): Promise<Blob> => {
@@ -468,7 +518,7 @@ export function initTestApp(root: HTMLElement): void {
   const shareLink = async (): Promise<void> => {
     if (!currentResult) return;
     const url = createShareUrl(currentResult);
-    const text = `I took the BDSM Test and got ${currentResult.primary}. Compare my scores and take the test yourself.`;
+    const text = buildResultSpotlight(currentResult).shareText;
     if (navigator.share) {
       try {
         await navigator.share({ title: "My BDSM Test result", text, url });
@@ -490,7 +540,7 @@ export function initTestApp(root: HTMLElement): void {
     const file = new File([blob], "my-bdsm-test-result.png", { type: "image/png" });
     if (navigator.share && navigator.canShare?.({ files: [file] })) {
       try {
-        await navigator.share({ title: "My BDSM Test result", text: "My BDSM Test role scores.", files: [file] });
+        await navigator.share({ title: "My BDSM Test result", text: buildResultSpotlight(currentResult).shareText, files: [file] });
         shareStatus.textContent = "Image shared.";
       } catch (error) {
         if ((error as DOMException).name !== "AbortError") {
@@ -505,30 +555,46 @@ export function initTestApp(root: HTMLElement): void {
   };
 
   root.addEventListener("click", async (event) => {
+    const shareChannel = (event.target as Element).closest<HTMLElement>("[data-share-channel]");
+    if (shareChannel) trackEvent("result_share", { method: shareChannel.dataset.shareChannel ?? "unknown" });
     const target = (event.target as Element).closest<HTMLElement>("[data-action]");
     if (!target) return;
     try {
       switch (target.dataset.action) {
-        case "start": showView("gate"); break;
-        case "shared-start": showView("gate"); break;
+        case "start":
+          trackEvent("test_start", { source: "homepage" });
+          showView("gate");
+          break;
+        case "shared-start":
+          trackEvent("test_start", { source: "shared_result" });
+          showView("gate");
+          break;
         case "gate-back": showView("intro"); break;
-        case "confirm": beginQuiz(false); break;
+        case "confirm":
+          trackEvent("age_gate_complete");
+          beginQuiz(false);
+          break;
         case "resume": beginQuiz(true); break;
         case "restart": showView("gate"); break;
         case "saved-result": if (currentResult) renderResult(currentResult, false); break;
         case "exit":
+          cancelAutoAdvance();
           persist();
           if (Object.keys(answers).length > 0) showResumeState(index);
           showView("intro");
           break;
         case "back":
+          cancelAutoAdvance();
           if (index > 0) {
             index -= 1;
             persist();
             renderQuestion();
           }
           break;
-        case "next": goNext(); break;
+        case "next":
+          cancelAutoAdvance();
+          goNext();
+          break;
         case "retake":
           clearLocalTestData();
           currentResult = null;
@@ -544,10 +610,12 @@ export function initTestApp(root: HTMLElement): void {
           showView("gate");
           break;
         case "boundary":
+          trackEvent("boundary_map_open");
           required<HTMLElement>(root, "[data-boundary-map]").hidden = false;
           required<HTMLElement>(root, "[data-boundary-map]").scrollIntoView({ behavior: "smooth", block: "start" });
           break;
         case "scroll-share": required<HTMLElement>(root, ".share-panel").scrollIntoView({ behavior: "smooth", block: "start" }); break;
+        case "scroll-map": required<HTMLElement>(root, "#result-map").scrollIntoView({ behavior: "smooth", block: "start" }); break;
         case "toggle-roles": {
           const grid = required<HTMLElement>(root, "[data-role-results]");
           const expanded = grid.classList.toggle("is-expanded");
@@ -562,9 +630,16 @@ export function initTestApp(root: HTMLElement): void {
           renderBoundaryMap();
           setText(root, "[data-boundary-status]", "Private map cleared.");
           break;
-        case "share-link": await shareLink(); break;
-        case "share-image": await shareImage(); break;
+        case "share-link":
+          trackEvent("result_share", { method: "native_or_link" });
+          await shareLink();
+          break;
+        case "share-image":
+          trackEvent("result_share", { method: "native_or_image" });
+          await shareImage();
+          break;
         case "copy-link":
+          trackEvent("result_share", { method: "copy_link" });
           if (currentResult) {
             const text = createShareUrl(currentResult);
             const copied = await copyText(text);
@@ -573,6 +648,7 @@ export function initTestApp(root: HTMLElement): void {
           }
           break;
         case "copy-text":
+          trackEvent("result_share", { method: "copy_text" });
           if (currentResult) {
             const text = `${resultSummaryText(currentResult)} ${createShareUrl(currentResult)}`;
             const copied = await copyText(text);
@@ -582,10 +658,12 @@ export function initTestApp(root: HTMLElement): void {
           break;
         case "hide-copy": required<HTMLElement>(root, "[data-copy-fallback]").hidden = true; break;
         case "download-image":
+          trackEvent("result_share", { method: "download_image" });
           downloadBlob(await getImage());
           shareStatus.textContent = "Image downloaded.";
           break;
         case "show-qr":
+          trackEvent("result_share", { method: "qr_code" });
           if (currentResult) {
             const QRCode = await import("qrcode");
             await QRCode.toCanvas(required<HTMLCanvasElement>(root, "[data-qr-canvas]"), createShareUrl(currentResult), {

@@ -10,25 +10,26 @@ test.describe("BDSM Test", () => {
     await page.goto("/");
     await expect(page).toHaveTitle("BDSM Test: Free Kink Preference Quiz | BDSMTest.top");
     await expect(page.getByRole("heading", { name: "Free BDSM Test", exact: true })).toBeVisible();
-    await page.getByRole("button", { name: "Begin privately" }).click();
+    await page.getByRole("button", { name: "Show me what pulls" }).click();
     await page.locator("[data-confirm='age']").check();
-    await page.locator("[data-confirm='context']").check();
-    await page.getByRole("button", { name: "Continue" }).click();
+    await page.getByRole("button", { name: "Enter the test" }).click();
     await expect(page.locator("[data-progress-label]")).toHaveText("01 / 32");
-    await page.getByText("Strongly appealing", { exact: true }).click();
-    await expect(page.locator("[data-progress-label]")).toHaveText("01 / 32");
+    const entryEvents = await page.evaluate(() => (window as Window & { dataLayer?: ArrayLike<unknown>[] }).dataLayer
+      ?.map((entry) => Array.from(entry))
+      .filter((entry) => entry[0] === "event")
+      .map((entry) => entry[1]));
+    expect(entryEvents).toEqual(expect.arrayContaining(["test_start", "age_gate_complete", "test_progress"]));
+    await page.getByText("Lights me up", { exact: true }).click();
+    await expect(page.locator("[data-progress-label]")).toHaveText("02 / 32");
     await page.getByRole("button", { name: "Save and exit" }).click();
     await expect(page.locator("[data-resume]")).toBeVisible();
-    await expect(page.getByRole("button", { name: "Begin privately" })).toBeHidden();
-    await expect(page.locator("[data-resume-label]")).toContainText("Continue at 01 / 32");
+    await expect(page.getByRole("button", { name: "Show me what pulls" })).toBeHidden();
+    await expect(page.locator("[data-resume-label]")).toContainText("Continue at 02 / 32");
     await page.getByRole("button", { name: "Continue test" }).click();
-    await page.getByRole("button", { name: "Continue", exact: true }).click();
-    await expect(page.locator("[data-progress-label]")).toHaveText("02 / 32");
 
     await page.getByRole("button", { name: "Previous question" }).click();
     await expect(page.locator("[data-progress-label]")).toHaveText("01 / 32");
-    await page.getByText("Somewhat appealing", { exact: true }).click();
-    await page.getByRole("button", { name: "Continue", exact: true }).click();
+    await page.getByText("I'd lean in", { exact: true }).click();
     await expect(page.locator("[data-progress-label]")).toHaveText("02 / 32");
 
     await page.reload();
@@ -37,8 +38,7 @@ test.describe("BDSM Test", () => {
     await expect(page.locator("[data-progress-label]")).toHaveText("02 / 32");
 
     for (let current = 2; current <= 32; current += 1) {
-      await page.getByText("Somewhat appealing", { exact: true }).click();
-      await page.getByRole("button", { name: "Continue", exact: true }).click();
+      await page.getByText("I'd lean in", { exact: true }).click();
       if (current < 32) await expect(page.locator("[data-progress-label]")).toHaveText(`${String(current + 1).padStart(2, "0")} / 32`);
     }
 
@@ -50,6 +50,11 @@ test.describe("BDSM Test", () => {
     await expect(page.locator("[data-role-results] .role-score-row:visible")).toHaveCount(10);
     await expect(page.locator("[data-result-radar] svg")).toBeVisible();
     await expect(page.locator("[data-result-radar] .radar-points circle")).toHaveCount(8);
+    const analyticsEvents = await page.evaluate(() => (window as Window & { dataLayer?: ArrayLike<unknown>[] }).dataLayer
+      ?.map((entry) => Array.from(entry))
+      .filter((entry) => entry[0] === "event")
+      .map((entry) => entry[1]));
+    expect(analyticsEvents).toEqual(expect.arrayContaining(["test_progress", "test_complete", "result_view"]));
 
     await page.getByRole("button", { name: "Map my boundaries" }).click();
     await page.locator(".boundary-row").first().getByText("Hard limit", { exact: true }).click();
@@ -96,7 +101,7 @@ test.describe("BDSM Test", () => {
     await expect(page.locator("[data-shared-role-section]")).toBeHidden();
     expect(await page.evaluate(() => location.hash)).toBe("");
     await page.getByRole("button", { name: "Explore yours privately" }).click();
-    await expect(page.getByRole("heading", { name: "A quick boundary check" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Curious is fine. Consent is required." })).toBeVisible();
   });
 
   test("fits the mobile viewport without horizontal overflow", async ({ page }, testInfo) => {
@@ -104,16 +109,15 @@ test.describe("BDSM Test", () => {
     await page.goto("/");
     const hasNoOverflow = await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth);
     expect(hasNoOverflow).toBe(true);
-    await expect(page.getByRole("button", { name: "Begin privately" })).toBeVisible();
-    await page.getByRole("button", { name: "Begin privately" }).click();
+    await expect(page.getByRole("button", { name: "Show me what pulls" })).toBeVisible();
+    await page.getByRole("button", { name: "Show me what pulls" }).click();
     await page.locator("[data-confirm='age']").check();
-    await page.locator("[data-confirm='context']").check();
-    await page.getByRole("button", { name: "Continue" }).click();
+    await page.getByRole("button", { name: "Enter the test" }).click();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
     const optionHeights = await page.locator(".answer-option").evaluateAll((options) => options.map((option) => option.getBoundingClientRect().height));
     expect(optionHeights.every((height) => height >= 48)).toBe(true);
-    await page.getByText("Somewhat appealing", { exact: true }).click();
-    await expect(page.getByRole("button", { name: "Continue", exact: true })).toBeEnabled();
+    await page.getByText("I'd lean in", { exact: true }).click();
+    await expect(page.locator("[data-progress-label]")).toHaveText("02 / 32");
   });
 
   test("stays stable across required viewport widths", async ({ page }, testInfo) => {

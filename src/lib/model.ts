@@ -54,6 +54,8 @@ export interface DimensionMeta {
 export interface ProfileMeta {
   id: ProfileId;
   primaryDimension: DimensionId;
+  /** Sharp first-screen recognition line (wow moment). */
+  hook: string;
   summary: string;
   reflection: string;
 }

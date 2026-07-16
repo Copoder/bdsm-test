@@ -13,7 +13,7 @@ const faqs = [
   ["Is this a scientific or diagnostic test?", "No. The model is research-informed but has not yet been validated as a psychometric scale. Treat the result as a structured starting point for reflection and conversation, not a diagnosis."],
   ["Can a result include more than one role?", "Yes. Direction and surrender are scored separately, and closely matched profiles can appear as a blend. A low or diffuse pattern returns Open-ended Explorer instead of forcing a label."],
   ["Does an appealing answer mean I should try it?", "No. Appeal, willingness, practical safety, relationship agreements, and personal boundaries are different questions. Any real activity needs specific, informed, ongoing consent."],
-  ["Do I need BDSM experience?", "No. The questions ask about current appeal, not past behavior. It is fine to choose It depends / unsure whenever trust, context, or unfamiliar language matters."]
+  ["Do I need BDSM experience?", "No. The questions ask about current pull, not past behavior. Choose It depends whenever trust, context, or unfamiliar language matters."]
 ];
 const structuredData = [
   {
@@ -141,8 +141,8 @@ const structuredData = [
 
   <section class="final-cta site-shell">
     <p class="eyebrow">Private browser-based scoring</p>
-    <h2>Ready when you are.</h2>
-    <a class="button" href="#start">Begin privately <ArrowRight size={17} /></a>
+    <h2>Find out what pulls.</h2>
+    <a class="button" href="#start">Start privately <ArrowRight size={17} /></a>
   </section>
 </BaseLayout>
 
@@ -217,5 +217,19 @@ const structuredData = [
     .roles-inner { grid-template-columns: 7fr 5fr; align-items: end; }
     .safety-section { grid-template-columns: 5fr 7fr; align-items: center; }
     .faq-layout { grid-template-columns: 4fr 8fr; }
+  }
+
+  /* Let spacing and contrast create hierarchy instead of a page-wide rule grid. */
+  .trust-grid { gap: var(--space-4); padding-top: var(--space-3); }
+  .trust-grid > div { border: 0; }
+  .dimension-grid { gap: var(--space-6) var(--space-7); border: 0; }
+  .dimension-grid article { min-height: 0; padding: 0 0 var(--space-5); border: 0; }
+  .dimension-index { margin-bottom: var(--space-4); }
+  .example-result { border: 0; box-shadow: 0 1.4rem 3.8rem rgb(20 12 17 / 13%); }
+
+  @media (min-width: 48rem) {
+    .trust-grid > div { padding-inline: 0; border: 0; }
+    .dimension-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .dimension-grid article { min-height: 13rem; padding: var(--space-4) 0 var(--space-5); border: 0; }
   }
 </style>

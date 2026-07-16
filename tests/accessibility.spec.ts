@@ -11,11 +11,10 @@ test("homepage, age gate, and first question have no serious accessibility viola
   test.skip(testInfo.project.name !== "desktop-chromium", "Accessibility audit runs once.");
   await page.goto("/");
   await assertNoSeriousViolations(page, "homepage");
-  await page.getByRole("button", { name: "Begin privately" }).click();
+  await page.getByRole("button", { name: "Show me what pulls" }).click();
   await assertNoSeriousViolations(page, "age gate");
   await page.locator("[data-confirm='age']").check();
-  await page.locator("[data-confirm='context']").check();
-  await page.getByRole("button", { name: "Continue" }).click();
+  await page.getByRole("button", { name: "Enter the test" }).click();
   await assertNoSeriousViolations(page, "question screen");
 });
 

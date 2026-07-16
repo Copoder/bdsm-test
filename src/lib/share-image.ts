@@ -1,5 +1,6 @@
 import { profileDisplayNames } from "../data/profiles";
 import { PROFILE_IDS, type TestResult } from "./model";
+import { buildResultSpotlight } from "./result-copy";
 
 const WIDTH = 1080;
 const HEIGHT = 1350;
@@ -34,6 +35,7 @@ export async function createResultImage(result: TestResult): Promise<Blob> {
   canvas.height = HEIGHT;
   const context = canvas.getContext("2d");
   if (!context) throw new Error("Canvas is not available");
+  const spotlight = buildResultSpotlight(result);
 
   context.fillStyle = "#101011";
   context.fillRect(0, 0, WIDTH, HEIGHT);
@@ -77,23 +79,42 @@ export async function createResultImage(result: TestResult): Promise<Blob> {
   context.fillText("BDSMTest.top", 214, 144);
   context.fillStyle = "#ef8798";
   context.font = "600 20px 'DM Sans Variable', sans-serif";
-  context.fillText("MY BDSM TEST RESULT", 106, 252);
+  context.fillText(spotlight.kicker.toUpperCase(), 106, 252);
 
   context.fillStyle = "#f3efe8";
   context.font = "600 78px 'Newsreader Variable', Georgia, serif";
   const profileLines = wrappedLines(context, result.primary, 840).slice(0, 3);
   profileLines.forEach((line, index) => context.fillText(line, 106, 350 + index * 76));
   let y = 418 + (profileLines.length - 1) * 76;
-  context.fillStyle = "#aaa3a8";
-  context.font = "500 24px 'DM Sans Variable', sans-serif";
-  context.fillText("Your strongest match right now, followed by all ten role scores.", 106, y);
 
-  y += 62;
+  if (spotlight.matchScore !== undefined) {
+    const scoreLabel = String(spotlight.matchScore);
+    context.fillStyle = "#f3efe8";
+    context.font = "600 56px 'Newsreader Variable', Georgia, serif";
+    const scoreWidth = context.measureText(scoreLabel).width;
+    context.fillText(scoreLabel, 106, y);
+    context.fillStyle = "#aaa3a8";
+    context.font = "600 18px 'DM Sans Variable', sans-serif";
+    context.fillText("MATCH STRENGTH", 106 + scoreWidth + 18, y - 8);
+    y += 48;
+  }
+
+  context.fillStyle = "#ef8798";
+  context.font = "italic 500 28px 'Newsreader Variable', Georgia, serif";
+  const hookLines = wrappedLines(context, spotlight.imageCaption, 860).slice(0, 3);
+  hookLines.forEach((line, index) => context.fillText(line, 106, y + index * 36));
+  y += hookLines.length * 36 + 28;
+
+  context.fillStyle = "#8f878c";
+  context.font = "600 20px 'DM Sans Variable', sans-serif";
+  context.fillText(spotlight.topLine, 106, y);
+
+  y += 48;
   context.fillStyle = "#1b191d";
-  context.fillRect(106, y, 868, 606);
+  context.fillRect(106, y, 868, 560);
   context.strokeStyle = "#3b363b";
   context.lineWidth = 2;
-  roundRect(context, 106, y, 868, 606, 8);
+  roundRect(context, 106, y, 868, 560, 8);
   context.fillStyle = "#f3efe8";
   context.font = "600 25px 'DM Sans Variable', sans-serif";
   context.fillText("ROLE AFFINITIES", 144, y + 55);
@@ -108,7 +129,7 @@ export async function createResultImage(result: TestResult): Promise<Blob> {
     const column = index < 5 ? 0 : 1;
     const row = index % 5;
     const columnX = column === 0 ? 144 : 558;
-    const rowY = y + 108 + row * 96;
+    const rowY = y + 108 + row * 88;
     const score = Math.round(result.profileScores[profile]);
     context.fillStyle = "#f3efe8";
     context.font = "600 18px 'DM Sans Variable', sans-serif";
