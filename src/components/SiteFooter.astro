@@ -1,5 +1,7 @@
 ---
 import { CONTACT_EMAIL } from "../data/site";
+
+const isHomepage = Astro.url.pathname === "/";
 ---
 
 <footer class="site-footer">
@@ -7,18 +9,34 @@ import { CONTACT_EMAIL } from "../data/site";
     <div>
       <a class="footer-brand" href="/">BDSMTest.top</a>
       <p>Name the pull. Keep the details yours.</p>
-      <a
-        class="listbulb-badge"
-        href="https://www.listbulb.com/tools/bdsmtest"
-        target="_blank"
-        rel="noopener"
-      >
-        <img
-          src="https://www.listbulb.com/featured-on-listbulb-light.svg"
-          alt="Featured on ListBulb"
-          height="240"
-        />
-      </a>
+      <div class="featured-badges">
+        <a
+          class="featured-badge listbulb-badge"
+          href="https://www.listbulb.com/tools/bdsmtest"
+          target="_blank"
+          rel="noopener"
+        >
+          <img
+            src="https://www.listbulb.com/featured-on-listbulb-light.svg"
+            alt="Featured on ListBulb"
+            height="240"
+          />
+        </a>
+        {isHomepage && (
+          <a
+            class="featured-badge"
+            href="https://toolfame.com/item/bdsm-test"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="https://toolfame.com/badge-light.svg"
+              alt="Featured on toolfame.com"
+              style="height: 54px; width: auto;"
+            />
+          </a>
+        )}
+      </div>
     </div>
     <nav aria-label="Product links">
       <strong>Explore</strong>
@@ -67,14 +85,21 @@ import { CONTACT_EMAIL } from "../data/site";
     color: #bdb5aa;
   }
 
-  .listbulb-badge {
-    display: inline-flex;
+  .featured-badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
     margin-top: var(--space-5);
+  }
+
+  .featured-badge {
+    display: inline-flex;
     text-decoration: none;
     transition: opacity 160ms ease;
   }
 
-  .listbulb-badge:hover {
+  .featured-badge:hover {
     opacity: 0.82;
   }
 

@@ -1,10 +1,11 @@
 import { expect, test } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 
-test("content security policy allows the ListBulb badge image", async () => {
+test("content security policy allows external badge images", async () => {
   const headers = await readFile(new URL("../public/_headers", import.meta.url), "utf8");
 
   expect(headers).toMatch(/img-src[^;]*https:\/\/www\.listbulb\.com/);
+  expect(headers).toMatch(/img-src[^;]*https:\/\/toolfame\.com/);
 });
 
 // Regression: QA-002 - policies lacked a working owner contact and email-processing disclosure.

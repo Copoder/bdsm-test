@@ -57,6 +57,13 @@ test("homepage owns the primary BDSM test intent and renders static content", as
   const schemas = JSON.parse(await page.locator("script[type='application/ld+json']").textContent() ?? "[]");
   expect(schemas.some((schema: { "@type"?: string }) => schema["@type"] === "WebApplication")).toBe(true);
   expect(schemas.some((schema: { "@type"?: string }) => schema["@type"] === "FAQPage")).toBe(true);
+
+  const toolfameBadge = page.locator('a[href="https://toolfame.com/item/bdsm-test"]');
+  await expect(toolfameBadge).toHaveAttribute("rel", "noopener noreferrer");
+  await expect(toolfameBadge.locator("img")).toHaveAttribute("src", "https://toolfame.com/badge-light.svg");
+
+  await page.goto("/about/");
+  await expect(page.locator('a[href="https://toolfame.com/item/bdsm-test"]')).toHaveCount(0);
 });
 
 test("robots, sitemap, internal links, and 404 are crawlable and consistent", async ({ page, request }, testInfo) => {
