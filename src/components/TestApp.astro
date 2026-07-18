@@ -1476,7 +1476,7 @@ import { ArrowLeft, ArrowRight, Copy, Download, Ellipsis, ImageDown, Link, QrCod
   .result-header {
     position: relative;
     overflow: hidden;
-    min-height: 100svh;
+    min-height: clamp(36rem, 78svh, 44rem);
     margin-inline: calc(50% - 50vw);
     width: 100vw;
     padding:
@@ -1525,8 +1525,8 @@ import { ArrowLeft, ArrowRight, Copy, Download, Ellipsis, ImageDown, Link, QrCod
     opacity: 0.5;
     content: "";
   }
-  .result-header > * { position: relative; z-index: 1; }
-  .result-atmosphere { z-index: 0; }
+  .result-header > :not(.result-atmosphere) { position: relative; z-index: 1; }
+  .result-atmosphere { position: absolute; z-index: 0; }
   .result-header .eyebrow { color: #ef8798; }
   .result-header h2 {
     max-width: 12ch;
@@ -1636,7 +1636,7 @@ import { ArrowLeft, ArrowRight, Copy, Download, Ellipsis, ImageDown, Link, QrCod
     .question-form legend { font-size: 3.25rem; max-width: 28ch; }
     .answer-option { min-height: 4rem; }
     .result-header {
-      min-height: 88svh;
+      min-height: clamp(36rem, 68svh, 44rem);
       width: 100vw;
       margin-left: calc(50% - 50vw);
       padding: 5rem max(1.5rem, calc((100vw - 66rem) / 2)) 3rem;

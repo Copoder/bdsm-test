@@ -43,6 +43,7 @@ test.describe("BDSM Test", () => {
     }
 
     await expect(page.locator("[data-result-primary]")).toBeVisible();
+    await expect(page.locator("[data-result-primary]")).toBeInViewport();
     await expect(page.locator(".dimension-row")).toHaveCount(8);
     await expect(page.locator("[data-role-results] .role-score-row")).toHaveCount(10);
     await expect(page.locator("[data-role-results] .role-score-row:visible")).toHaveCount(3);
