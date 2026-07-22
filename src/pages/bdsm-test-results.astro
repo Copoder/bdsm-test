@@ -1,0 +1,193 @@
+---
+import { ArrowRight } from "@lucide/astro";
+import { dimensions } from "../data/questions";
+import { roleGuides } from "../data/roles";
+import ContentLayout from "../layouts/ContentLayout.astro";
+import { breadcrumbSchema } from "../lib/seo";
+
+const title = "BDSM Test Results Explained: Scores, Roles & Dimensions";
+const description = "Learn how to read BDSM test results, including 0-100 role scores, preference dimensions, blended profiles, low scores, and private shared-result links.";
+const faqs = [
+  ["Is a BDSM test score a percentage of how kinky I am?", "No. A score shows how closely your answers aligned with one dimension or role formula in this test. It is not a percentile, diagnosis, probability, or measure of experience."],
+  ["Can several BDSM role scores be high?", "Yes. Roles overlap by design. Someone may enjoy direction, surrender, restraint, care, and play in different combinations or contexts, so several role scores can be meaningful at once."],
+  ["What does a low BDSM test score mean?", "It means the scenarios contributing to that score created less pull in this response set. It does not prove a hard limit, and it does not rule out curiosity in a different context."],
+  ["Can someone else see my answers from a result link or code?", "No. A BDSMTest.top shared link contains only the profile and rounded role and preference scores. It does not include raw answers, test progress, limits, or the Private Boundary Map."]
+];
+const structuredData = [
+  breadcrumbSchema([{ name: "Home", path: "/" }, { name: "BDSM test results", path: "/bdsm-test-results/" }]),
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "How to read your BDSM test results",
+    description,
+    datePublished: "2026-07-22",
+    dateModified: "2026-07-22",
+    mainEntityOfPage: "https://bdsmtest.top/bdsm-test-results/",
+    publisher: { "@type": "Organization", name: "BDSMTest.top", url: "https://bdsmtest.top/" }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map(([name, text]) => ({
+      "@type": "Question",
+      name,
+      acceptedAnswer: { "@type": "Answer", text }
+    }))
+  }
+];
+const exampleScores = [
+  { label: "Direction", score: 76, color: "#922a3e" },
+  { label: "Surrender", score: 62, color: "#2d7069" },
+  { label: "Play", score: 48, color: "#8a5425" }
+];
+---
+
+<ContentLayout
+  {title}
+  {description}
+  eyebrow="Result guide · Model 1.0.0"
+  heading="How to read your BDSM test results"
+  intro="A score describes the shape of this answer set. Read the pattern, the context, and the overlaps before treating any role name as the conclusion."
+  breadcrumbs={[{ label: "Home", href: "/" }, { label: "BDSM test results" }]}
+  updated="July 22, 2026"
+  {structuredData}
+>
+  <div class="callout result-answer">
+    <strong>Quick answer:</strong>
+    <p>Your BDSM test result is not a pass, diagnosis, or ranking against other people. The useful information is the relationship between your 10 role scores and eight preference dimensions.</p>
+  </div>
+
+  <h2>What appears in a BDSM test result</h2>
+  <p>BDSMTest.top separates the result into layers so that one label does not hide the rest of the pattern.</p>
+  <div class="result-anatomy">
+    <section>
+      <span>01</span>
+      <div><h3>Profile</h3><p>A concise name for the strongest role pattern, or a blended profile when two patterns are close.</p></div>
+    </section>
+    <section>
+      <span>02</span>
+      <div><h3>Ten role scores</h3><p>Weighted matches for Dominant, Submissive, Switch, Brat, Rigger, Caregiver, and the other supported profiles.</p></div>
+    </section>
+    <section>
+      <span>03</span>
+      <div><h3>Eight dimensions</h3><p>The underlying pulls toward direction, surrender, intensity, restraint, care, play, and exploration.</p></div>
+    </section>
+    <section>
+      <span>04</span>
+      <div><h3>Context notes</h3><p>Dimensions where several answers were <em>It depends</em>, kept visible instead of being forced into certainty.</p></div>
+    </section>
+  </div>
+
+  <h2>What a 0-100 BDSM score means</h2>
+  <p>A dimension score summarizes four answers. Each response contributes from 0 to 4, and the average is normalized to a 0-100 scale. A role score then combines relevant dimensions with narrower signals from particular questions.</p>
+  <p>The number is an affinity index for this test. A score of 76 does <strong>not</strong> mean you are more interested than 76% of people, have a 76% chance of enjoying an activity, or should consent to 76% of related scenarios.</p>
+
+  <figure class="score-reading" aria-labelledby="example-caption">
+    <figcaption id="example-caption"><strong>Illustrative pattern</strong><span>Example only, not a real result</span></figcaption>
+    {exampleScores.map((item) => (
+      <div class="score-line" style={`--score:${item.score}%;--score-color:${item.color}`}>
+        <span>{item.label}</span>
+        <i aria-hidden="true"><b></b></i>
+        <strong>{item.score}</strong>
+      </div>
+    ))}
+    <p>This shape could suggest a stronger pull toward directing while leaving meaningful room for surrender, with play depending more on context. It does not prescribe a role or activity.</p>
+  </figure>
+
+  <h2>Read the shape before the label</h2>
+  <ol class="reading-order">
+    <li><strong>Start with the highest dimensions.</strong> They show which broad qualities created the clearest pull.</li>
+    <li><strong>Compare neighboring scores.</strong> A narrow gap usually matters less than the shared pattern behind both scores.</li>
+    <li><strong>Notice context.</strong> Repeated <em>It depends</em> answers may mean trust, partner, setting, wording, or unfamiliarity matters.</li>
+    <li><strong>Read the role profile last.</strong> Use it as vocabulary for reflection, not as a fixed identity assigned by a quiz.</li>
+  </ol>
+
+  <h2>Role scores and preference dimensions are different</h2>
+  <p>Dimensions describe broad forms of appeal. Role scores are interpretations built from those dimensions and narrower question tags. That is why one dimension can contribute to several roles, and why two people with the same primary profile can still have different result charts.</p>
+  <div class="dimension-index">
+    {dimensions.map((dimension) => (
+      <div style={`--dimension-color:${dimension.color}`}>
+        <span>{dimension.shortName}</span>
+        <p>{dimension.description}</p>
+      </div>
+    ))}
+  </div>
+  <p>For the formulas and source material, read <a href="/methodology/">how the BDSM preference test is scored</a>.</p>
+
+  <h2>Why several role scores can be high</h2>
+  <p>BDSM roles are not mutually exclusive categories. Direction can coexist with surrender; restraint can appeal as craft, sensation, trust, or power exchange; care can appear on either side of a dynamic. Multiple high scores can therefore be more informative than a single winner.</p>
+  <p>Model 1.0.0 uses two explicit safeguards against forcing a neat label:</p>
+  <ul>
+    <li>If the strongest role score is below 45, the result is <strong>Open-ended Explorer</strong>.</li>
+    <li>If the two strongest role scores are within 7 points and the top score is at least 45, they form a <strong>blended profile</strong>.</li>
+  </ul>
+
+  <h2>Explore the role names in your result</h2>
+  <div class="role-links">
+    {roleGuides.map((role) => (
+      <a href={`/roles/${role.slug}/`}>
+        <span>{role.name}</span>
+        <small>{role.summary}</small>
+        <ArrowRight size={16} aria-hidden="true" />
+      </a>
+    ))}
+  </div>
+
+  <h2>What low scores do and do not say</h2>
+  <p>A lower score means the contributing scenarios created less pull in this answer set. It may reflect disinterest, a preference for the opposite side, or uncertainty about context. It is not automatically a hard limit.</p>
+  <p>The reverse is equally important: a high score is not permission, evidence of experience, technical skill, compatibility, or readiness. Attraction and consent remain separate decisions. Use the optional Private Boundary Map or another explicit conversation to record limits and conditions.</p>
+
+  <h2>How shared result links and codes work</h2>
+  <p>BDSMTest.top does not publish a searchable result record or ask someone to enter a public lookup code. When you choose to share, the link carries a compact summary in its URL fragment. That fragment contains the profile and rounded scores needed to render the shared view.</p>
+  <p>Raw answers, progress, limits, and the Private Boundary Map are excluded. The recipient sees a summary, not the reasoning behind every answer and never proof of consent or compatibility. Read the complete <a href="/privacy/">shared-result privacy explanation</a>.</p>
+
+  <h2>Questions about BDSM test scores</h2>
+  <div class="result-faq">
+    {faqs.map(([question, answer]) => (
+      <section><h3>{question}</h3><p>{answer}</p></section>
+    ))}
+  </div>
+
+  <h2>Use the result as a conversation starter</h2>
+  <p>Choose one or two scores that surprised you and ask what made those scenarios appealing or uncertain. Discuss the conditions that would change the answer, what remains out of scope, and how either person can pause or revise an agreement.</p>
+  <p><a href="/consent-and-safety/">Continue with the consent and safety framework</a>, or <a href="/#start">take the private BDSM test</a>.</p>
+</ContentLayout>
+
+<style>
+  .result-answer p { margin-top: var(--space-2); }
+  .result-anatomy { max-width: var(--reading); border-top: 1px solid var(--line-strong); }
+  .result-anatomy section { display: grid; grid-template-columns: 2.5rem 1fr; gap: var(--space-3); padding: var(--space-4) 0; border-bottom: 1px solid var(--line); }
+  .result-anatomy section > span { color: var(--oxblood); font-size: 0.74rem; font-weight: 600; }
+  .result-anatomy h3 { margin: 0 0 var(--space-2); font-size: 1.25rem; }
+  .result-anatomy p { margin: 0; }
+  .score-reading { max-width: var(--reading); margin: var(--space-6) 0; padding: var(--space-5); color: var(--paper); background: var(--night-raised); border-top: 3px solid var(--signal); }
+  .score-reading figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2); padding-bottom: var(--space-4); border-bottom: 1px solid var(--line-dark); }
+  .score-reading figcaption span { color: #aaa3a8; font-size: 0.74rem; }
+  .score-line { display: grid; grid-template-columns: minmax(6rem, 8rem) 1fr 2.2rem; align-items: center; gap: var(--space-3); padding-top: var(--space-4); }
+  .score-line > span { color: #d7cfd3; font-size: 0.82rem; }
+  .score-line i { height: 0.45rem; background: var(--night-soft); }
+  .score-line i b { display: block; width: var(--score); height: 100%; background: var(--score-color); }
+  .score-line > strong { text-align: right; }
+  .score-reading > p { margin: var(--space-5) 0 0; color: #bcb4b8; font-size: 0.82rem; }
+  .reading-order { padding-left: 1.4rem; }
+  .reading-order strong { color: var(--ink); }
+  .dimension-index { display: grid; max-width: var(--reading); margin: var(--space-5) 0; border-top: 1px solid var(--line-strong); }
+  .dimension-index > div { display: grid; grid-template-columns: minmax(8rem, 0.7fr) 2fr; gap: var(--space-4); padding: var(--space-4) 0; border-bottom: 1px solid var(--line); }
+  .dimension-index span { color: var(--dimension-color); font-weight: 700; }
+  .dimension-index p { margin: 0; }
+  .role-links { display: grid; max-width: var(--reading); border-top: 1px solid var(--line-strong); }
+  .role-links a { display: grid; grid-template-columns: minmax(8rem, 0.8fr) 2fr 1.25rem; align-items: start; gap: var(--space-3); padding: var(--space-4) 0; border-bottom: 1px solid var(--line); text-decoration: none; }
+  .role-links a:hover span { color: var(--oxblood); }
+  .role-links small { color: var(--ink-soft); font-weight: 400; line-height: 1.5; }
+  .role-links svg { margin-top: 0.2rem; }
+  .result-faq { max-width: var(--reading); border-top: 1px solid var(--line-strong); }
+  .result-faq section { padding: var(--space-5) 0; border-bottom: 1px solid var(--line); }
+  .result-faq h3 { margin: 0 0 var(--space-3); font-size: 1.35rem; }
+  .result-faq p { margin: 0; }
+  @media (max-width: 34rem) {
+    .dimension-index > div { grid-template-columns: 1fr; gap: var(--space-2); }
+    .role-links a { grid-template-columns: 1fr 1.25rem; }
+    .role-links small { grid-column: 1 / -1; }
+    .role-links svg { grid-column: 2; grid-row: 1; }
+  }
+</style>

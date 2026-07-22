@@ -13,6 +13,7 @@ const faqs = [
   ["Is this a scientific or diagnostic test?", "No. The model is research-informed but has not yet been validated as a psychometric scale. Treat the result as a structured starting point for reflection and conversation, not a diagnosis."],
   ["Can a result include more than one role?", "Yes. Direction and surrender are scored separately, and closely matched profiles can appear as a blend. A low or diffuse pattern returns Open-ended Explorer instead of forcing a label."],
   ["Does an appealing answer mean I should try it?", "No. Appeal, willingness, practical safety, relationship agreements, and personal boundaries are different questions. Any real activity needs specific, informed, ongoing consent."],
+  ["Is this a BDSM quiz, kink test, or preference test?", "Those phrases usually describe the same basic goal: reflecting on BDSM and kink interests through a set of questions. This test uses negotiated adult scenarios to report 10 role scores and eight preference dimensions rather than treating one label as the whole result."],
   ["Do I need BDSM experience?", "No. The questions ask about current pull, not past behavior. Choose It depends whenever trust, context, or unfamiliar language matters."]
 ];
 const structuredData = [
@@ -110,6 +111,7 @@ const structuredData = [
       </div>
       <div>
         <p>Your result ranks every supported role from 0 to 100, then shows the dimensions that shaped those matches. Mixed patterns stay mixed.</p>
+        <a class="text-link results-link" href="/bdsm-test-results/">Learn how to read BDSM test results <ArrowRight size={17} /></a>
         <a class="button button--secondary" href="/bdsm-roles/">Explore BDSM roles <ArrowRight size={17} /></a>
       </div>
     </div>
@@ -183,6 +185,7 @@ const structuredData = [
   .roles-inner { display: grid; gap: var(--space-6); }
   .roles-band .eyebrow { color: #d47b84; }
   .roles-band p { color: #bdb6ad; }
+  .roles-band .results-link { margin-bottom: var(--space-4); color: #f0d9dd; }
   .roles-band .button--secondary { color: white; border-color: #77716a; }
   .roles-band .button--secondary:hover { color: var(--ink); }
   .safety-section { position: relative; display: grid; gap: var(--space-7); padding-block: var(--space-8); }

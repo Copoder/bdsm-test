@@ -3,6 +3,7 @@ import { expect, test } from "@playwright/test";
 const routes = [
   "/",
   "/about/",
+  "/bdsm-test-results/",
   "/bdsm-roles/",
   "/consent-and-safety/",
   "/methodology/",
@@ -54,6 +55,8 @@ test("homepage owns the primary BDSM test intent and renders static content", as
   await expect(page.locator("h1")).toHaveText("Free BDSM Test");
   await expect(page.getByText("What this BDSM test reveals", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "BDSM test FAQ" })).toBeVisible();
+  await expect(page.locator("summary").filter({ hasText: "Is this a BDSM quiz, kink test, or preference test?" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Learn how to read BDSM test results" })).toHaveAttribute("href", "/bdsm-test-results/");
   const schemas = JSON.parse(await page.locator("script[type='application/ld+json']").textContent() ?? "[]");
   expect(schemas.some((schema: { "@type"?: string }) => schema["@type"] === "WebApplication")).toBe(true);
   expect(schemas.some((schema: { "@type"?: string }) => schema["@type"] === "FAQPage")).toBe(true);
@@ -64,6 +67,21 @@ test("homepage owns the primary BDSM test intent and renders static content", as
 
   await page.goto("/about/");
   await expect(page.locator('a[href="https://toolfame.com/item/bdsm-test"]')).toHaveCount(0);
+});
+
+test("results guide explains scores without presenting them as diagnosis or percentile", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "SEO route audit runs once.");
+  await page.goto("/bdsm-test-results/");
+  await expect(page.locator("h1")).toHaveText("How to read your BDSM test results");
+  await expect(page.getByRole("heading", { name: "What a 0-100 BDSM score means" })).toBeVisible();
+  await expect(page.locator("main")).toContainText("not mean you are more interested than 76% of people");
+  await expect(page.locator("main")).toContainText("Open-ended Explorer");
+  await expect(page.locator("main")).toContainText("within 7 points");
+  await expect(page.locator('a[href="/roles/dominant/"]')).toBeVisible();
+
+  const schemas = JSON.parse(await page.locator("script[type='application/ld+json']").textContent() ?? "[]");
+  expect(schemas.some((schema: { "@type"?: string }) => schema["@type"] === "Article")).toBe(true);
+  expect(schemas.some((schema: { "@type"?: string }) => schema["@type"] === "FAQPage")).toBe(true);
 });
 
 test("robots, sitemap, internal links, and 404 are crawlable and consistent", async ({ page, request }, testInfo) => {
